@@ -1,0 +1,61 @@
+{% if (reviews is not empty) %}
+<!-- Reviews Featured :: Start-->
+<div class="reviews-featured">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col">
+				<span class="h2 reviews-featured__title">{{ heading_title }}
+					<img src="catalog/view/theme/prostore/images/img-hand.png" alt="" width="30" height="30" loading="lazy">
+				</span>
+			</div>
+			<div class="col-auto">
+				<div class="reviews-featured__all">
+					<a class="ui-link ui-link--blue" href="{{reviews_href}}">{{text_all_reviews}}<svg class="icon-arrow-link"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-link"></use>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="reviews-featured__swiper">
+			<div class="swiper-container swiper-reviews js-swiper-reviews">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<div class="reviews-featured__item">
+							<div class="reviews-featured__item-head">
+								<span class="reviews-featured__item-title">{{ text_our_rating }} — <span class="ui-rate">{{average_rating}} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+										</svg>
+									</span>
+								</span>
+							</div>
+							<div class="reviews-featured__item-body">
+								<p>{{ text_info }}</p>
+								<p>{{ text_initial }}</p>
+							</div>
+						</div>
+					</div>					
+					{% for review in reviews %}
+					<div class="swiper-slide">
+						<div class="reviews-featured__item">
+							<div class="reviews-featured__item-head">
+								<span class="reviews-featured__item-letter">{{ review.author|first|upper }}</span>
+								<span class="reviews-featured__item-title">{{ review.author }}<small>{{ text_rate }} <span class="ui-rate">{{ review.rating }}<svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+											</svg>
+										</span>
+									</small>
+								</span>
+							</div>
+							<div class="reviews-featured__item-body">
+								<p>{{ review.description }}</p>
+								<span>{{ review.date_added }}</span>
+								<a href="{{ review.href }}">{{ text_all }}</a>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="swiper-scrollbar js-swiper-reviews-scrollbar"></div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

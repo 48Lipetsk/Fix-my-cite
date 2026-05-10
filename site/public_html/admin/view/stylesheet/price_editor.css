@@ -1,0 +1,48 @@
+.relative{
+    position: relative!important;
+}
+.price_editor{
+    position: absolute;
+    z-index: 1;
+    top: 95%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    padding: 5px;
+    min-width: 100px;
+    background-color: white;
+    border: 1px solid #C7C7C7;
+    border-radius: 3px;
+}
+.price_editor::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid #C7C7C7;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
+.price_editor > input[name='new_price']{
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+    border: 1px solid #C7C7C7;
+    padding: 5px;
+    outline: none;
+}
+.price_editor > .price_editor__inner{
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-between;
+}
+.pricing{
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    outline: 1px solid #C7C7C7;
+}

@@ -1,0 +1,35 @@
+{% for key,link in main_navs_v[number].type[0].links %} 
+{% if categories['categoriesls'][key|slice(1)] is defined %} 
+	{% set cat_id = key|slice(1) %} 
+	{% set element = main_navs_v[number]['addelem'] %}
+  	
+    {% if (not categories['categoriesls'][cat_id]['childrencount']) %}
+		<li>
+			<a class="header__catalog-link" href="{{ categories['categoriesls'][cat_id]['href'] }}" data-catalog-target>
+				{% if (nav_icons[key]['image']['v'][naw_row_id]) %}
+				<span class="header__catalog-link-icon">
+					{{nav_icons[key]['image']['v'][naw_row_id]}}
+				</span>
+				{% endif %}
+				<span class="header__catalog-link-text">{{ categories['categoriesls'][cat_id]['name'] }}</span>
+			</a>
+		</li>
+    {% else %} 
+		<li>
+			<a class="header__catalog-link" href="{{ categories['categoriesls'][cat_id]['href'] }}" data-catalog-target="mega_category_{{ cat_id }}">
+				{% if (nav_icons[key]['image']['v'][naw_row_id]) %}
+				<span class="header__catalog-link-icon">
+					{{nav_icons[key]['image']['v'][naw_row_id]}}
+				</span>
+				{% endif %}
+				<span class="header__catalog-link-text">{{ categories['categoriesls'][cat_id]['name'] }}</span>
+				<span class="header__catalog-link-arrow">
+					<svg class="icon-arrow-right">
+						<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+					</svg>
+				</span>
+			</a>
+		</li>
+    {% endif %} 
+{% endif %} 
+{% endfor %}

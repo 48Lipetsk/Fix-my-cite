@@ -1,0 +1,21 @@
+{% if not redirect %}
+{{ payment }}
+<script>
+$('#button-confirm, #continue-button, #collapse-checkout-confirm input[type=submit], #collapse-checkout-confirm a[href*=\'paykeeper/gopay\']').bindFirst('click', function(e) { 
+	if($("#agree").prop("checked") == false){
+		e.preventDefault();
+		$('.alerts-wrapper').empty();
+		$('.alerts-wrapper').append($('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">{{ error_agree }}</p></div>'));
+		e.stopImmediatePropagation();
+		return ;
+	}
+});	
+$(function() {
+$('#button-confirm, #continue-button, #collapse-checkout-confirm input[type=submit], #collapse-checkout-confirm a[href*=\'paykeeper/gopay\']').addClass('ui-btn ui-btn--60 ui-btn--primary').parent().addClass('checkout__step-action');
+});
+</script> 
+{% else %} 
+<script>
+location = '{{ redirect }}';
+</script> 
+{% endif %} 

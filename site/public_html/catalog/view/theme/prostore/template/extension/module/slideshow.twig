@@ -1,0 +1,38 @@
+<!-- Intro Opencart slideshow :: Start-->
+<div class="intro intro--oc-slideshow" style="background: transparent;box-shadow: none;">
+	<div class="container-fluid">
+		<div class="intro__swiper">
+			<div class="swiper-container swiper-intro js-swiper-intro" data-swiper-auto="2500">
+				<div class="swiper-wrapper">
+					{% for banner in banners %}
+					<div class="swiper-slide">
+						{% if banner.link %}<a class="intro__item" href="{{ banner.link }}">{% else %}<div class="intro__item">{% endif %}
+							<div class="intro__item-desc">
+								<span class="h2 intro__item-title">{{ banner.title }}</span>
+							</div>
+							<div class="intro__item-cover">
+								<img src="{{ banner.image }}" alt="{{ banner.title }}">
+							</div>
+						{% if banner.link %}</a>{% else %}</div>{% endif %}
+					</div>
+					{% endfor %}
+				</div>
+				<div class="swiper-control">
+					<button class="swiper-prev js-swiper-intro-prev">
+						<svg class="icon-prev"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-prev"></use>
+						</svg>
+					</button>
+					<button class="swiper-next js-swiper-intro-next">
+						<svg class="icon-next"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-next"></use>
+						</svg>
+					</button>
+				</div>
+				<div class="swiper-pagination js-swiper-intro-pagination">
+					{% for banner in banners %}
+					<div class="swiper-pagination-bullet"></div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- Intro Opencart slideshow :: End-->

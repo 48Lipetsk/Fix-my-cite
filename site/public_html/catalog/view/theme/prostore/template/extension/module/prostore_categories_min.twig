@@ -1,0 +1,37 @@
+	<!-- Categories :: Start-->
+<div class="categories">
+	<div class="container-fluid">
+		<span class="h2 categories__title">{% if title %}{{ title }}{% else %}{{ heading_title }}{% endif %}</span>
+		<div class="categories__swiper">
+			<div class="swiper-container swiper-categories swiper-categories--col-{{ column }} js-swiper-categories">
+				<div class="swiper-wrapper">
+					{% for i,banner1 in banners %}
+					{% for banner in banner1 %}
+					<div class="swiper-slide">
+						<div class="categories__item categories__item--0{{ i }}">
+							<div class="categories__item-in" style="background: {% if banner.background %}#{{ banner.background }}{% else %}var(--theme-primary-color){% endif %};">
+								<a href="{{ banner.link }}" class="categories__item-back" aria-label="{{ banner.title }}">
+									<div class="categories__item-image">
+										<img src="{{ banner.image }}" alt="{{ category.name }}" width="{{ banner.width }}" height="{{ banner.height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</div>
+								</a>
+								<div class="categories__item-front">
+									<a class="h3 categories__item-title" href="{{ banner.link }}">{{ banner.title }}</a>
+									<ul class="categories__item-menu">
+										{% for subcategory in banner.subcategories %}
+										<li>
+											<a class="categories__item-link" href="{{ subcategory.href }}">{{ subcategory.name }}</a>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- Categories :: End-->

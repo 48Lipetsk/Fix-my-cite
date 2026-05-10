@@ -1,0 +1,54 @@
+<div class="cart__code cart__code--reward">
+	<div class="cart__code-head">
+		<span class="cart__code-title">{{ text_prostore_reward }} ({{ points_total }})</span>
+	</div>
+	<div class="cart__code-body">
+		<div class="ui-code">
+			<input class="ui-code__input" type="text" name="reward" value="{{ reward }}" placeholder="{{ entry_reward }}">
+			<button id="button-reward" data-loading-text="{{ text_loading }}" class="ui-code__btn">{{ button_submit }}</button>
+		</div>
+	</div>
+</div>
+<script>
+// --------------------------------------------------------------------------
+// Loading ocAddReward
+// --------------------------------------------------------------------------
+
+function ocAddReward() {
+	$('#button-reward').on('click', function(e) {
+	e.preventDefault();
+		$.ajax({
+			url: 'index.php?route=extension/total/reward/reward',
+			type: 'post',
+			data: 'reward=' + encodeURIComponent($('input[name=\'reward\']').val()),
+			dataType: 'json',
+			beforeSend: function() {
+				$('input[name=\'reward\']').attr('disabled', 'disabled');
+			},
+			complete: function() {
+				$('input[name=\'reward\']').removeAttr('disabled');
+			},
+			success: function(json) {
+				$('.alert').remove();
+
+				if (json['error']) {
+					$('.alerts-wrapper').append($('<div class="alert alert--red"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text"> ' + json['error'] + ' </p></div>'));
+				}
+
+				if (json['redirect']) {
+					location = json['redirect'];
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});	
+	$('input[name=\'reward\']').keypress(function(e){
+		if(e.which == 13){
+			$('#button-reward').trigger('click');
+		}
+	});
+}
+document.addEventListener('DOMContentLoaded', ocAddReward);
+</script>

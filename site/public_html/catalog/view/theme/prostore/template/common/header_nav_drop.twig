@@ -1,0 +1,88 @@
+{% set header_class = (header_type == '4' or header_type == '5' or header_type == '6' or header_type == '8') ? 1 : 0 %}
+{% for key,link in main_navs[number].type[0].links %} 
+{% if categories['categoriesls'][key|slice(1)] is defined %} 
+  {% set cat_id = key|slice(1) %} 
+ 
+	{% if (not categories['categoriesls'][cat_id]['childrencount']) %}
+	<li>
+		<a class="{% if header_class %}header__nav-link{% else %}header__tags-btn{% endif %}" href="{{ categories['categoriesls'][cat_id]['href'] }}">
+			{% if not header_class %}
+				{% if (nav_icons[key]['image']['h'][naw_row_id]) %}
+				{{nav_icons[key]['image']['h'][naw_row_id]}}
+				{% endif %}
+			{% endif %}
+			{{ categories['categoriesls'][cat_id]['name'] }}
+		</a>
+	</li>
+    {% else %} 
+	<li>
+		<a class="{% if header_class %}header__nav-link{% else %}header__tags-btn{% endif %}" href="{{ categories['categoriesls'][cat_id]['href'] }}">
+			{% if not header_class %}
+				{% if (nav_icons[key]['image']['h'][naw_row_id]) %}
+				{{nav_icons[key]['image']['h'][naw_row_id]}}
+				{% endif %}
+			{% endif %}
+			{{ categories['categoriesls'][cat_id]['name'] }}
+			{% if header_class %}<svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use></svg>{% endif %}
+		</a>
+		<div class="{% if header_class %}header__nav-dropdown{% else %}header__tags-offcanvas{% endif %}">
+			<ul class="{% if header_class %}header__nav-submenu{% else %}header__tags-submenu{% endif %}">
+				{% for category in categories['categoriesls'][cat_id]['children'] %}
+				{% if (category['children']) %}
+				<li>
+					<a class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}" href="{{ category['href'] }}">
+						<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-text">{{ category['name'] }}</span>
+						<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-arrow">
+							<svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+							</svg>
+						</span>
+					</a>
+					<div class="{% if header_class %}header__nav-dropdown{% else %}header__tags-offcanvas{% endif %}">
+						<ul class="{% if header_class %}header__nav-submenu{% else %}header__tags-submenu{% endif %}">
+							{% for category3 in category['children'] %}
+							{% if (category3['children']) %}
+							<li>
+								<a class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}" href="{{ category3['href'] }}">
+									<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-text">{{ category3['name'] }}</span>
+									<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-arrow">
+										<svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+										</svg>
+									</span>
+								</a>
+								<div class="{% if header_class %}header__nav-dropdown{% else %}header__tags-offcanvas{% endif %}">
+									<ul class="{% if header_class %}header__nav-submenu{% else %}header__tags-submenu{% endif %}">
+										{% for category4 in category3['children'] %}
+										<li>
+											<a class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}" href="{{ category4['href'] }}">
+												<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-text">{{ category4['name'] }}</span>
+											</a>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</li>
+							{% else %}
+							<li>
+								<a class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}" href="{{ category3['href'] }}">
+									<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-text">{{ category3['name'] }}</span>
+								</a>
+							</li>
+							{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				</li>
+				{% else %}
+				<li>
+					<a class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}" href="{{ category['href'] }}">
+						<span class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}-text">{{ category['name'] }}</span>
+					</a>
+				</li>
+				{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	</li>
+   {% endif %} 
+{% endif %} 
+{% endfor %}

@@ -1,0 +1,76 @@
+<!-- Categories Aside :: Start-->
+<div class="categories-aside">
+	<div class="categories-aside__offcanvas">
+		<div class="categories-aside__offcanvas-in">
+			<span class="h2 categories-aside__title">{% if title %}{{ title }}{% else %}{{ heading_title }}{% endif %}</span>
+			<ul class="categories-aside__menu">
+				{% for category in categories %}
+				<li{% if (category.category_id == path_ids.0) %} class="is-open"{% endif %}>
+					<a class="categories-aside__link" href="{{ category.href }}">{{ category.name }}{% if showcount %}{{ category.totalitems }}{% endif %}
+					{% if category.children is not empty %}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use></svg></span>
+					{% endif %}
+					</a>
+					{% if category.children is not empty %}
+					<div class="categories-aside__dropdown"{% if (category.category_id == path_ids.0) %} style="display: block;"{% endif %}>
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ category.name }}
+						</span>
+						<ul class="categories-aside__submenu">
+							{% for category2 in category.children %}
+							<li>
+								<a class="categories-aside__sublink{% if category2.category_id == path_ids.1 %} is-active{% endif %}" href="{{ category2.href }}">{{ category2.name }}{% if showcount %}{{ category2.totalitems }}{% endif %}
+								{% if (category2.children is not empty) %}<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use></svg>
+								{% endif %}
+								</a>
+								{% if (category2.children is not empty) %}
+								<div class="categories-aside__dropright">
+									<span class="categories-aside__back">
+										<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+										</svg>{{ category2.name }}
+									</span>
+									<ul class="categories-aside__submenu">
+										{% for category3 in category2.children %}
+										{% if (category3.children is not empty) %}
+										<li>
+											<a class="categories-aside__sublink{% if category3.active %} is-active{% endif %}" href="{{ category3.href }}">{{ category3.name }}{% if showcount %}{{ category3.totalitems }}{% endif %}<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+												</svg>
+											</a>
+											<div class="categories-aside__dropright">
+												<span class="categories-aside__back">
+													<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+													</svg>{{ category3.name }}
+												</span>
+												<ul class="categories-aside__submenu">
+													{% for category4 in category3.children %}
+													<li>
+														<a class="categories-aside__sublink{% if category4.category_id == path_ids.3 %} is-active{% endif %}" href="{{ category4.href }}">{{ category4.name }}{% if showcount %}{{ category4.totalitems }}{% endif %}</a>
+													</li>
+													{% endfor %}
+													<li><a class="categories-aside__sublink categories-aside__sublink--show_all" href="{{ category3.href }}">{{ text_prostore_show_all }}</a></li>
+												</ul>
+											</div>
+										</li>
+										{% else %}
+										<li>
+											<a class="categories-aside__sublink{% if category3.active %} is-active{% endif %}" href="{{ category3.href }}">{{ category3.name }}{% if showcount %}{{ category3.totalitems }}{% endif %}</a>
+										</li>
+										{% endif %}
+										{% endfor %}
+										<li><a class="categories-aside__sublink categories-aside__sublink--show_all" href="{{ category2.href }}">{{ text_prostore_show_all }}</a></li>
+									</ul>
+								</div>
+								{% endif %}
+							</li>
+							{% endfor %}
+							<li><a class="categories-aside__sublink categories-aside__sublink--show_all" href="{{ category.href }}">{{ text_prostore_show_all }}</a></li>
+						</ul>
+					</div>
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<button class="categories-aside__close">{{ text_prostore_menu_close }}</button>
+	</div>
+</div><!-- Categories Aside :: End-->

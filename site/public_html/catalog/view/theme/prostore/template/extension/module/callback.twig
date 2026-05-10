@@ -1,0 +1,24 @@
+<span class="popup__title">{{ sendthis }}</span>
+<div class="popup__form">
+	<form class="data-callback">
+		<div class="ui-field">
+			<label class="ui-label required">{{ namew }}</label>
+			<input class="ui-input" type="text" value="" name="name">
+		</div>
+		<div class="ui-field">
+			<label class="ui-label required">{{ phonew }}</label>
+			<input class="ui-input" type="tel" value="" name="phone">
+		</div>
+		<div class="ui-field">
+			<label class="ui-label">{{ comment }}</label>
+			<textarea class="ui-textarea" name="comment" cols="30" rows="10"></textarea>
+		</div>
+		{{ captcha }}
+		
+		<button type="button" class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth contact-send">{{ sendw }}</button>
+		
+		{% if (text_prostore_pdata) %} 
+		<div class="personal-data">{{ text_prostore_pdata }}</div>
+		{% endif %} 
+	</form>
+</div>

@@ -1,0 +1,14 @@
+		<div class="container-fluid">
+            <div class="article__other article__other--ocstore">
+              <span class="h2 article__other-heading">{{ heading_title }} </span>
+				<div class="article__other-slides js-slick-article">
+				{% for article in articles %} 
+				<a class="blog__item" href="{{ article['href'] }}">
+                  <figure class="blog__item-image"><img src="{{ article['thumb'] }}" alt="{{ article['name'] }}"></figure>
+                  <span class="h3 blog__item-title">{{ article['name'] }}</span>
+                  <p class="blog__item-text">{{ article['description'] }}</p>
+				</a>
+				{% endfor %} 
+				</div>
+            </div>
+        </div>

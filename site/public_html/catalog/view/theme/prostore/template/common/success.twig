@@ -1,0 +1,105 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+{% if (order_id is defined) %}
+
+<!-- Main :: Start-->
+<main class="main">
+	<!-- System :: Start-->
+	<div class="system">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+				<div class="container-fluid">
+					{% if logo_success %}
+					<div class="system__image">
+						<img src="{{ logo_success }}" alt="{{ heading_title }}" loading="lazy">
+					</div>
+					{% else %}
+					<picture class="system__image">
+						<source type="image/webp" srcset="catalog/view/theme/prostore/images/img-mail-status.webp">
+						<img src="catalog/view/theme/prostore/images/img-mail-status.png" alt="{{ heading_title }}" width="136" height="136" loading="lazy">
+					</picture>
+					{% endif %}
+					<h1 class="system__title">{{ heading_title }}</h1>
+					<div class="system__text ui-wysiwyg">{{ text_message }}</div>
+					<!-- <div class="system__social">
+						<p class="system__social-text">{{ text_prostore_con_soc }}</p>
+						{% if social_navs is not empty %}
+						<ul class="tech__social">
+							{% for key,social_nav in social_navs %}
+							<li>
+								<a class="tech__social-link" href="{{ social_nav.link }}" target="{{ social_nav.attr }}" rel="nofollow">
+									<img src="catalog/view/theme/prostore/images/icons/social/{{ social_links[social_nav.settype]|lower|replace({' ': '_'}) }}.svg" alt="{{ social_nav.language[language_id].name }}" title="{{ social_nav.language[language_id].name }}" width="44" height="44">
+								</a>
+							</li>
+							{% endfor %}
+						</ul>
+						{% endif %}
+					</div> -->
+				</div>
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- System :: End-->
+</main>
+<!-- Main :: End-->
+
+{% else %}
+
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+			<div class="ui-wysiwyg editor">
+				{{ text_message }} 
+				<a href="{{ continue }}" class="ui-btn ui-btn--40 ui-btn--primary">{{ button_continue }}</a>
+			</div>
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+
+{% endif %}
+{{ footer }}
+<script>
+	{% if (order_id is defined) %} 
+	function send_checkout_success() {
+		$(document).ready(function() {
+			sendGAch("order_id={{ order_id }}",'purchase');
+			sendMetrics('prostore_checkout_success');
+		});
+	}
+	document.addEventListener('DOMContentLoaded', send_checkout_success);
+	{% endif %} 
+</script>	
+</body></html>

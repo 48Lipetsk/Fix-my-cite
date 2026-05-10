@@ -1,0 +1,44 @@
+<!-- Banners :: Start-->
+<div class="banners">
+	<div class="container-fluid">
+		<div class="swiper-container swiper-banners js-swiper-banners">
+			<div class="swiper-wrapper">
+				{% for banner in banners %}
+				<div class="swiper-slide">
+					<div class="banners__item">
+						<div class="banners__item-image">
+							<img src="{{ banner.image }}" alt="{{ banner.title|striptags }}" width="{{ width }}" height="{{ height }}" loading="lazy">
+						</div>
+						<div class="banners__item-desc">
+							<!--<span class="banners__item-category"></span>-->
+							{% if banner.title %}
+							<span class="h2 banners__item-title">
+							{{ banner.title }}
+							</span>
+							{% endif %}
+							{% if banner.link %}
+							<div class="banners__item-action">
+								<a class="ui-btn ui-btn--35 ui-btn--dark ui-btn--outline" href="{{ banner.link }}"> {{ text_prostore_detail }}<svg class="icon-arrow-btn"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-btn"></use>
+									</svg>
+								</a>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="swiper-control">
+				<button class="swiper-prev js-swiper-banners-prev">
+					<svg class="icon-prev"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-prev"></use>
+					</svg>
+				</button>
+				<button class="swiper-next js-swiper-banners-next">
+					<svg class="icon-next"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-next"></use>
+					</svg>
+				</button>
+			</div>
+			<div class="swiper-pagination js-swiper-banners-pagination"></div>
+		</div>
+	</div>
+</div><!-- Banners :: End-->

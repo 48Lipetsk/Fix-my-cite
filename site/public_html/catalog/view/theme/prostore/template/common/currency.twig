@@ -1,0 +1,30 @@
+{% if currencies|length > 1 %}
+<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-currency">
+	<div class="header__currency">
+		<button class="header__currency-btn js-currency-trigger">
+			<mark>{{ text_currency }}</mark>
+			{% for currency in currencies %}
+			{% if currency.code == code %}{{ currency.title }}{% endif %}
+			{% endfor %}
+			<svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use></svg>
+		</button>
+		<div class="header__currency-offcanvas">
+			<div class="header__currency-offcanvas-overlay js-currency-trigger"></div>
+			<div class="header__currency-offcanvas-content">
+				<ul class="header__currency-menu">
+					{% for currency in currencies %}
+					<li>
+						<a data-curr="{{ currency.code }}" class="header__currency-link currency-select" href="#">{{ currency.title }}</a>
+					</li>
+					{% endfor %}
+					<li>
+						<button class="header__currency-link header__currency-link--close js-currency-trigger">{{ text_prostore_menu_close }}</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="code" value="">
+	<input type="hidden" name="redirect" value="{{ redirect }}">
+</form>
+{% endif %}

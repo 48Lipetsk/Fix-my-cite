@@ -1,0 +1,22 @@
+<!-- Benefits Aside :: Start-->
+<div class="benefits-aside is-xl-visible">
+	{% if title %}<span class="h2 benefits-aside__title">{{ title }}</span>{% endif %}
+	<ul class="benefits-aside__list">
+		{% for advantage1 in advantages %}
+		{% for advantage in advantage1 %}
+		<li>
+			{% if advantage.link %}<a class="benefits__item benefits__item--grid" href="{{ advantage.link }}">{% else %}<div class="benefits__item benefits__item--grid">{% endif %}
+				<div class="benefits__item-image">
+					{% if (icon_type == 'html') %}
+					{{ advantage.html }}
+					{% else %}
+					<img src="{{ advantage.image }}" alt="{{ advantage.title }}" width="{{ width }}" height="{{ height }}" {% if lazyload %}loading="lazy"{% endif %}>
+					{% endif %}
+				</div>
+				<span class="h4 benefits__item-title">{{ advantage.title }}</span>
+			{% if advantage.link %}</a>{% else %}</div>{% endif %}
+		</li>
+		{% endfor %}
+		{% endfor %}
+	</ul>
+</div><!-- Benefits Aside :: End-->

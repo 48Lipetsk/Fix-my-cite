@@ -1,0 +1,106 @@
+<!-- Filter :: Start-->
+<div class="filter-aside">
+	<button class="filter-aside__toggle"> {{ text_prostore_filter }} {% if filter_groups|length > 0 %}<span class="filter-aside__counter">{{ filter_groups|length }}</span>{% endif %}
+		<svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+		</svg>
+	</button>
+	<div class="filter-aside__offcanvas">
+		<input type="hidden" name="min_price_init" value="{{ priceLimits.min_price }}" id="min_price_init">
+		<input type="hidden" name="max_price_init" value="{{ priceLimits.max_price }}" id="max_price_init">
+		<input type="hidden" name="min_price_current" value="{{ min_price }}" id="min_price_current">
+		<input type="hidden" name="max_price_current" value="{{ max_price }}" id="max_price_current">
+		<input type="hidden" name="filter_category_id" value="{{ category_id }}" id="filter_category_id">
+		<form action="#">
+			<div class="filter-aside__more"></div>
+			<div class="filter-aside__head">
+				<button class="filter-aside__close">
+					<svg class="icon-arrow-left"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-left"></use>
+					</svg>
+				</button>
+				<span class="filter-aside__title">{{ text_prostore_filter }} {% if filter_groups|length > 0 %}<span class="filter-aside__counter">{{ filter_groups|length }}</span>{% endif %}
+				</span>
+				<button class="filter-aside__reset js-filter-reset" type="reset">
+					<span class="is-xl-visible">
+						<svg class="icon-reset"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-reset"></use>
+						</svg>{{ text_prostore_reset }}
+					</span>
+					<span class="is-xl-hidden"> {{ text_prostore_reset }}</span>
+				</button>
+			</div>
+			<div class="filter-aside__body">
+				<div class="filter-aside__group {% if min_price == max_price %}hide{% endif %}">
+					<div class="filter-aside__group-head">
+						<span class="filter-aside__group-title">{{ text_prostore_filter_price }}</span>
+					</div>
+					<div class="filter-aside__group-body" id="filterblock">
+						<div class="ui-range">
+							<div class="row">
+								<div class="col-6">
+									<div class="ui-range__field">
+										<span class="ui-range__append">{{ currencySymbol }}</span>
+										<input class="ui-range__input js-filter-from" type="text" value="{{ text_prostore_from }} {{ min_price_format|replace({(currencySymbol): ''}) }}" data-prefix="{{ text_prostore_from }}" aria-label="{{ text_prostore_from }}" disabled>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="ui-range__field">
+										<span class="ui-range__append">{{ currencySymbol }}</span>
+										<input class="ui-range__input js-filter-to" type="text" value="{{ text_prostore_to }} {{ max_price_format|replace({(currencySymbol): ''}) }}" data-prefix="{{ text_prostore_to }}" aria-label="{{ text_prostore_to }}" disabled>
+									</div>
+								</div>
+							</div>
+							<input class="ui-range__slider" type="range" data-min="{{ priceLimits.min_price }}" data-max="{{ priceLimits.max_price }}" data-wallet="{{ currencySymbol }}" aria-label="{{ text_prostore_filter_price }}">
+						</div>
+					</div>
+				</div>
+				{% for filter_group in filter_groups %}
+				<div class="filter-aside__group">
+					<div class="filter-aside__group-head">
+						<span class="filter-aside__group-title">{{ filter_group.name }}</span>
+						<!-- <button class="filter-aside__group-reset" type="reset">
+							<svg class="icon-reset"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-reset"></use>
+							</svg>
+						</button> -->
+					</div>
+					<div class="filter-aside__group-body js-readmore" data-collapsedheight-toggle="275" data-readmore-toggle="{{ text_prostore_show_more }}" data-readless-toggle="{{ text_prostore_show_less }}">
+						<ul class="filter-aside__group-checklist" id="filter-group{{ filter_group.filter_group_id }}">
+							{% for i,filter in filter_group.filter %}
+							{% if filter.filter_id in filter_category %}
+							<li>
+								<label class="ui-check">
+									<input class="ui-check__input" type="checkbox" id="filter-{{ filter.filter_id }}-{{ i }}" value="{{ filter.filter_id }}" name="filter[]" checked="checked">
+									<span class="ui-check__tag">
+										<span class="ui-check__tag-text">{{ filter.name }}</span>
+										<span class="ui-check__tag-cancel">
+											<svg class="icon-cancel"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cancel"></use>
+											</svg>
+										</span>
+									</span>
+								</label>
+							</li>
+							{% else %}
+							<li{{ not filter.isactive ? ' class="filter-disabled"' : ''}}>
+								<label class="ui-check">
+									<input class="ui-check__input" type="checkbox" id="filter-{{ filter.filter_id }}-{{ i }}" value="{{ filter.filter_id }}" name="filter[]" {{ not filter.isactive ? 'disabled' : ''}}>
+									<span class="ui-check__tag">
+										<span class="ui-check__tag-text">{{ filter.name }}</span>
+										<span class="ui-check__tag-cancel">
+											<svg class="icon-cancel"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cancel"></use>
+											</svg>
+										</span>
+									</span>
+								</label>
+							</li>
+							{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="filter-aside__foot is-xl-visible">
+				<button type="button" id="button-filter" class="ui-btn ui-btn--primary ui-btn--35">{{ text_prostore_show }}</button>
+			</div>
+			<input type="hidden" name="fix_filter_action" value="{{ action }}">
+		</form>
+	</div>
+</div><!-- Filter :: End-->

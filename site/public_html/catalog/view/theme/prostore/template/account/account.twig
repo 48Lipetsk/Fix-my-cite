@@ -1,0 +1,217 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Alerts :: Start-->
+<div class="alerts-wrapper">
+	{% if success %}
+	<div class="alert alert--green">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ success }}</p>
+	</div>
+	{% endif %}
+</div><!-- Alerts :: End-->
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row personal__wrapper">
+		{{ column_left|replace({'<div id="column-left" class="col-xl-3">': '<div id="column-left" class="col-xl-3 personal__sidebar">'}) }}
+		<div class="col-xl-{{ col }}">                          
+			<span class="h2 personal__title">{{ text_prostore_view }}</span>
+			<div class="personal__overview">
+				<div class="personal__overview-sidebar">
+					<div class="personal__action">
+						<ul class="personal__action-menu">
+							<li>
+								<a class="personal__action-link" href="{{ compare }}">
+									<span class="personal__action-link-icon">
+										<svg width="29" height="26" viewBox="0 0 29 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M17.8462 13.383C17.8462 16.5454 20.348 19.1183 23.4231 19.1183C24.9127 19.1183 26.3132 18.5217 27.3666 17.4384C28.4199 16.3552 29 14.9149 29 13.383C29 13.175 28.945 12.9711 28.8409 12.7928L25.341 6.79334C25.743 6.61998 26.0256 6.21155 26.0256 5.73514C26.0256 5.10166 25.5262 4.58808 24.9103 4.58808H15.6154V1.14706C15.6154 0.513576 15.1161 0 14.5 0C13.8841 0 13.3846 0.513576 13.3846 1.14706V4.58808H4.08974C3.47383 4.58808 2.97436 5.10166 2.97436 5.73514C2.97436 6.21155 3.25685 6.61998 3.65898 6.79334L0.159054 12.7928C0.0548769 12.9711 0 13.1751 0 13.383C0 16.5454 2.50181 19.1183 5.57692 19.1183C8.65204 19.1183 11.1538 16.5454 11.1538 13.383C11.1538 13.1751 11.099 12.9711 10.9949 12.7928L7.54684 6.8822H13.3846V23.7059H4.83333C4.21742 23.7059 3.71795 24.2195 3.71795 24.8529C3.71795 25.4864 4.21742 26 4.83333 26H24.1667C24.7827 26 25.2821 25.4864 25.2821 24.8529C25.2821 24.2195 24.7827 23.7059 24.1667 23.7059H15.6154V6.8822H21.4532L18.0052 12.7928C17.9011 12.9711 17.8462 13.1751 17.8462 13.383ZM5.57692 16.8241C4.12298 16.8241 2.88342 15.865 2.42291 14.53H8.73093C8.27058 15.865 7.03101 16.8241 5.57692 16.8241ZM8.06854 12.2359H3.0853L5.57692 7.96479L8.06854 12.2359ZM23.4231 7.96479L25.9147 12.2359H20.9313L23.4231 7.96479ZM26.5771 14.53C26.1167 15.865 24.8772 16.8241 23.4231 16.8241C21.9691 16.8241 20.7294 15.865 20.2689 14.53H26.5771Z" fill="currentColor" />
+										</svg>
+									</span>
+									<span class="personal__action-link-text">{{ text_prostore_comp_head }} </span>
+								</a>
+							</li>
+							<li>
+								<a class="personal__action-link" href="{{ wishlist }}">
+									<span class="personal__action-link-icon">
+										<svg width="26" height="25" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M23.6296 2.64842C22.2512 1.15049 20.424 0.236237 18.4781 0.070812C16.5322 -0.0946127 14.5959 0.499695 13.0189 1.74638C11.3644 0.412553 9.30515 -0.19227 7.25573 0.0537119C5.20632 0.299694 3.31901 1.37821 1.97386 3.07207C0.628711 4.76593 -0.0743573 6.94932 0.00623561 9.18255C0.0868286 11.4158 0.945096 13.533 2.4082 15.1078L10.4833 23.8744C11.1595 24.5957 12.0702 25 13.0189 25C13.9676 25 14.8784 24.5957 15.5545 23.8744L23.6296 15.1078C25.1478 13.4521 26 11.2125 26 8.87809C26 6.54369 25.1478 4.30412 23.6296 2.64842ZM21.7961 13.1628L13.7211 21.9153C13.6292 22.0159 13.5198 22.0957 13.3993 22.1502C13.2788 22.2047 13.1495 22.2327 13.0189 22.2327C12.8883 22.2327 12.759 22.2047 12.6385 22.1502C12.518 22.0957 12.4086 22.0159 12.3167 21.9153L4.24167 13.1205C3.2219 11.9906 2.65086 10.4728 2.65086 8.89219C2.65086 7.31156 3.2219 5.79378 4.24167 4.6639C5.28084 3.55184 6.68236 2.92829 8.14266 2.92829C9.60297 2.92829 11.0045 3.55184 12.0437 4.6639C12.1645 4.796 12.3084 4.90086 12.4668 4.97241C12.6253 5.04397 12.7952 5.08081 12.9669 5.08081C13.1385 5.08081 13.3085 5.04397 13.467 4.97241C13.6254 4.90086 13.7692 4.796 13.8901 4.6639C14.9293 3.55184 16.3308 2.92829 17.7911 2.92829C19.2514 2.92829 20.6529 3.55184 21.6921 4.6639C22.7259 5.77897 23.3157 7.28853 23.3351 8.86919C23.3546 10.4499 22.8021 11.9759 21.7961 13.1205V13.1628Z" fill="currentColor" />
+										</svg>
+									</span>
+									<span class="personal__action-link-text">{{ text_prostore_wish_head }}</span>
+								</a>
+							</li>
+							<li>
+								<a class="personal__action-link" href="{{ download }}">
+									<span class="personal__action-link-icon">
+										<svg width="20" height="25" viewBox="0 0 20 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M6.25 10H7.5C7.83152 10 8.14946 9.8683 8.38388 9.63388C8.6183 9.39946 8.75 9.08152 8.75 8.75C8.75 8.41848 8.6183 8.10054 8.38388 7.86612C8.14946 7.6317 7.83152 7.5 7.5 7.5H6.25C5.91848 7.5 5.60054 7.6317 5.36612 7.86612C5.1317 8.10054 5 8.41848 5 8.75C5 9.08152 5.1317 9.39946 5.36612 9.63388C5.60054 9.8683 5.91848 10 6.25 10ZM6.25 12.5C5.91848 12.5 5.60054 12.6317 5.36612 12.8661C5.1317 13.1005 5 13.4185 5 13.75C5 14.0815 5.1317 14.3995 5.36612 14.6339C5.60054 14.8683 5.91848 15 6.25 15H13.75C14.0815 15 14.3995 14.8683 14.6339 14.6339C14.8683 14.3995 15 14.0815 15 13.75C15 13.4185 14.8683 13.1005 14.6339 12.8661C14.3995 12.6317 14.0815 12.5 13.75 12.5H6.25ZM20 8.675C19.987 8.56017 19.9618 8.44704 19.925 8.3375V8.225C19.8649 8.09647 19.7847 7.97833 19.6875 7.875L12.1875 0.375C12.0842 0.27777 11.966 0.197601 11.8375 0.1375C11.8002 0.1322 11.7623 0.1322 11.725 0.1375C11.598 0.0646766 11.4578 0.0179303 11.3125 0H3.75C2.75544 0 1.80161 0.395088 1.09835 1.09835C0.395088 1.80161 0 2.75544 0 3.75V21.25C0 22.2446 0.395088 23.1984 1.09835 23.9017C1.80161 24.6049 2.75544 25 3.75 25H16.25C17.2446 25 18.1984 24.6049 18.9017 23.9017C19.6049 23.1984 20 22.2446 20 21.25V8.75C20 8.75 20 8.75 20 8.675ZM12.5 4.2625L15.7375 7.5H13.75C13.4185 7.5 13.1005 7.3683 12.8661 7.13388C12.6317 6.89946 12.5 6.58152 12.5 6.25V4.2625ZM17.5 21.25C17.5 21.5815 17.3683 21.8995 17.1339 22.1339C16.8995 22.3683 16.5815 22.5 16.25 22.5H3.75C3.41848 22.5 3.10054 22.3683 2.86612 22.1339C2.6317 21.8995 2.5 21.5815 2.5 21.25V3.75C2.5 3.41848 2.6317 3.10054 2.86612 2.86612C3.10054 2.6317 3.41848 2.5 3.75 2.5H10V6.25C10 7.24456 10.3951 8.19839 11.0983 8.90165C11.8016 9.60491 12.7554 10 13.75 10H17.5V21.25ZM13.75 17.5H6.25C5.91848 17.5 5.60054 17.6317 5.36612 17.8661C5.1317 18.1005 5 18.4185 5 18.75C5 19.0815 5.1317 19.3995 5.36612 19.6339C5.60054 19.8683 5.91848 20 6.25 20H13.75C14.0815 20 14.3995 19.8683 14.6339 19.6339C14.8683 19.3995 15 19.0815 15 18.75C15 18.4185 14.8683 18.1005 14.6339 17.8661C14.3995 17.6317 14.0815 17.5 13.75 17.5Z" fill="currentColor" />
+										</svg>
+									</span>
+									<span class="personal__action-link-text">{{ text_account_download }}</span>
+								</a>
+							</li>
+							<li>
+
+							</li>
+						</ul>
+					</div>
+					<a href="{{ newsletter }}" class="personal__subsc is-xl-visible">
+						<figure class="personal__subsc-icon">
+							<svg width="56" height="50" viewBox="0 0 56 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M42 11.1111H44.8V13.8889C44.8 14.6256 45.095 15.3321 45.6201 15.8531C46.1452 16.374 46.8574 16.6667 47.6 16.6667C48.3426 16.6667 49.0548 16.374 49.5799 15.8531C50.105 15.3321 50.4 14.6256 50.4 13.8889V11.1111H53.2C53.9426 11.1111 54.6548 10.8185 55.1799 10.2975C55.705 9.77658 56 9.07005 56 8.33333C56 7.59662 55.705 6.89008 55.1799 6.36915C54.6548 5.84821 53.9426 5.55556 53.2 5.55556H50.4V2.77778C50.4 2.04107 50.105 1.33453 49.5799 0.813592C49.0548 0.292658 48.3426 0 47.6 0C46.8574 0 46.1452 0.292658 45.6201 0.813592C45.095 1.33453 44.8 2.04107 44.8 2.77778V5.55556H42C41.2574 5.55556 40.5452 5.84821 40.0201 6.36915C39.495 6.89008 39.2 7.59662 39.2 8.33333C39.2 9.07005 39.495 9.77658 40.0201 10.2975C40.5452 10.8185 41.2574 11.1111 42 11.1111ZM53.2 22.2222C52.4574 22.2222 51.7452 22.5149 51.2201 23.0358C50.695 23.5567 50.4 24.2633 50.4 25V41.6667C50.4 42.4034 50.105 43.1099 49.5799 43.6309C49.0548 44.1518 48.3426 44.4444 47.6 44.4444H8.4C7.65739 44.4444 6.9452 44.1518 6.4201 43.6309C5.895 43.1099 5.6 42.4034 5.6 41.6667V15.0278L22.064 31.3889C23.639 32.9494 25.774 33.826 28 33.826C30.226 33.826 32.361 32.9494 33.936 31.3889L40.852 24.5278C41.3792 24.0047 41.6755 23.2953 41.6755 22.5556C41.6755 21.8158 41.3792 21.1064 40.852 20.5833C40.3247 20.0603 39.6096 19.7664 38.864 19.7664C38.1184 19.7664 37.4033 20.0603 36.876 20.5833L29.96 27.4444C29.4366 27.9534 28.7329 28.2385 28 28.2385C27.2671 28.2385 26.5634 27.9534 26.04 27.4444L9.548 11.1111H30.8C31.5426 11.1111 32.2548 10.8185 32.7799 10.2975C33.305 9.77658 33.6 9.07005 33.6 8.33333C33.6 7.59662 33.305 6.89008 32.7799 6.36915C32.2548 5.84821 31.5426 5.55556 30.8 5.55556H8.4C6.17218 5.55556 4.03561 6.43353 2.4603 7.99633C0.884998 9.55914 0 11.6788 0 13.8889V41.6667C0 43.8768 0.884998 45.9964 2.4603 47.5592C4.03561 49.122 6.17218 50 8.4 50H47.6C49.8278 50 51.9644 49.122 53.5397 47.5592C55.115 45.9964 56 43.8768 56 41.6667V25C56 24.2633 55.705 23.5567 55.1799 23.0358C54.6548 22.5149 53.9426 22.2222 53.2 22.2222Z" fill="currentColor" />
+							</svg>
+						</figure>
+						<strong class="personal__subsc-title">{{ text_prostore_subscribe }}</strong>
+						<p class="personal__subsc-text">{{ text_newsletter }}</p>
+					</a>
+				</div>
+				<div class="personal__overview-content">
+					<div class="personal__card">
+						<div class="personal__card-head">
+							<div class="row">
+								<div class="col">
+									<span class="h3 personal__card-title">{{ text_prostore_my_last_order }}</span>
+								</div>
+								<div class="col-auto">
+									<div class="personal__card-all">
+										<a class="ui-link ui-link--blue" href="{{ order }}">{{ text_prostore_my_all_order }}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="personal__card-body">
+							{% if last_orders_info.products_data %}
+							<div class="swiper-container swiper-products-small js-swiper-products-small">
+								<div class="swiper-wrapper">
+									{% for product in last_orders_info.products_data %}
+									<div class="swiper-slide">
+										<div class="products__item products__item--small">
+											<div class="products__item-in">
+												<div class="products__item-buttons">
+													<button class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" data-action="compare" data-for="{{ product.product_id }}">
+														<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+															<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+														</svg>
+													</button>
+													<button class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" data-action="wishlist" data-for="{{ product.product_id }}">
+														<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+															<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+														</svg>
+													</button>
+												</div>
+												<a href="{{product.href}}" class="products__item-image">
+													<img src="{{product.thumb}}" alt="[Alt]" width="200" height="200" loading="lazy">
+												</a>
+												<a href="{{product.href}}" class="h3 products__item-title">{{product.name}}</a>
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							{% else %}
+							{{ text_prostore_empty_last_orders }}
+							{% endif %}
+						</div>
+						<div class="personal__card-foot">
+							<p class="personal__card-total">
+								<a class="ui-link ui-link--blue" href="{{last_orders_info.href}}">{{last_orders_info.text_total}}</a>
+							</p>
+						</div>
+					</div>
+					<div class="personal__card">
+						<div class="personal__card-head">
+							<div class="row">
+								<div class="col">
+									<span class="h3 personal__card-title">{{ text_prostore_cart_title }}</span>
+								</div>
+								<div class="col-auto">
+									<div class="personal__card-all">
+										<a class="ui-link ui-link--blue" href="{{ cart }}">{{ text_prostore_my_all_cart }}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="personal__card-body">
+							{% if cart_info.cart_products %}
+							<div class="swiper-container swiper-products-small js-swiper-products-small">
+								<div class="swiper-wrapper">
+									{% for product in cart_info.cart_products %}
+									<div class="swiper-slide">
+										<div class="products__item products__item--small">
+											<div class="products__item-in">
+												<div class="products__item-buttons">
+													<button class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" data-action="compare" data-for="{{ product.product_id }}">
+														<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+															<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+														</svg>
+													</button>
+													<button class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" data-action="wishlist" data-for="{{ product.product_id }}">
+														<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+															<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+														</svg>
+													</button>
+												</div>
+												<a href="{{product.href}}" class="products__item-image">
+													<img src="{{product.thumb}}" alt="[Alt]" width="200" height="200" loading="lazy">
+												</a>
+												<a href="{{product.href}}" class="h3 products__item-title">{{product.name}}</a>
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							{% else %}
+							{{ text_prostore_empty_cart_products }}
+							{% endif %}
+						</div>
+						<div class="personal__card-foot">
+							<p class="personal__card-total">
+								<a class="ui-link ui-link--blue" href="{{ cart }}">{{cart_info.text_total}}</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a href="{{ newsletter }}" class="personal__subsc is-xl-hidden">
+				<figure class="personal__subsc-icon">
+					<svg width="56" height="50" viewBox="0 0 56 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M42 11.1111H44.8V13.8889C44.8 14.6256 45.095 15.3321 45.6201 15.8531C46.1452 16.374 46.8574 16.6667 47.6 16.6667C48.3426 16.6667 49.0548 16.374 49.5799 15.8531C50.105 15.3321 50.4 14.6256 50.4 13.8889V11.1111H53.2C53.9426 11.1111 54.6548 10.8185 55.1799 10.2975C55.705 9.77658 56 9.07005 56 8.33333C56 7.59662 55.705 6.89008 55.1799 6.36915C54.6548 5.84821 53.9426 5.55556 53.2 5.55556H50.4V2.77778C50.4 2.04107 50.105 1.33453 49.5799 0.813592C49.0548 0.292658 48.3426 0 47.6 0C46.8574 0 46.1452 0.292658 45.6201 0.813592C45.095 1.33453 44.8 2.04107 44.8 2.77778V5.55556H42C41.2574 5.55556 40.5452 5.84821 40.0201 6.36915C39.495 6.89008 39.2 7.59662 39.2 8.33333C39.2 9.07005 39.495 9.77658 40.0201 10.2975C40.5452 10.8185 41.2574 11.1111 42 11.1111ZM53.2 22.2222C52.4574 22.2222 51.7452 22.5149 51.2201 23.0358C50.695 23.5567 50.4 24.2633 50.4 25V41.6667C50.4 42.4034 50.105 43.1099 49.5799 43.6309C49.0548 44.1518 48.3426 44.4444 47.6 44.4444H8.4C7.65739 44.4444 6.9452 44.1518 6.4201 43.6309C5.895 43.1099 5.6 42.4034 5.6 41.6667V15.0278L22.064 31.3889C23.639 32.9494 25.774 33.826 28 33.826C30.226 33.826 32.361 32.9494 33.936 31.3889L40.852 24.5278C41.3792 24.0047 41.6755 23.2953 41.6755 22.5556C41.6755 21.8158 41.3792 21.1064 40.852 20.5833C40.3247 20.0603 39.6096 19.7664 38.864 19.7664C38.1184 19.7664 37.4033 20.0603 36.876 20.5833L29.96 27.4444C29.4366 27.9534 28.7329 28.2385 28 28.2385C27.2671 28.2385 26.5634 27.9534 26.04 27.4444L9.548 11.1111H30.8C31.5426 11.1111 32.2548 10.8185 32.7799 10.2975C33.305 9.77658 33.6 9.07005 33.6 8.33333C33.6 7.59662 33.305 6.89008 32.7799 6.36915C32.2548 5.84821 31.5426 5.55556 30.8 5.55556H8.4C6.17218 5.55556 4.03561 6.43353 2.4603 7.99633C0.884998 9.55914 0 11.6788 0 13.8889V41.6667C0 43.8768 0.884998 45.9964 2.4603 47.5592C4.03561 49.122 6.17218 50 8.4 50H47.6C49.8278 50 51.9644 49.122 53.5397 47.5592C55.115 45.9964 56 43.8768 56 41.6667V25C56 24.2633 55.705 23.5567 55.1799 23.0358C54.6548 22.5149 53.9426 22.2222 53.2 22.2222Z" fill="currentColor" />
+					</svg>
+				</figure>
+				<strong class="personal__subsc-title">{{ text_prostore_subscribe }}</strong>
+				<p class="personal__subsc-text">{{ text_newsletter }}</p>
+			</a>			
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+</body></html>

@@ -1,0 +1,32 @@
+<div class="checkout__step-method">
+	<label class="ui-check">
+		<input class="ui-check__input" type="radio" name="account" id="account-register" value="register" {{ account == 'register' or not checkout_guest ? 'checked="checked"' : ''}}>
+		<span class="ui-check__btn">
+			<span class="ui-check__btn-radio"> </span>
+			<span class="ui-check__btn-desc">{{ text_register }}</span>
+		</span>
+	</label>
+	{% if checkout_guest %}
+	<label class="ui-check">
+		<input class="ui-check__input" type="radio" name="account" id="account-guest" value="guest" {{ account == 'guest' ? 'checked="checked"' : ''}}>
+		<span class="ui-check__btn">
+			<span class="ui-check__btn-radio"> </span>
+			<span class="ui-check__btn-desc">{{ text_guest }}</span>
+		</span>
+	</label>
+	{% endif %}
+</div>
+											
+<div class="fancybox-is-hidden popup" id="checkout-login">
+	<span class="popup__title">{{ text_account_title }}</span>
+	<div class="popup__form">
+		<label class="ui-label">{{ entry_email }}</label>
+		<input class="ui-input" type="email" value="" name="email" placeholder="{{ entry_email }}" required>
+		<label class="ui-label">{{ entry_password }}</label>
+		<input class="ui-input" type="password" value="" name="password" placeholder="{{ entry_password }}" required>
+		<div class="popup__link">
+			<a class="ui-link ui-link--blue ui-link--underline" href="{{ forgotten }}">{{ text_forgotten }}</a>
+		</div>
+		<button type="button" class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth" id="button-login">{{ button_login }}</button>
+	</div>
+</div>

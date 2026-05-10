@@ -1,0 +1,17 @@
+<table class="ui-table-delivery">
+	<thead>
+		<tr>
+			<th colspan="2">{{ text_prostore_shipping }} <a class="calculate_ship ui-link ui-link--blue ui-link--dashed" href="#popup-calculate-ship" data-fancybox>{{zone_info}}</a></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for code,quote_entity in quote_data %}
+			{% for quote in quote_entity.quote %}
+			<tr>
+				<td>{{quote.title}}</td>
+				<td class="text-right">{{quote.text}}</td>
+			</tr>
+			{% endfor %}
+		{% endfor %}
+	</tbody>
+</table>

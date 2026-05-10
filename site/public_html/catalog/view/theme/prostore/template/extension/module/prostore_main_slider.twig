@@ -1,0 +1,117 @@
+<!-- Intro :: Start-->
+<div class="intro">
+	<div class="container-fluid">
+		<div class="row">
+			{% if left_image_count >= 1 %}
+			<div class="{% if (isrightimage == 1) %}col-xl-8{% else %}col-xl-12{% endif %}">
+				<div class="intro__swiper{% if resizable %} intro__swiper--resizable{% endif %}">
+					<div class="swiper-container swiper-intro js-swiper-intro" {% if slide_fade %}data-swiper-effect="{{ slide_fade }}"{% endif %} data-swiper-speed="{{ speed*100 }}" {% if autoplay %}data-swiper-auto="{{ autoplay*1000 }}"{% endif %} data-swiper-length="{{ left_image_count }}">
+						<div class="swiper-wrapper">
+						{% for i,banner1 in banners %} 
+						{% for banner in banner1 %}
+						{% if (banner['position'] == 1) %}
+							<div class="swiper-slide">
+								{% if img_link %}<a href="{{ banner['link'] }}" class="intro__item">{% else %}<div class="intro__item">{% endif %}
+									<div class="intro__item-desc {% if banner['text_color'] == '1' %}intro__item-desc--dark{% endif %}">
+										{% if (banner['title']) %}
+										<ul class="intro__item-info">
+											<li>{{ banner['title'] }}</li>
+										</ul>
+										{% endif %}
+										{% if (banner['slider_text']) %}
+										<span class="h2 intro__item-title">{{ banner['slider_text'] }}</span>
+										{% endif %}
+										{% if (banner['btn_text']) %}
+											{% if img_link %}
+												<p class="intro__item-price">{{ banner['btn_text'] }}</p>
+											{% else %}
+												<a href="{{ banner['link'] }}" class="intro__item-price">{{ banner['btn_text'] }}</a>
+											{% endif %}
+										{% endif %}
+									</div>
+									<picture class="intro__item-{{ banner['full'] ? 'cover' : 'image' }}">
+										{% if (banner['image2']) %}
+										<source srcset="{{ banner['image2'] }}" media="(max-width: 767px)">
+										{% endif %}
+										<source srcset="{{ banner['image'] }}">
+										<img src="{{ banner['image'] }}" alt="{{ banner['title'] }}" width="{{ banner['width_pc'] }}" height="{{ banner['height_pc'] }}">
+									</picture>
+								{% if img_link %}</a>{% else %}</div>{% endif %}
+							</div>
+						{% endif %}
+						{% endfor %}
+						{% endfor %}
+						</div>
+						{% if left_image_count > 1 %}
+						<div class="swiper-control">
+							<button class="swiper-prev js-swiper-intro-prev">
+								<svg class="icon-prev"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-prev"></use>
+								</svg>
+							</button>
+							<button class="swiper-next js-swiper-intro-next">
+								<svg class="icon-next"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-next"></use>
+								</svg>
+							</button>
+						</div>
+						<div class="swiper-pagination js-swiper-intro-pagination">
+						{% for i,banner1 in banners %} 
+						{% for banner in banner1 %}
+						{% if (banner['position'] == 1) %}
+							<div class="swiper-pagination-bullet"></div>
+						{% endif %}
+						{% endfor %}
+						{% endfor %}
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			{% if isrightimage == 1 %}
+			<div class="col-xl-4 is-xl-visible">
+				<div class="intro__swiper">
+					<div class="swiper-container swiper-intro js-swiper-intro-right">
+						<div class="swiper-wrapper">
+						{% for i,banner1 in banners %} 
+						{% for banner in banner1 %}
+						{% if (banner['position'] == 2) %}
+							<div class="swiper-slide">
+								<a class="intro__item intro__item--vertical" href="{{ banner['link'] }}">
+									<div class="intro__item-desc {% if banner['text_color'] == '1' %}intro__item-desc--dark{% endif %}">
+										{% if (banner['title']) %}<span class="intro__item-category">{{ banner['title'] }}</span>{% endif %}
+										{% if (banner['slider_text']) %}<span class="h2 intro__item-title">{{ banner['slider_text'] }}</span>{% endif %}
+										{% if (banner['btn_text']) %}<div class="intro__item-action">
+											<span class="ui-btn ui-btn--35 ui-btn--{% if banner['text_color'] == '1' %}dark{% else %}white{% endif %} ui-btn--outline">{{ banner['btn_text'] }}<svg class="icon-arrow-btn"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-btn"></use>
+												</svg>
+											</span>
+										</div>{% endif %}
+									</div>
+									<picture class="intro__item-{{ banner['full'] ? 'cover' : 'image' }}">
+										{% if (banner['image2']) %}
+										<source srcset="{{ banner['image2'] }}" media="(max-width: 767px)">
+										{% endif %}
+										<source srcset="{{ banner['image'] }}">
+										<img src="{{ banner['image'] }}" alt="{{ banner['title'] }}" width="{{ banner['width_pc'] }}" height="{{ banner['height_pc'] }}">
+									</picture>
+								</a>
+							</div>
+						{% endif %}
+						{% endfor %}
+						{% endfor %}
+						</div>
+						<div class="swiper-pagination js-swiper-intro-pagination-right">
+						{% for i,banner1 in banners %} 
+						{% for banner in banner1 %}
+						{% if (banner['position'] == 2) %}
+							<div class="swiper-pagination-bullet"></div>
+						{% endif %}
+						{% endfor %}
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div><!-- Intro :: End-->

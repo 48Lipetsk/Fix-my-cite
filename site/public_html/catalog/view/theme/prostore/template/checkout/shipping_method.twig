@@ -1,0 +1,41 @@
+{% if error_warning %}
+<div class="alert alert--yellow alert--opacity">
+	<p class="alert__text">{{ error_warning }}</p>
+</div>
+{% endif %}
+{% if shipping_methods %}
+<div class="checkout__step-delivery">
+	{% for shipping_method in shipping_methods %}
+		{% if not shipping_method.error %}
+			{% for quote in shipping_method.quote %}
+			<label class="ui-check">
+				{% if quote.code == code or not code %}
+				<input class="ui-check__input" type="radio" name="shipping_method" value="{{ quote.code }}" checked="checked">
+				{% else %}
+				<input class="ui-check__input" type="radio"name="shipping_method" value="{{ quote.code }}">
+				{% endif %}
+				<span class="ui-check__btn">
+					<span class="ui-check__btn-radio"> </span>
+					<span class="ui-check__btn-desc">
+						<div class="row">
+							<div class="col-md-9"><span class="ui-check__btn-title">{{ shipping_method.title }}</span><span class="ui-check__btn-text">{{ quote.title }}</span></div><div class="col-md-3"><span class="ui-check__btn-price">{{ quote.text }}</span></div>
+						</div>
+					</span>
+				</span>
+			</label>
+			{% endfor %}
+		{% else %}
+		<div class="alert alert--red alert--opacity">
+			<p class="alert__text">{{ shipping_method.error }}</p>
+		</div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endif %}
+<div class="checkout__step-comment">
+	<label class="ui-label">{{ text_comments }}</label>
+	<textarea name="comment" class="ui-textarea" placeholder="">{{ comment }}</textarea>
+</div>
+<div class="checkout__step-action">
+	<button type="button" class="ui-btn ui-btn--60 ui-btn--primary" id="button-shipping-method" data-loading-text="{{ text_loading }}">{{ button_continue }}</button>
+</div>

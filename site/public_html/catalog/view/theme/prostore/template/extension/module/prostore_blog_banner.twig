@@ -1,0 +1,38 @@
+{% if template == 2 %} 
+</p><div class="swiper-container swiper-gallery js-swiper-gallery">
+    <div class="swiper-wrapper">
+        {% for image in images %}
+        <div class="swiper-slide">
+            <img src="{{image.image}}" alt="{{image.link}}" width="{{image_popup_width}}" height="{{image_popup_height}}" loading="lazy">
+        </div>
+        {% endfor %}
+    </div>
+    <button class="swiper-prev js-swiper-gallery-prev">
+        <svg class="icon-prev"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-prev"></use>
+        </svg>
+    </button>
+    <button class="swiper-next js-swiper-gallery-next">
+        <svg class="icon-next"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-next"></use>
+        </svg>
+    </button>
+    <button class="swiper-fullscreen" data-fancybox-gallery="{{gallery}}">{{text_images}} {{imagescount}}<svg class="icon-fullscreen"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-fullscreen"></use>
+        </svg>
+    </button>
+</div><p>
+{% else %}
+</p>
+<div class="blog-gallery">
+	<div class="row">
+        {% for image in images %}
+        <div class="col-sm-3">
+			<div class="ui-picture">
+				<a href="{{image.image}}" data-fancybox="sku">
+					<img src="{{image.image}}" alt="{{name}}" width="{{image_popup_width}}" height="{{image_popup_height}}" loading="lazy" >
+				</a>
+			</div>
+        </div>
+        {% endfor %}
+	</div>
+</div>
+<p>
+{% endif %}

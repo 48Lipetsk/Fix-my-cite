@@ -1,0 +1,29 @@
+<span class="popup__title">{{ text_prostore_found_it_cheaper }}</span>
+<div class="popup__form">
+	<form>
+		<fieldset class="ui-fieldset">
+			<p>{{ text_prostore_found_cheaper_text }}</p>
+		</fieldset>
+		<fieldset class="ui-fieldset">
+			<div class="ui-field">
+				<label class="ui-label required">{{ text_prostore_name }}</label>
+				<input class="ui-input" type="text" name="name" value="{{ customer_name }}">
+			</div>
+			<div class="ui-field">
+				<label class="ui-label required">{{ text_prostore_email }}</label>
+				<input class="ui-input" type="email" name="email" value="{{ customer_email }}">
+			</div>
+			<div class="ui-field">
+				<label class="ui-label">{{ text_prostore_phone }}</label>
+				<input class="ui-input" type="tel" name="phone" value="{{ customer_phone }}">
+			</div>
+			<div class="ui-field">
+				<label class="ui-label required">{{ text_prostore_link }}</label>
+				<input class="ui-input" type="text" name="link" value="">
+			</div>
+			<input type="hidden" name="product_id" value="{{ product_id }}">
+			{{ captcha }}
+			<button class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth found_cheaper_send">{{ button_prostore_sendbutton }}</button>
+		</fieldset>
+	</form>
+</div>

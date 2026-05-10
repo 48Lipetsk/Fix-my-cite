@@ -1,0 +1,932 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Alerts :: Start-->
+<div class="alerts-wrapper">
+	{% if error_warning %}
+	<div class="alert alert--red">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ error_warning }}</p>
+	</div>
+	{% endif %}
+</div><!-- Alerts :: End-->
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Checkout :: Start-->
+	<div class="checkout">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+			<div class="checkout__wrapper">
+				<div class="checkout__content">
+					<div class="checkout__step">
+						<div class="checkout__step-head">
+							<div class="row">
+								<div class="col-md">
+									<a class="checkout__step-title" href="#">{{ text_prostore_checkout_s1 }}</a>
+								</div>
+								{% if not logged %}
+								<div class="col-md-auto">
+									<span class="checkout__step-account">
+										<a class="ui-btn ui-btn--38 ui-btn--grey" href="#checkout-login" data-fancybox>{{ text_prostore_checkout_login }}</a>
+									</span>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+						<div class="checkout__step-body">
+							<div id="collapse-checkout-option"></div>
+							<div id="collapse-payment-address"></div>
+						</div>
+					</div>
+					
+					{% if shipping_required %}
+					<div class="checkout__step {% if checkout_st3_sa %}hide{% endif %}">
+						<div class="checkout__step-head">
+							<a class="checkout__step-title" href="#">{{ text_prostore_checkout_s2 }}</a>
+						</div>
+						<div class="checkout__step-body" id="collapse-shipping-address"></div>
+					</div>
+					
+					<div class="checkout__step">
+						<div class="checkout__step-head">
+							<a class="checkout__step-title" href="#">{{ text_prostore_checkout_s3 }}</a>
+						</div>
+						<div class="checkout__step-body" id="collapse-shipping-method"></div>
+					</div>
+					{% endif %}
+					
+					<div class="checkout__step">
+						<div class="checkout__step-head">
+							<a class="checkout__step-title" href="#">{{ text_prostore_checkout_s4 }}</a>
+						</div>
+						<div class="checkout__step-body">
+							<div id="collapse-payment-method"></div>
+							<div id="collapse-checkout-confirm"></div>
+						</div>
+					</div>
+				</div>
+				<div class="checkout__sidebar">
+					<div class="checkout__group"></div>
+				</div>
+			</div>
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Checkout :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+<script>
+// Checkout
+{% if not logged %}
+function checkoutOption() {
+	$.ajax({
+		url: 'index.php?route=checkout/' + $('#collapse-checkout-option input[name=\'account\']:checked').val(),
+		dataType: 'html',
+		beforeSend: function() {
+		},
+		complete: function() {
+		},
+		success: function(html) {
+            $('.alert, .ui-error, .icon-error').remove();
+			$('.ui-group, .ui-field').removeClass('is-error');
+
+			$('#collapse-payment-address').html(html);
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+}
+
+$(document).on('change', '#collapse-checkout-option input[name=\'account\']', function() {
+	checkoutOption();
+});
+			
+$(document).ready(function() {
+    $.ajax({
+        url: 'index.php?route=checkout/login',
+        dataType: 'html',
+        success: function(html) {
+			$('#collapse-checkout-option').html(html);
+
+			checkoutOption();
+			
+			$('#collapse-payment-address').parent().parent().addClass('pass');
+
+			$('#collapse-payment-address').parent().parent().find('.checkout__step-title').trigger('click');
+	
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+{% else %}
+$(document).ready(function() {
+    $.ajax({
+        url: 'index.php?route=checkout/payment_address',
+        dataType: 'html',
+        success: function(html) {
+            $('#collapse-payment-address').html(html);
+
+			$('#collapse-payment-address').parent().parent().addClass('pass');
+
+			$('#collapse-payment-address').parent().parent().find('.checkout__step-title').trigger('click');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+{% endif %}
+
+// Login
+$(document).delegate('#button-login', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/login/save',
+        type: 'post',
+        data: $('#checkout-login :input'),
+        dataType: 'json',
+        beforeSend: function() {
+        	$('#button-login').button('loading');
+		},
+        complete: function() {
+            $('#button-login').button('reset');
+        },
+        success: function(json) {
+            $('#checkout-login .alert--red, #checkout-login .ui-error, #checkout-login .icon-error').remove();
+			$('#checkout-login .ui-group, #checkout-login .ui-field').removeClass('is-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+				$('#button-login').before('<div class="alert alert--red alert--opacity"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+
+				// Highlight any found errors
+				$('#checkout-login input[name=\'email\']').parent().addClass('is-error');
+				$('#checkout-login input[name=\'password\']').parent().addClass('is-error');
+		   }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+// Register
+$(document).delegate('#button-register', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/register/save',
+        type: 'post',
+        data: $('#collapse-payment-address input[type=\'text\'], #collapse-payment-address input[type=\'date\'], #collapse-payment-address input[type=\'datetime-local\'], #collapse-payment-address input[type=\'time\'], #collapse-payment-address input[type=\'password\'], #collapse-payment-address input[type=\'hidden\'], #collapse-payment-address input[type=\'checkbox\']:checked, #collapse-payment-address input[type=\'radio\']:checked, #collapse-payment-address textarea, #collapse-payment-address select'),
+        dataType: 'json',
+        beforeSend: function() {
+			$('#button-register').button('loading');
+		},
+        success: function(json) {
+            $('.alert--red, .ui-error').remove();
+			$('.ui-group, .ui-field').removeClass('is-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-register').button('reset');
+
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#input-payment-' + i.replace('_', '-'));
+					if ($(element).parent().hasClass('ui-select')) {
+						$(element).parent().after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else if ($(element).hasClass('ui-input') || $(element).hasClass('ui-textarea')) {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					}
+				}
+
+            } else {
+                {% if shipping_required %}
+                var shipping_address = $('#collapse-payment-address input[name=\'shipping_address\']:checked').prop('value');
+
+                if (shipping_address) {
+                    $.ajax({
+                        url: 'index.php?route=checkout/shipping_method',
+                        dataType: 'html',
+                        success: function(html) {
+                            refreshcart();
+							// Add the shipping address
+                            $.ajax({
+                                url: 'index.php?route=checkout/shipping_address',
+                                dataType: 'html',
+                                complete: function() {
+                                    payment_address_fill();
+                                },                                
+                                success: function(html) {
+                                    $('#collapse-shipping-address').html(html);
+
+									$('#collapse-shipping-address').parent().addClass('pass');
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                                }
+                            });
+
+							$('#collapse-shipping-method').html(html);
+
+							$('#collapse-shipping-method').parent().addClass('pass');
+
+							$('#collapse-shipping-method').parent().find('.checkout__step-title').trigger('click');
+							
+							$('#collapse-checkout-option').empty();
+							$('#collapse-payment-address').parent().parent().find('.checkout__step-account').hide();
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: 'index.php?route=checkout/shipping_address',
+                        dataType: 'html',
+                        complete: function() {
+                            payment_address_fill();
+                        },                        
+                        success: function(html) {
+                            $('#collapse-shipping-address').html(html);
+
+							$('#collapse-shipping-address').parent().addClass('pass');
+
+							$('#collapse-shipping-address').parent().find('.checkout__step-title').trigger('click');
+							
+							$('#collapse-checkout-option').empty();
+							$('#collapse-payment-address').parent().parent().find('.checkout__step-account').hide();
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                        }
+                    });
+                }
+                {% else %}
+                $.ajax({
+                    url: 'index.php?route=checkout/payment_method',
+                    dataType: 'html',
+                    complete: function() {
+                        payment_address_fill();
+                    },                    
+                    success: function(html) {
+                        $('#collapse-payment-method').html(html);
+
+						$('#collapse-payment-method').parent().parent().addClass('pass');
+
+						$('#collapse-payment-method').parent().parent().find('.checkout__step-title').trigger('click');
+						
+						checkoutConfirm();
+						
+						$('#collapse-checkout-option').empty();
+						$('#collapse-payment-address').parent().parent().find('.checkout__step-account').hide();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+                {% endif %}
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+function payment_address_fill() {
+    $.ajax({
+        url: 'index.php?route=checkout/payment_address',
+        dataType: 'html',
+        complete: function() {
+            $('#button-register').button('reset');
+        },
+        success: function(html) {
+            $('#collapse-payment-address').html(html);
+
+    		$('#collapse-payment-address').parent().parent().addClass('pass');
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });    
+}
+
+// Payment Address
+$(document).delegate('#button-payment-address', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/payment_address/save',
+        type: 'post',
+        data: $('#collapse-payment-address input[type=\'text\'], #collapse-payment-address input[type=\'date\'], #collapse-payment-address input[type=\'datetime-local\'], #collapse-payment-address input[type=\'time\'], #collapse-payment-address input[type=\'password\'], #collapse-payment-address input[type=\'checkbox\']:checked, #collapse-payment-address input[type=\'radio\']:checked, #collapse-payment-address input[type=\'hidden\'], #collapse-payment-address textarea, #collapse-payment-address select'),
+        dataType: 'json',
+        beforeSend: function() {
+        	$('#button-payment-address').button('loading');
+		},
+        complete: function() {
+			$('#button-payment-address').button('reset');
+        },
+        success: function(json) {
+            $('.alert, .ui-error, .icon-error').remove();
+			$('.ui-group, .ui-field').removeClass('is-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#input-payment-' + i.replace('_', '-'));
+					if ($(element).parent().hasClass('ui-select')) {
+						$(element).parent().after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else if ($(element).hasClass('ui-input') || $(element).hasClass('ui-textarea')) {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					}
+				}
+            } else {
+                {% if shipping_required %}
+				
+				var hide_shipping_address = $('#collapse-shipping-address').parent().is('.hide');
+				
+				if (hide_shipping_address) {
+                    $.ajax({
+                        url: 'index.php?route=checkout/shipping_method',
+                        dataType: 'html',
+                        success: function(html) {
+							$.ajax({
+								url: 'index.php?route=checkout/shipping_address',
+								dataType: 'html',
+								success: function(html) {
+									$('#collapse-shipping-address').html(html);
+
+									$('#collapse-shipping-address').parent().addClass('pass');
+								},
+								error: function(xhr, ajaxOptions, thrownError) {
+									alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+								}
+							}).done(function() {
+								$('#collapse-shipping-address').find('#button-shipping-address').trigger('click');
+							});
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                        }
+                    });
+				} else {
+					$.ajax({
+						url: 'index.php?route=checkout/shipping_address',
+						dataType: 'html',
+						success: function(html) {
+							$('#collapse-shipping-address').html(html);
+
+							$('#collapse-shipping-address').parent().addClass('pass');
+
+							$('#collapse-shipping-address').parent().find('.checkout__step-title').trigger('click');
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					}).done(function() {
+						$.ajax({
+							url: 'index.php?route=checkout/payment_address',
+							dataType: 'html',
+							success: function(html) {
+								$('#collapse-payment-address').html(html);
+							},
+							error: function(xhr, ajaxOptions, thrownError) {
+								alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+							}
+						});
+					});
+				}
+                {% else %}
+                $.ajax({
+                    url: 'index.php?route=checkout/payment_method',
+                    dataType: 'html',
+                    success: function(html) {
+                        $('#collapse-payment-method').html(html);
+
+						$('#collapse-payment-method').parent().parent().addClass('pass');
+
+						$('#collapse-payment-method').parent().parent().find('.checkout__step-title').trigger('click');
+						
+						checkoutConfirm();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                }).done(function() {
+					$.ajax({
+						url: 'index.php?route=checkout/payment_address',
+						dataType: 'html',
+						success: function(html) {
+							$('#collapse-payment-address').html(html);
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});				
+				});
+                {% endif %}
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+// Shipping Address
+$(document).delegate('#button-shipping-address', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/shipping_address/save',
+        type: 'post',
+        data: $('#collapse-shipping-address input[type=\'text\'], #collapse-shipping-address input[type=\'date\'], #collapse-shipping-address input[type=\'datetime-local\'], #collapse-shipping-address input[type=\'time\'], #collapse-shipping-address input[type=\'password\'], #collapse-shipping-address input[type=\'checkbox\']:checked, #collapse-shipping-address input[type=\'radio\']:checked, #collapse-shipping-address textarea, #collapse-shipping-address select'),
+        dataType: 'json',
+        beforeSend: function() {
+			$('#button-shipping-address').button('loading');
+	    },
+        success: function(json) {
+            $('.alert, .ui-error, .icon-error').remove();
+			$('.ui-group, .ui-field').removeClass('is-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-shipping-address').button('reset');
+
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#input-shipping-' + i.replace('_', '-'));
+					if ($(element).parent().hasClass('ui-select')) {
+						$(element).parent().after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else if ($(element).hasClass('ui-input') || $(element).hasClass('ui-textarea')) {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					}
+				}
+            } else {
+                $.ajax({
+                    url: 'index.php?route=checkout/shipping_method',
+                    dataType: 'html',
+                    complete: function() {
+                        $('#button-shipping-address').button('reset');
+                    },
+                    success: function(html) {
+                        $('#collapse-shipping-method').html(html);
+
+						$('#collapse-shipping-method').parent().addClass('pass');
+
+						$('#collapse-shipping-method').parent().find('.checkout__step-title').trigger('click');
+
+                        $.ajax({
+                            url: 'index.php?route=checkout/shipping_address',
+                            dataType: 'html',
+                            success: function(html) {
+                                $('#collapse-shipping-address').html(html);
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                            }
+                        });
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                }).done(function() {
+					$.ajax({
+						url: 'index.php?route=checkout/payment_address',
+						dataType: 'html',
+						success: function(html) {
+							$('#collapse-payment-address').html(html);
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});
+				});
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+// Guest
+$(document).delegate('#button-guest', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/guest/save',
+        type: 'post',
+        data: $('#collapse-payment-address input[type=\'text\'], #collapse-payment-address input[type=\'date\'], #collapse-payment-address input[type=\'datetime-local\'], #collapse-payment-address input[type=\'time\'], #collapse-payment-address input[type=\'checkbox\']:checked, #collapse-payment-address input[type=\'radio\']:checked, #collapse-payment-address input[type=\'hidden\'], #collapse-payment-address textarea, #collapse-payment-address select'),
+        dataType: 'json',
+        beforeSend: function() {
+       		$('#button-guest').button('loading');
+	    },
+        success: function(json) {
+            $('.alert, .ui-error, .icon-error').remove();
+			$('.ui-group, .ui-field').removeClass('is-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-guest').button('reset');
+
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#input-payment-' + i.replace('_', '-'));
+					if ($(element).parent().hasClass('ui-select')) {
+						$(element).parent().after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else if ($(element).hasClass('ui-input') || $(element).hasClass('ui-textarea')) {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					}
+				}
+            } else {
+                {% if shipping_required %}
+                var shipping_address = $('#collapse-payment-address input[name=\'shipping_address\']:checked').prop('value');
+
+                if (shipping_address) {
+                    $.ajax({
+                        url: 'index.php?route=checkout/shipping_method',
+                        dataType: 'html',
+                        complete: function() {
+                            $('#button-guest').button('reset');
+                        },
+                        success: function(html) {
+                            refreshcart();
+							// Add the shipping address
+                            $.ajax({
+                                url: 'index.php?route=checkout/guest_shipping',
+                                dataType: 'html',
+                                success: function(html) {
+                                    $('#collapse-shipping-address').html(html);
+
+									$('#collapse-shipping-address').parent().addClass('pass');
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                                }
+                            });
+
+						    $('#collapse-shipping-method').html(html);
+
+							$('#collapse-shipping-method').parent().addClass('pass');
+
+							$('#collapse-shipping-method').parent().find('.checkout__step-title').trigger('click');
+
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: 'index.php?route=checkout/guest_shipping',
+                        dataType: 'html',
+                        complete: function() {
+                            $('#button-guest').button('reset');
+                        },
+                        success: function(html) {
+                            $('#collapse-shipping-address').html(html);
+
+							$('#collapse-shipping-address').parent().addClass('pass');
+
+							$('#collapse-shipping-address').parent().find('.checkout__step-title').trigger('click');
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                        }
+                    });
+                }
+                {% else %}
+                $.ajax({
+                    url: 'index.php?route=checkout/payment_method',
+                    dataType: 'html',
+                    complete: function() {
+                        $('#button-guest').button('reset');
+                    },
+                    success: function(html) {
+                        $('#collapse-payment-method').html(html);
+
+						$('#collapse-payment-method').parent().parent().addClass('pass');
+
+						$('#collapse-payment-method').parent().parent().find('.checkout__step-title').trigger('click');
+						
+						checkoutConfirm();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+                {% endif %}
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+// Guest Shipping
+$(document).delegate('#button-guest-shipping', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/guest_shipping/save',
+        type: 'post',
+        data: $('#collapse-shipping-address input[type=\'text\'], #collapse-shipping-address input[type=\'date\'], #collapse-shipping-address input[type=\'datetime-local\'], #collapse-shipping-address input[type=\'time\'], #collapse-shipping-address input[type=\'password\'], #collapse-shipping-address input[type=\'checkbox\']:checked, #collapse-shipping-address input[type=\'radio\']:checked, #collapse-shipping-address textarea, #collapse-shipping-address select'),
+        dataType: 'json',
+        beforeSend: function() {
+        	$('#button-guest-shipping').button('loading');
+		},
+        success: function(json) {
+            $('.alert--red, .ui-error, .icon-error').remove();
+			$('.ui-group, .ui-field').removeClass('is-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-guest-shipping').button('reset');
+
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+
+				for (i in json['error']) {
+					var element = $('#input-shipping-' + i.replace('_', '-'));
+					if ($(element).parent().hasClass('ui-select')) {
+						$(element).parent().after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else if ($(element).hasClass('ui-input') || $(element).hasClass('ui-textarea')) {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					} else {
+						$(element).after('<span class="error ui-error">' + json['error'][i] + '</span>').parent().addClass('is-error');
+					}
+				}
+            } else {
+                $.ajax({
+                    url: 'index.php?route=checkout/shipping_method',
+                    dataType: 'html',
+                    complete: function() {
+                        $('#button-guest-shipping').button('reset');
+                    },
+                    success: function(html) {
+                        refreshcart();
+						$('#collapse-shipping-method').html(html);
+
+						$('#collapse-shipping-method').parent().addClass('pass');
+
+						$('#collapse-shipping-method').parent().find('.checkout__step-title').trigger('click');
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$(document).delegate('#button-shipping-method', 'click', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/shipping_method/save',
+        type: 'post',
+        data: $('#collapse-shipping-method input[type=\'radio\']:checked, #collapse-shipping-method textarea'),
+        dataType: 'json',
+        beforeSend: function() {
+        	$('#button-shipping-method').button('loading');
+		},
+        success: function(json) {
+            $('.alert-dismissible, .text-danger').remove();
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#button-shipping-method').button('reset');
+
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+            } else {
+                $.ajax({
+                    url: 'index.php?route=checkout/payment_method',
+                    dataType: 'html',
+                    complete: function() {
+                        $('#button-shipping-method').button('reset');
+                    },
+                    success: function(html) {
+                        $('#collapse-payment-method').html(html);
+
+						$('#collapse-payment-method').parent().parent().addClass('pass');
+
+						$('#collapse-payment-method').parent().parent().find('.checkout__step-title').trigger('click');
+						
+						checkoutConfirm();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$(document).on('change', '#collapse-shipping-method input[type=\'radio\']', function() {
+    $.ajax({
+        url: 'index.php?route=checkout/shipping_method/save',
+        type: 'post',
+        data: $('#collapse-shipping-method input[type=\'radio\']:checked, #collapse-shipping-method textarea'),
+        dataType: 'json',
+        success: function() {
+			refreshcart();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$(document).on('change', '#collapse-payment-method input[type=\'radio\'], #collapse-payment-method textarea[name=\'comment\']',
+    function() {
+	    checkoutConfirm();
+    }
+);
+
+function checkoutConfirm() {
+    $.ajax({
+        url: 'index.php?route=checkout/payment_method/save',
+        type: 'post',
+        data: $('#collapse-payment-method input[type=\'radio\']:checked, #collapse-payment-method input[type=\'checkbox\']:checked, #collapse-payment-method textarea'),
+        dataType: 'json',
+        beforeSend: function() {
+		},
+        success: function(json) {
+            $('.alert--red, .text-danger').remove();
+
+            if (json['redirect']) {
+                location = json['redirect'];
+           } else if (json['error']) {
+                if (json['error']['warning']) {
+                    $('.alerts-wrapper').prepend('<div class="alert alert--red"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error']['warning'] + '</p></div>');
+                }
+            } else {
+                $.ajax({
+                    url: 'index.php?route=checkout/confirm',
+                    dataType: 'html',
+                    complete: function() {
+                    },
+                    success: function(html) {
+                        $('#collapse-checkout-confirm').html(html);
+					},
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+                });
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+}
+
+$.fn.bindFirst = function(name, fn) {
+  var elem, handlers, i, _len;
+  this.bind(name, fn);
+  for (i = 0, _len = this.length; i < _len; i++) {
+    elem = this[i];
+    handlers = jQuery._data(elem).events[name.split('.')[0]];
+    handlers.unshift(handlers.pop());
+  }
+};
+
+function refreshcart() {
+	$('.checkout__group').load('index.php?route=common/cart&custcart=1',function(){
+		$('[data-fancybox]').fancybox(fancyboxOptions);
+	});
+}
+		
+function checkoutStep() {
+	var step = $('.checkout__step');
+	if (step.length) {
+		var title = step.find('.checkout__step-title'),
+		inner = step.find('.checkout__step-body'),
+		
+		tab_target = -10;
+
+		if (window.matchMedia('(min-width: 1200px)').matches) {
+			if ( $('body').is('.is-page-header-fixed') ) {
+				tab_target -= $('.header-fixed').data('fixed-height') || $('.header-fixed').innerHeight();
+			}
+		} else {
+			tab_target = tab_target - $('.header__mobile-fixed').innerHeight();
+		}
+		
+		title.on('click', function(e){
+			e.preventDefault();
+			if ($(this).closest(step).hasClass('pass')) {
+				var thisStep = $(this).closest(step);
+				thisStep.siblings(step).find(inner).slideUp(200);
+				step.removeClass('is-active');
+				thisStep.find(inner).slideDown({
+					duration: 200,
+					complete: function(){
+						$('body, html').animate({scrollTop: thisStep.offset().top + tab_target}, 'fast');
+						thisStep.addClass('is-active');
+						stickyCheckout();
+						$('.checkout__group').trigger('sticky_kit:recalc');
+					}
+				});
+			}
+		});
+	}
+}
+
+function stickyCheckout() {
+
+	if ( $('.checkout__group').length ) {
+
+		if (window.matchMedia('(min-width: 1200px)').matches) {
+
+			var $triggerTop = 10;
+
+			if ( $('body').is('.is-page-header-fixed') ) {
+				$triggerTop = ($('.header-fixed').data('fixed-height') || $('.header-fixed').innerHeight()) + 10;
+			}
+				
+			$('.checkout__group').stick_in_parent({
+				offset_top: $triggerTop,
+				bottoming: true,
+				spacer: false,
+				inner_scrolling: true,
+				sticky_class: 'is-sticky',
+				parent: '.checkout__wrapper'
+			});
+
+
+		} else {
+
+			$('.checkout__group').trigger('sticky_kit:detach');
+
+		}
+
+	}
+
+}
+
+$(function() {
+	refreshcart();
+	checkoutStep();
+	$(window).on('load resize orientationchange', function(){
+		stickyCheckout();
+	});
+});
+</script>
+</body></html>

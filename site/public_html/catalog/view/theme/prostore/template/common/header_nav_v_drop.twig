@@ -1,0 +1,90 @@
+{% for key,link in main_navs_v[number].type[0].links %} 
+{% if categories['categoriesls'][key|slice(1)] is defined %} 
+	{% set cat_id = key|slice(1) %} 
+    {% if (not categories['categoriesls'][cat_id]['childrencount']) %}
+		<li>
+			<a class="header__catalog-link" href="{{ categories['categoriesls'][cat_id]['href'] }}" data-catalog-target>
+				{% if (nav_icons[key]['image']['v'][naw_row_id]) %}
+				<span class="header__catalog-link-icon">
+					{{nav_icons[key]['image']['v'][naw_row_id]}}
+				</span>
+				{% endif %}
+				<span class="header__catalog-link-text">{{ categories['categoriesls'][cat_id]['name'] }}</span>
+			</a>
+		</li>
+    {% else %}
+	 <li>
+		 <a class="header__catalog-link" href="{{ categories['categoriesls'][cat_id]['href'] }}" data-catalog-target="drop_category_{{ cat_id }}">
+			{% if (nav_icons[key]['image']['v'][naw_row_id]) %}
+				<span class="header__catalog-link-icon">
+				{{nav_icons[key]['image']['v'][naw_row_id]}}
+				</span>
+			{% endif %}
+			 <span class="header__catalog-link-text">{{ categories['categoriesls'][cat_id]['name'] }}</span>
+			 <span class="header__catalog-link-arrow">
+				 <svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+				 </svg>
+			 </span>
+		 </a>
+		 <div class="header__catalog-dropdown" data-catalog-dropdown="drop_category_{{ cat_id }}">
+			 <ul class="header__catalog-menu">
+				 {% for category in categories['categoriesls'][cat_id]['children'] %}
+				 {% if (category['children']) %}
+				 <li>
+					 <a class="header__catalog-link" href="{{ category['href'] }}">
+						 <span class="header__catalog-link-text">{{ category['name'] }}</span>
+						 <span class="header__catalog-link-arrow">
+							 <svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+							 </svg>
+						 </span>
+					 </a>
+					 <div class="header__catalog-dropdown">
+						 <ul class="header__catalog-menu">
+							 {% for category3 in category['children'] %}
+							 {% if (category3['children']) %}
+							 <li>
+								 <a class="header__catalog-link" href="{{ category3['href'] }}">
+									 <span class="header__catalog-link-text">{{ category3['name'] }}</span>
+									 <span class="header__catalog-link-arrow">
+										 <svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+										 </svg>
+									 </span>
+								 </a>
+								 <div class="header__catalog-dropdown">
+									 <ul class="header__catalog-menu">
+										 {% for category4 in category3['children'] %}
+										 <li>
+											  <a class="header__catalog-link" href="{{ category4['href'] }}">
+												  <span class="header__catalog-link-text">{{ category4['name'] }}</span>
+											  </a>
+										 </li>
+										 {% endfor %}
+									 </ul>
+								 </div>
+							 </li>
+							 {% else %}
+							 <li>
+								 <a class="header__catalog-link" href="{{ category3['href'] }}">
+									 <span class="header__catalog-link-text">{{ category3['name'] }}</span>
+								 </a>
+							 </li>
+							 {% endif %}
+							 {% endfor %}
+							 
+						 </ul>
+					 </div>
+				 </li>
+				 {% else %}
+				 <li>
+					 <a class="header__catalog-link" href="{{ category['href'] }}">
+						 <span class="header__catalog-link-text">{{ category['name'] }}</span>
+					 </a>
+				 </li>
+				 {% endif %}
+				 {% endfor %}
+			 </ul>
+		 </div>
+	 </li>									
+    {% endif %} 
+{% endif %} 
+{% endfor %}

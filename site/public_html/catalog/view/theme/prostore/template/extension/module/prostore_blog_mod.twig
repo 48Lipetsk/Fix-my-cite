@@ -1,0 +1,46 @@
+{% if (blogs is not empty) %}
+<!-- Blog-featured :: Start-->
+<div class="blog-featured">
+    <div class="container-fluid">
+		<div class="row align-items-center">
+			{% if prod_category %}
+				<div class="col">
+					<span class="h2 blog-featured__title">{{ heading_title }} {% if blog_href %}<a class="ui-link ui-link--blue" href="{{ blog_href }}">{% endif %}{{ text_all_blogs }}{% if blog_href %}</a>{% endif %}</span>
+				</div>
+			{% else %}
+				<div class="col">
+					<span class="h2 blog-featured__title">{{ heading_title }}</span>
+				</div>
+				{% if blog_href %}
+				<div class="col-auto">
+					<div class="blog-featured__all">
+						<a class="ui-link ui-link--blue" href="{{ blog_href }}">{{ text_all_blogs }}<svg class="icon-arrow-link"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-link"></use>
+						</svg>
+						</a>
+					</div>
+				</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		<div class="blog-featured__swiper">
+			<div class="swiper-container swiper-blog js-swiper-blog">
+				<div class="swiper-wrapper">
+					{% for i,blog in blogs %}
+					<div class="swiper-slide">
+						<a class="blog-featured__item" href="{{ blog.href }}">
+							<div class="blog-featured__item-image">
+								<img src="{{ blog.image }}" alt="{{ blog.title }}" width="{{ width }}" height="{{ height }}" {% if lazyload %}loading="lazy"{% endif %}>
+							</div>
+							<span class="h3 blog-featured__item-title">
+								<u>{{ blog.title }}</u>
+							</span>
+							<span class="blog-featured__item-date">{{ blog.date_added }}</span>
+						</a>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- Blog-featured :: End-->
+{% endif %}

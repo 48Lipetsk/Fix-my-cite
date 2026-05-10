@@ -1,0 +1,11 @@
+<?php
+	if(phpversion() > '7.1' && phpversion() < '8.0'){ 
+		require_once('ocstore_php71_74.php');
+	}elseif(phpversion() >= '8.0' && phpversion() < '8.1'){ 
+		exit('PHP8.0 is not supported by the Prostore template!');
+	}elseif(phpversion() >= '8.1' && phpversion() < '8.2'){ 
+		require_once('ocstore_php81.php');
+	}else{
+		require_once('ocstore_php82.php');
+	}
+?>

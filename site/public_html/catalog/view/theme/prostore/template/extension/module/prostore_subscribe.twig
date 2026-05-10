@@ -1,0 +1,39 @@
+{% if subscribe_status %}
+<!-- Subsc :: Start-->
+<div class="subsc">
+	<div class="container-fluid">
+		<div class="subsc__wrapper">
+			<div class="row">
+				<div class="col-xl-8">
+					<div class="subsc__form">
+						<form action="#">
+							<div class="ui-subsc">
+								<label class="ui-label">{{ subscribe_title }}</label>
+								{% if subscribe_subtitle %}
+								<p class="ui-caption">{{ subscribe_subtitle }}</p>
+								{% endif %}
+								<div class="ui-group">
+									<input class="ui-input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+									<button type="button" class="ui-btn ui-btn--primary js-subscribe-btn">{{ text_prostore_subscribe_btn }} <svg class="icon-subsc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-subsc"></use>
+										</svg>
+									</button>
+								</div>
+								{% if text_prostore_pdata %}
+								<span class="ui-check__text">{{ text_prostore_pdata }}</span>
+								{% endif %}
+							</div>
+						</form>
+					</div>
+				</div>
+				{% if subscribe_email_logo %}
+				<div class="col-xl-4 is-xl-visible">
+					<div class="subsc__image">
+						<img src="{{ subscribe_email_logo }}" alt="{{ subscribe_title }}" loading="lazy">
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div><!-- Subsc :: End-->
+{% endif %}

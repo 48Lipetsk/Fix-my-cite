@@ -1,0 +1,72 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Alerts :: Start-->
+<div class="alerts-wrapper">
+	{% if success %}
+	<div class="alert alert--green">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ success }}</p>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert--red">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ error_warning }}</p>
+	</div>
+	{% endif %}
+</div><!-- Alerts :: End-->
+<!-- Main :: Start-->
+<main class="main">
+	{{ content_top }}
+<!-- 	<div class="row">
+	{{ column_left }}
+	<div class="col-xl-{{ col }}"> -->
+	<!-- Authorization :: Start-->
+	<div class="auth">
+		<div class="container-fluid">
+			<div class="auth__head">
+				<h1 class="auth__title">{{ heading_title }}</h1>
+				<div class="auth__control">
+					<span>{{ text_new_affiliate }}?</span>
+					<a class="ui-btn ui-btn--36 ui-btn--primary" href="{{ register }}">{{ text_register }} </a>
+				</div>
+			</div>
+			<div class="auth__body">
+				<div class="auth__form">
+					<form action="{{ action }}" method="post" enctype="multipart/form-data">
+						<fieldset class="ui-fieldset">
+							<p class="ui-caption">{{ text_description }}</p>
+						</fieldset>
+						<fieldset class="ui-fieldset">
+							<legend class="ui-legend">{{ text_returning_affiliate }}</legend>
+							<label class="ui-label required" for="input-email">{{ entry_email }}</label>
+							<input class="ui-input" type="email" name="email" placeholder="{{ entry_email }}" value="{{ email }}" id="input-email">
+							<label class="ui-label required" for="input-password">{{ entry_password }}</label>
+							<input class="ui-input" type="password" name="password" placeholder="{{ entry_password }}" value="{{ password }}" id="input-password">
+							<p class="ui-forgot">
+								<a class="ui-link ui-link--blue" href="{{ forgotten }}">{{ text_forgotten }}</a>
+							</p>
+						</fieldset>
+						<fieldset class="ui-fieldset">
+							<hr>
+							<button type="submit" class="ui-btn ui-btn--primary ui-btn--60 ui-btn--fullwidth">{{ button_login }}</button>
+						</fieldset>
+					  {% if redirect %}
+					  <input type="hidden" name="redirect" value="{{ redirect }}">
+					  {% endif %}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div><!-- Authorization :: End-->
+<!-- 	</div>
+	{{ column_right }}
+	</div> -->
+	{{ content_bottom }}
+</main><!-- Main :: End-->
+{{ footer }}</body></html>

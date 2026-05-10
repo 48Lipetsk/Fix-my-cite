@@ -1,0 +1,293 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	{{ content_top }}
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+               {% if products %}
+			   <!-- Compare :: Start-->
+                <div class="compare js-compare">
+                    <div class="container-fluid">
+                        <div class="compare__head">
+                            <div class="compare__topbar">
+                                <div class="row">
+                                    <div class="col-md">
+                                        <span class="h2 compare__title">{{ text_prostore_selected_models }} <mark class="compare__counter">{{ model_num }}</mark>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-auto">
+                                        <div class="compare__filter">
+                                            <form action="#">
+                                                <div class="ui-switch">
+                                                    <button class="ui-switch__btn switch-diff is-active">{{ text_readmore_attributes }}</button>
+                                                    <button class="ui-switch__btn switch-diff diff-only">{{ text_prostore_differences }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="compare__spacer js-compare-spacer">
+                                <div class="compare__sticky js-compare-sticky">
+                                    <div class="swiper-container swiper-compare js-swiper-compare-slides">
+                                        <div class="swiper-wrapper">
+                                            {% for product in products %}
+											<div class="swiper-slide">
+                                                <div class="compare__item">
+                                                    <div class="compare__item-buttons">
+                                                        <a class="ui-btn ui-btn--40x40 ui-btn--outline" href="{{ product.remove }}">
+                                                            <svg class="icon-clear"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-clear"></use>
+                                                            </svg>
+                                                        </a>
+                                                        <button type="button" class="ui-btn ui-btn--favorite ui-btn--40x40 ui-btn--outline {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" data-action="wishlist" data-for="{{ product.product_id }}">
+                                                            <svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+																<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+																</svg>
+                                                        </button>
+                                                    </div>
+                                                    {% if product.thumb %}
+													<a class="compare__item-image" href="{{ product.href }}">
+                                                        <img src="{{ product.thumb }}" alt="{{ product.name }}">
+                                                    </a>
+													{% endif %}
+                                                    <a class="compare__item-title" href="{{ product.href }}">{{ product.name }}</a>
+                                                    <p class="compare__item-price">{% if product.special %}<mark>-{{ product.discount }}</mark><ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}</p>
+                                                    <div class="compare__item-action">
+                                                        {% if not product.buy_btn %}
+														<button type="button" class="ui-btn ui-btn--50x50 ui-btn--primary" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" {% if product.buy_btn %}disabled{% endif %}>
+                                                            <svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+                                                            </svg>
+                                                        </button>
+                                                        <button type="button" class="ui-btn ui-btn--50x50 ui-btn--outline js-btn-preview" data-for="{{ product.product_id }}" href="#popupprod">
+                                                            <svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+                                                            </svg>
+                                                        </button>
+														{% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+											{% endfor %}
+                                        </div>
+                                        <div class="swiper-scrollbar js-swiper-compare-scrollbar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="compare__body">
+                            <div class="swiper-container swiper-compare js-swiper-compare-thumbs">
+                                <div class="swiper-wrapper">
+                                    {% for product in products %}
+									<div class="swiper-slide">
+                                        <div class="compare__data">
+                                            <div class="compare__data-group">
+                                                <span class="h4 compare__data-title">{{ text_prostore_compare_main }}</span>
+                                                <dl class="compare__data-dl">
+                                                    <dt>{{ text_model }}</dt>
+                                                    <dd data-mh="1">{{ product.model }}</dd>
+                                                    <dt class="isdiff-{{diff_keys.manufacturer}}">{{ text_manufacturer }}</dt>
+                                                    <dd data-mh="2" class="isdiff-{{diff_keys.manufacturer}}">{{ product.manufacturer }}</dd>
+                                                    <dt class="isdiff-{{diff_keys.availability}}">{{ text_availability }}</dt>
+                                                    <dd data-mh="3" class="isdiff-{{diff_keys.availability}}">{{ product.availability }}</dd>
+													{% if review_status %}
+                                                    <dt class="isdiff-{{diff_keys.reviews}}">{{ text_rating }}</dt>
+													<dd data-mh="4" class="isdiff-{{diff_keys.reviews}}">{{ product.rating }}/5 {{ product.reviews }}</dd>
+													{% endif %}
+                                                    <dt class="isdiff-{{diff_keys.weight}}">{{ text_weight }}</dt>
+                                                    <dd data-mh="5" class="isdiff-{{diff_keys.weight}}">{{ product.weight }}</dd>
+                                                    <dt class="isdiff-{{diff_keys.dimensions}}">{{ text_dimension }}</dt>
+                                                    <dd data-mh="6" class="isdiff-{{diff_keys.dimensions}}">{{ product.length }} x {{ product.width }} x {{ product.height }}</dd>
+                                                </dl>
+                                            </div>
+											{% for i,attribute_group in attribute_groups %}
+                                            <div class="compare__data-group">
+                                                <span class="h4 compare__data-title">{{ attribute_group.name }}</span>
+                                                <dl class="compare__data-dl">
+                                                    {% for key,attribute in attribute_group.attribute %}
+													{% if product.attribute[key] is defined %}
+													<dt class="isdiff-{{diff_keys.attribute[key]}}">{{ attribute.name }}</dt>
+                                                    <dd data-mh="{{ key + 7 }}" class="isdiff-{{diff_keys.attribute[key]}}">{{ product.attribute[key] }}</dd>
+                                                    {% else %}
+													<dt>{{ attribute.name }}</dt>
+                                                    <dd data-mh="{{ key + 7 }}">—</dd>
+													{% endif %}
+													{% endfor %}
+                                                </dl>
+                                            </div>
+											{% endfor %}
+                                        </div>
+                                    </div>
+									{% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- Compare :: End-->
+			{% else %}
+			<div class="container-fluid">
+				<div class="page">
+					<div class="page__body">
+						<p>{{ text_empty }}</p>
+					</div>
+					<div class="page__action">
+						<a href="{{ continue }}" class="ui-btn ui-btn--primary">{{ button_continue }}</a>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+		{{ column_right }}
+		</div>
+	{{ content_bottom }}
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+<script>
+$(document).on('click', '.switch-diff', function (event) {
+	event.preventDefault();
+	$('.switch-diff').removeClass("is-active");
+	$(this).addClass("is-active");
+
+	if($(this).hasClass("diff-only")){
+		$('.isdiff-0').hide();
+	}else{
+		$('.isdiff-0').show();
+	}
+
+});
+
+$(function() {
+
+	// --------------------------------------------------------------------------
+	// matchHeight
+	// --------------------------------------------------------------------------
+
+	function initMatchHeight() {
+
+		if ( $('[data-mh]').length ) {
+
+			var matchHeightOptions = {
+				byRow: false,
+				property: 'height',
+				target: null,
+				remove: false
+			};
+
+			$('[data-mh]').matchHeight(matchHeightOptions);
+
+		}
+
+	}
+	
+	initMatchHeight();
+	
+	if ( $('.js-compare').length ) {
+
+		var swiperCompareThumbs = new Swiper('.js-swiper-compare-thumbs', {
+			slidesPerView: 'auto',
+			spaceBetween: 0,
+			watchSlidesVisibility: true,
+			watchSlidesProgress: true,
+			watchOverflow: true,
+			loop: false,
+			scrollbar: {
+				el: '.js-swiper-compare-scrollbar',
+				draggable: true,
+			},
+		});
+
+		var swiperCompareSlides = new Swiper('.js-swiper-compare-slides', {
+			slidesPerView: 'auto',
+			spaceBetween: 0,
+			watchSlidesVisibility: true,
+			watchSlidesProgress: true,
+			watchOverflow: true,
+			loop: false,
+			// scrollbar: {
+			// 	el: '.js-swiper-compare-scrollbar',
+			// 	draggable: true,
+			// },
+			// thumbs: {
+				// swiper: swiperCompareThumbs,
+			// },
+		});
+
+
+		swiperCompareSlides.controller.control = swiperCompareThumbs;
+		swiperCompareThumbs.controller.control = swiperCompareSlides;
+
+	}	
+		
+	function stickyCompare() {
+
+		if ( $('.js-compare-sticky').length ) {
+
+			var $triggerTop = 0;
+			if ( $('body').is('.is-page-header-fixed') ) {
+				if (window.matchMedia('(min-width: 1200px)').matches) {
+					$triggerTop = $('.header-fixed').data('fixed-height') || $('.header-fixed').innerHeight();
+				} else {
+					$triggerTop = $('.header__mobile-fixed').innerHeight();
+				}
+			}
+			
+			$('.js-compare-sticky').stick_in_parent({
+				offset_top: $triggerTop,
+				bottoming: false,
+				spacer: '.js-compare-spacer',
+				inner_scrolling: true,
+				sticky_class: 'is-sticky',
+				parent: '.js-compare'
+			});
+
+		}
+
+    }
+	
+	$(window).on('load resize orientationchange', function(){
+		stickyCompare();
+	});
+
+});
+</script>
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
+	{% for i,breadcrumb in breadcrumbs %}
+	{
+	  "@type": "ListItem",
+	  "position": {{ i + 1 }},
+	  "item": {
+		"@id": "{{ breadcrumb.href }}",
+		"name": "{{ breadcrumb.text }}"
+	  }
+	}{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+	{% endfor %}
+	]
+}
+</script>
+ <!-- Schema Org :: End-->
+{% endif %}
+</body></html>

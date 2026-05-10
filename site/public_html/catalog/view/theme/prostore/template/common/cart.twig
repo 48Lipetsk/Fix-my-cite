@@ -1,0 +1,220 @@
+<div class="header__cart" id="cart">
+	<a class="header__cart-btn {% if cart_call %}js-cart-call{% endif %}" href="{{ cart }}">
+		<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+		</svg>
+		<span class="header__cart-total js-cart-total">
+			<span id="cart-total">
+				{{ text_items }}
+			</span>
+		</span>
+	</a>
+	<div class="header__cart-overlay"></div>
+	<div class="header__cart-load">
+	<div class="header__cart-offcanvas">
+		<div class="header__cart-scrollbar {% if (products or vouchers) %}js-cart-scrollbar{% endif %}">
+			<button class="header__cart-close">
+				<svg class="icon-close-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-cart"></use>
+				</svg>
+			</button>
+			<div class="header__cart-head">
+				<span class="header__cart-title">{{ text_prostore_cart_title }}</span>
+				{% if (products or vouchers) %}
+				<button class="header__cart-clear" onclick="cart.clear();">
+					<svg class="icon-clear"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-clear"></use>
+					</svg>{{ text_prostore_clear }}
+				</button>
+				{% endif %}
+			</div>
+			<div class="header__cart-body">
+				{% if error_min_warning %}
+                    <div class="alert alert--red alert--opacity">
+                        <button class="alert__close">
+                            <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+                            </svg>
+                        </button>
+                        <p class="alert__text">{{ error_min_warning }}</p>
+                    </div>
+				{% endif %}
+				{% if products or vouchers %}
+				<ul class="header__cart-list">
+					{% for product in products %}
+					<li>
+						<div class="header__cart-item">
+							{% if (product.thumb) %}
+							<a href="{{ product.href }}">
+								<div class="header__cart-item-image">
+									<img src="{{ product.thumb }}" alt="{{ product.name }}" width="124" height="82" loading="lazy">
+								</div>
+							</a>
+							{% endif %}
+							<div class="header__cart-item-desc">
+								<span class="header__cart-item-id">{{ product.model }}</span>
+								<a href="{{ product.href }}" class="header__cart-item-title">{{ product.name }}</a>
+								{% if (product.option) %}
+								<p class="header__cart-item-text">
+									{% for i,option in product.option %}
+									{{ option.name }}: {{ option.value }}{% if (i + 1 < product.option|length) %},{% endif %}
+									{% endfor %}
+									</p>
+								{% endif %}
+							</div>
+							<div class="header__cart-item-number">
+								<div class="ui-number">
+									<input class="ui-number__input" min="{% if product.minimum > 1 %}{{ product.minimum }}{% else %}0{% endif %}" max="9999" type="number" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}">
+									<button class="ui-number__decrease">
+										<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+										</svg>
+									</button>
+									<button class="ui-number__increase">
+										<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+										</svg>
+									</button>
+								</div>
+							</div>
+							<div class="header__cart-item-price">
+								<span class="header__cart-item-price-current">{{ product.total }}</span>
+								<small class="header__cart-item-price-piece">{{ product.price }} / {{ text_prostore_cart_quantity }}</small>
+							</div>
+							<div class="header__cart-item-action js-action">
+								<button class="header__cart-item-action-toggle js-action-toggle">
+									<svg class="icon-dots"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-dots"></use>
+									</svg>
+								</button>
+								<div class="header__cart-item-action-offcanvas">
+									<ul class="header__cart-item-action-menu">
+										<li>
+											<button class="header__cart-item-action-link" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');">{{ button_wishlist }}</button>
+										</li>
+										<li>
+											<button class="header__cart-item-action-link" title="{{ button_remove }}" onclick="cart.remove('{{ product.cart_id }}');">{{ button_remove }}</button>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+					{% for voucher in vouchers %}
+					<li>
+						<div class="header__cart-item">
+
+							<div class="header__cart-item-desc">
+								<span class="header__cart-item-title">{{ voucher.description }}</span>
+							</div>
+							<div class="header__cart-item-number">
+								<div class="ui-number">
+									<input class="ui-number__input" min="1" max="1" type="number" value="1" disabled>
+									<button class="ui-number__decrease" disabled>
+										<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+										</svg>
+									</button>
+									<button class="ui-number__increase" disabled>
+										<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+										</svg>
+									</button>
+								</div>
+							</div>
+							<div class="header__cart-item-price">
+								<span class="header__cart-item-price-current">{{ voucher.amount }}</span>
+								<small class="header__cart-item-price-piece">{{ voucher.amount }} / {{ text_prostore_cart_quantity }}</small>
+							</div>
+							<div class="header__cart-item-action js-action">
+								<button class="header__cart-item-action-toggle js-action-toggle">
+									<svg class="icon-dots"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-dots"></use>
+									</svg>
+								</button>
+								<div class="header__cart-item-action-offcanvas">
+									<ul class="header__cart-item-action-menu">
+										<li>
+											<button class="header__cart-item-action-link" title="{{ button_remove }}" onclick="voucher.remove('{{ voucher.key }}');">{{ button_remove }}</button>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+				</ul>
+				<div class="header__cart-data">
+					<span class="header__cart-data-title">{{ text_prostore_shipping_0 }}</span>
+					<table class="header__cart-data-table">
+						<tbody>
+							{% for i,total in totals %}
+							{% if (i + 1 < totals|length) %}
+							<tr>
+								<td class="{% if total.value < 0 %}text-red{% endif %}">{{ total.title }}</td>
+								<td class="text-right {% if total.value < 0 %}text-red{% endif %}">{{ total.text }}</td>
+							</tr>
+							{% endif %}
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							{% for i,total in totals %}
+							{% if not (i + 1 < totals|length) %}
+							<tr>
+								<td>{{ total.title }}</td>
+								<td class="text-right">{{ total.text }}</td>
+							</tr>
+							{% endif %}
+							{% endfor %}
+						</tfoot>
+					</table>
+					<div class="header__cart-data-action">
+						<a class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth" href="{{ checkout }}">{{ text_prostore_order }}</a>
+					</div>
+					<div class="header__cart-data-quick">
+						<div class="header__cart-data-quick-action">
+							<div class="row">
+								{% if (buy_click.status is defined and buy_click.status) %}
+								<div class="col-6">
+									<a class="ui-btn ui-btn--grey ui-btn--fullwidth js-fancy-popup-cart" href="#popup-buy-click-cc" data-fancybox data-typefrom="cart-popup">{{ text_prostore_fast_order }}</a>
+								</div>
+								{% endif %}
+								<div class="col-{% if (buy_click.status is defined and buy_click.status) %}6{% else %}12{% endif %}">
+									<a class="ui-btn ui-btn--white ui-btn--fullwidth" href="{{ cart }}">{{ text_cart }}</a>
+								</div>
+							</div>
+						</div>
+						<p class="header__cart-data-quick-text">{{ text_prostore_cart_quick_text }}</p>
+					</div>
+				</div>
+				{% else %}
+				{{ text_empty }}
+				{% endif %}
+			</div>
+		</div>
+		{% if (products or vouchers) %}
+		<div class="header__cart-sticky">
+			<div class="row">
+				{% if (buy_click.status is defined and buy_click.status) %}
+				<div class="col-6">
+					<a class="ui-btn ui-btn--55 ui-btn--grey ui-btn--fullwidth js-fancy-popup-cart" href="#popup-buy-click-cc" data-fancybox data-typefrom="cart-popup">{{ text_prostore_fast_order }}</a>
+				</div>
+				{% endif %}
+				<div class="col-{% if (buy_click.status is defined and buy_click.status) %}6{% else %}12{% endif %}">
+					<a class="ui-btn ui-btn--55 ui-btn--primary ui-btn--fullwidth" href="{{ checkout }}">{{ text_prostore_order }}</a>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if (products or vouchers) %}
+		<!-- Popups :: Start-->
+			{% if (buy_click.status is defined and buy_click.status) %}
+			<div class="fancybox-is-hidden popup popup--buy-click" id="popup-buy-click-cc">
+				<span class="popup__title">{{ text_prostore_fast_order }}</span>
+				<div class="popup__form">
+						{{ buyclick_form }}
+						{{ captcha_fo }}
+						<button type="button" class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth quickbuy-send" onclick="cart.add2cartFast($('#popup-buy-click-cc input,#popup-buy-click-cc textarea'));">{{ button_fastorder_sendorder }}</button>
+						<input name="redirect"  value="1" class="fast-redirect" type="hidden">
+						{% if (text_prostore_pdata) %} 
+							<div class="personal-data">{{ text_prostore_pdata }}</div>
+						{% endif %} 
+				</div>
+			</div>
+			{% endif %}
+		<!-- Popups :: End-->
+		{% endif %}
+	</div>
+	</div>
+</div>

@@ -1,0 +1,45 @@
+{% if (newss is not empty) %}
+<!-- News :: Start-->
+<div class="news-featured">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col">
+				<span class="h2 news-featured__title">{{ heading_title }}</span>
+			</div>
+			<div class="col-auto">
+				<div class="news-featured__all">
+					<a class="ui-link ui-link--blue" href="{{ news_href }}">{{ text_all_news }}<svg class="icon-arrow-link"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-link"></use>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="news-featured__swiper">
+			<div class="swiper-container swiper-news js-swiper-news">
+				<div class="swiper-wrapper">
+					{% for news in newss %}
+					<div class="swiper-slide">
+						<a class="news-featured__item" href="{{ news.href }}">
+							{% if news.badges %}
+							<div class="news__item-badges">
+								<span class="ui-badge ui-badge--30 ui-badge--lightred">{{ text_badges }}</span>
+							</div>
+							{% endif %}
+							<div class="news-featured__item-image {% if news.badges %}news-featured__item-image--badges{% endif %}" {% if news.badges %}style="background: #{{ news.background }};"{% endif %}>
+								{% if news.thumb %}
+								<img src="{{ news.thumb }}" alt="{{ news.title }}" width="{{ news.width }}" height="{{ news.height }}" loading="lazy">
+								{% endif %}
+							</div>
+							<span class="h3 news-featured__item-title">
+								<u>{{ news.title }}</u>
+							</span>
+							<span class="news-featured__item-date">{{ news.date_added }}</span>
+						</a>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+    </div>
+</div><!-- News :: End-->
+{% endif %}

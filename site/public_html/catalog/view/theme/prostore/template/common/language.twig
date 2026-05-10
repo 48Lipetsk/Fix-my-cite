@@ -1,0 +1,30 @@
+{% if languages|length > 1 %}
+<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-language">
+	<div class="header__language">
+		<button class="header__language-btn js-language-trigger">
+			<mark>{{ text_language }}</mark>
+			{% for language in languages %}
+			{% if language.code == code %}{{ language.name }}{% endif %}
+			{% endfor %}
+			<svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use></svg>
+		</button>
+		<div class="header__language-offcanvas">
+			<div class="header__language-offcanvas-overlay js-language-trigger"></div>
+			<div class="header__language-offcanvas-content">
+				<ul class="header__language-menu">
+					{% for language in languages %}
+					<li>
+						<a data-lang="{{ language.code }}" class="header__language-link language-select" href="#">{{ language.name }}</a>
+					</li>
+					{% endfor %}
+					<li>
+						<button class="header__language-link header__language-link--close js-language-trigger">{{ text_prostore_menu_close }}</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="code" value="">
+	<input type="hidden" name="redirect" value="{{ redirect }}">
+</form>
+{% endif %}
