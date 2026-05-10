@@ -45,7 +45,25 @@ class ControllerProductCategory extends Controller {
 		$json = array();
 
 
-		if (isset($this->request->get['filter'])) {
+		
+      // OCFilter start
+			if (isset($this->request->get['filter_ocfilter'])) {
+				$url .= '&filter_ocfilter=' . $this->request->get['filter_ocfilter'];
+			}
+      // OCFilter end
+      
+      // OCFilter start
+			if (isset($this->request->get['filter_ocfilter'])) {
+				$url .= '&filter_ocfilter=' . $this->request->get['filter_ocfilter'];
+			}
+      // OCFilter end
+      
+      // OCFilter start
+			if (isset($this->request->get['filter_ocfilter'])) {
+				$url .= '&filter_ocfilter=' . $this->request->get['filter_ocfilter'];
+			}
+      // OCFilter end
+      if (isset($this->request->get['filter'])) {
 			$filter = $this->request->get['filter'];
 		} else {
 			$filter = '';
@@ -175,7 +193,15 @@ class ControllerProductCategory extends Controller {
 			$limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
 		}
 
-		$data['breadcrumbs'] = array();
+		
+		// OCFilter start
+    if (isset($this->request->get['filter_ocfilter'])) {
+      $filter_ocfilter = $this->request->get['filter_ocfilter'];
+    } else {
+      $filter_ocfilter = '';
+    }
+		// OCFilter end
+      $data['breadcrumbs'] = array();
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -437,7 +463,11 @@ $data['image_category_height'] = $this->config->get('theme_' . $this->config->ge
 //prostore stop
 			
 
-			$product_total = $this->model_catalog_product->getTotalProducts($filter_data);
+			
+  		// OCFilter start
+  		$filter_data['filter_ocfilter'] = $filter_ocfilter;
+  		// OCFilter end
+      $product_total = $this->model_catalog_product->getTotalProducts($filter_data);
 
 			$results = $this->model_catalog_product->getProducts($filter_data);
 
@@ -764,6 +794,33 @@ $data['image_category_height'] = $this->config->get('theme_' . $this->config->ge
 			$data['sort'] = $sort;
 			$data['order'] = $order;
 			$data['limit'] = $limit;
+      // OCFilter Start
+      if ($this->ocfilter->getParams()) {
+        if (isset($product_total) && !$product_total) {
+      	  $this->response->redirect($this->url->link('product/category', 'path=' . $this->request->get['path']));
+        }
+
+        $this->document->setTitle($this->ocfilter->getPageMetaTitle($this->document->getTitle()));
+			  $this->document->setDescription($this->ocfilter->getPageMetaDescription($this->document->getDescription()));
+        $this->document->setKeywords($this->ocfilter->getPageMetaKeywords($this->document->getKeywords()));
+
+        $data['heading_title'] = $this->ocfilter->getPageHeadingTitle($data['heading_title']);
+        $data['description'] = $this->ocfilter->getPageDescription();
+
+        if (!trim(strip_tags(html_entity_decode($data['description'], ENT_QUOTES, 'UTF-8')))) {
+        	$data['thumb'] = '';
+        }
+
+        $breadcrumb = $this->ocfilter->getPageBreadCrumb();
+
+        if ($breadcrumb) {
+  			  $data['breadcrumbs'][] = $breadcrumb;
+        }
+
+        $this->document->deleteLink('canonical');
+      }
+      // OCFilter End
+      
 
 // prostore
 			$data['sort_title'] = $this->language->get('text_default');

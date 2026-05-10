@@ -116,7 +116,21 @@ if (!empty($data['filter_sub_category']) && $this->config->get('config_seo_pro')
 			
 		}
 
-		$sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+		
+		// OCFilter start
+		if (!empty($data['filter_ocfilter'])) {
+    	$this->load->model('extension/module/ocfilter');
+
+      $ocfilter_product_sql = $this->model_extension_module_ocfilter->getSearchSQL($data['filter_ocfilter']);
+		} else {
+      $ocfilter_product_sql = false;
+    }
+
+    if ($ocfilter_product_sql && $ocfilter_product_sql->join) {
+    	$sql .= $ocfilter_product_sql->join;
+    }
+    // OCFilter end
+      $sql .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'";
 
 
 		if (isset($data['filter_category_ids']) && $data['filter_category_ids']) {
@@ -208,7 +222,13 @@ if (!empty($data['filter_sub_category']) && $this->config->get('config_seo_pro')
 			$sql .= ")";
 		}
 
-		if (!empty($data['filter_manufacturer_id'])) {
+		
+    // OCFilter start
+    if (!empty($ocfilter_product_sql) && $ocfilter_product_sql->where) {
+    	$sql .= $ocfilter_product_sql->where;
+    }
+    // OCFilter end
+      if (!empty($data['filter_manufacturer_id'])) {
 			$sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
 		}
 
