@@ -32,12 +32,26 @@ final class Twig {
 		);
 
 		try {
-			$loader = new \Twig\Loader\ArrayLoader(array($filename . '.twig' => $code));
+			// ArrayLoader — for the current template passed as $code
+			$arrayLoader = new \Twig\Loader\ArrayLoader(array($filename . '.twig' => $code));
 
+			// FilesystemLoader — for {% include %} directives
+			$paths = array();
 
+			if (defined('DIR_TEMPLATE')) {
+				$paths[] = DIR_TEMPLATE;
+			}
+
+			if (defined('DIR_MODIFICATION') && is_dir(DIR_MODIFICATION . 'catalog/view/theme/')) {
+				$paths[] = DIR_MODIFICATION . 'catalog/view/theme/';
+			}
+
+			$filesystemLoader = new \Twig\Loader\FilesystemLoader($paths);
+
+			// ChainLoader tries ArrayLoader first, then FilesystemLoader
+			$loader = new \Twig\Loader\ChainLoader(array($arrayLoader, $filesystemLoader));
 
 			$twig = new \Twig\Environment($loader, $config);
-			
 
 			return $twig->render($filename . '.twig', $this->data);
 		} catch (\Exception $e) {

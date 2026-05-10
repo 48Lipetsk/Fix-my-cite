@@ -207,6 +207,12 @@ class ControllerStartupStartup extends Controller {
 		
 		// Cart
 		$this->registry->set('cart', new Cart\Cart($this->registry));
+		// OCFilter
+		$this->registry->set('ocfilter', new OCFilter($this->registry));
+      
+
+		// OCFilter
+		$this->registry->set('ocfilter', new OCFilter($this->registry));
 		
 		// Encryption
 		$this->registry->set('encryption', new Encryption());
