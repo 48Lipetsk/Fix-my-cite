@@ -116,22 +116,28 @@ CREATE TABLE IF NOT EXISTS `oc_ocfilter_page_description` (
   PRIMARY KEY (`ocfilter_page_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- ---- ProStore theme tables (41) ----
+-- ---- ProStore theme tables ----
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog` (
   `blog_id` INT(11) NOT NULL AUTO_INCREMENT,
   `image` VARCHAR(255) DEFAULT NULL,
+  `image_preview` VARCHAR(255) DEFAULT NULL,
+  `bottom` TINYINT(1) NOT NULL DEFAULT '0',
   `sort_order` INT(3) NOT NULL DEFAULT '0',
   `status` TINYINT(1) NOT NULL DEFAULT '0',
-  `date_available` DATE NOT NULL DEFAULT '0000-00-00',
+  `viewed` INT(11) NOT NULL DEFAULT '0',
   `date_added` DATETIME NOT NULL,
-  `date_modified` DATETIME NOT NULL,
   PRIMARY KEY (`blog_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_banner` (
   `banner_id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
+  `image_thumb_width` INT(11) NOT NULL DEFAULT '0',
+  `image_thumb_height` INT(11) NOT NULL DEFAULT '0',
+  `image_popup_width` INT(11) NOT NULL DEFAULT '0',
+  `image_popup_height` INT(11) NOT NULL DEFAULT '0',
+  `template` VARCHAR(32) NOT NULL DEFAULT '',
   `status` TINYINT(1) NOT NULL,
   PRIMARY KEY (`banner_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -153,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_blog_comment` (
   `customer_id` INT(11) NOT NULL DEFAULT '0',
   `author` VARCHAR(64) NOT NULL DEFAULT '',
   `text` TEXT NOT NULL,
+  `rating` INT(1) NOT NULL DEFAULT '0',
   `status` TINYINT(1) NOT NULL DEFAULT '0',
   `date_added` DATETIME NOT NULL,
   `date_modified` DATETIME NOT NULL,
@@ -163,15 +170,15 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_blog_comment` (
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_description` (
   `blog_id` INT(11) NOT NULL,
   `language_id` INT(11) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
+  `title` VARCHAR(255) NOT NULL DEFAULT '',
   `description` TEXT NOT NULL,
-  `tag` TEXT NOT NULL,
-  `meta_title` VARCHAR(255) NOT NULL,
-  `meta_description` VARCHAR(255) NOT NULL,
-  `meta_keyword` VARCHAR(255) NOT NULL,
+  `meta_title` VARCHAR(255) NOT NULL DEFAULT '',
   `meta_h1` VARCHAR(255) NOT NULL DEFAULT '',
+  `meta_description` VARCHAR(255) NOT NULL DEFAULT '',
+  `meta_keyword` VARCHAR(255) NOT NULL DEFAULT '',
+  `tag` TEXT NOT NULL,
   PRIMARY KEY (`blog_id`,`language_id`),
-  KEY `name` (`name`)
+  KEY `title` (`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_related` (
@@ -182,14 +189,14 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_blog_related` (
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_related_banners` (
   `blog_id` INT(11) NOT NULL,
-  `banner_id` INT(11) NOT NULL,
-  PRIMARY KEY (`blog_id`,`banner_id`)
+  `related_id` INT(11) NOT NULL,
+  PRIMARY KEY (`blog_id`,`related_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_related_cat` (
   `blog_id` INT(11) NOT NULL,
-  `blog_category_id` INT(11) NOT NULL,
-  PRIMARY KEY (`blog_id`,`blog_category_id`)
+  `related_id` INT(11) NOT NULL,
+  PRIMARY KEY (`blog_id`,`related_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_related_prod` (
@@ -199,14 +206,17 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_blog_related_prod` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_tag` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `blog_id` INT(11) NOT NULL,
+  `language_id` INT(11) NOT NULL,
   `tag` VARCHAR(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`blog_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_blog_to_category` (
   `blog_id` INT(11) NOT NULL,
   `category_id` INT(11) NOT NULL,
+  `main_category` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`blog_id`,`category_id`),
   KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -234,23 +244,24 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_callback` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_callcheaper` (
-  `callcheaper_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `product_id` INT(11) NOT NULL DEFAULT '0',
-  `phone` VARCHAR(32) NOT NULL DEFAULT '',
+  `call_id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
+  `telephone` VARCHAR(32) NOT NULL DEFAULT '',
+  `email` VARCHAR(255) NOT NULL DEFAULT '',
   `link` VARCHAR(255) NOT NULL DEFAULT '',
-  `status` TINYINT(1) NOT NULL DEFAULT '0',
   `date_added` DATETIME NOT NULL,
-  PRIMARY KEY (`callcheaper_id`)
+  `date_modified` DATETIME NOT NULL,
+  `status_id` TINYINT(1) NOT NULL DEFAULT '0',
+  `store_id` INT(11) NOT NULL DEFAULT '0',
+  `comment` TEXT NOT NULL,
+  PRIMARY KEY (`call_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_field` (
   `custom_field_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(32) NOT NULL,
-  `value` TEXT NOT NULL,
-  `validation` VARCHAR(255) NOT NULL,
-  `location` VARCHAR(32) NOT NULL,
+  `name` VARCHAR(128) NOT NULL DEFAULT '',
   `status` TINYINT(1) NOT NULL,
+  `type` VARCHAR(32) NOT NULL,
   `sort_order` INT(3) NOT NULL,
   PRIMARY KEY (`custom_field_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -258,22 +269,27 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_custom_field` (
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_field_customer_group` (
   `custom_field_id` INT(11) NOT NULL,
   `customer_group_id` INT(11) NOT NULL,
-  `required` TINYINT(1) NOT NULL
+  `required` TINYINT(1) NOT NULL,
+  `is_show` TINYINT(1) NOT NULL DEFAULT '0',
+  `store_id` INT(11) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_field_description` (
   `custom_field_id` INT(11) NOT NULL,
   `language_id` INT(11) NOT NULL,
-  `name` VARCHAR(128) NOT NULL,
+  `description` TEXT NOT NULL,
+  `store_id` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`custom_field_id`,`language_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs` (
-  `tab_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `cust_tab_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `view` VARCHAR(32) NOT NULL DEFAULT 'tab',
+  `mode` VARCHAR(32) NOT NULL DEFAULT 'categories',
   `sort_order` INT(11) NOT NULL DEFAULT '0',
-  `global` INT(11) NOT NULL DEFAULT '0',
   `status` TINYINT(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`tab_id`)
+  `date_added` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`cust_tab_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs_description` (
@@ -285,14 +301,8 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs_description` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs_instanses` (
-  `tab_instanse_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `tab_id` INT(11) NOT NULL,
-  `product_id` INT(11) NOT NULL DEFAULT '0',
-  `category_id` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`tab_instanse_id`),
-  KEY `tab_id` (`tab_id`),
-  KEY `product_id` (`product_id`),
-  KEY `category_id` (`category_id`)
+  `cust_tab_id` INT(11) NOT NULL,
+  `instanses` INT(11) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs_instanses_brands` (
@@ -305,9 +315,9 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs_instanses_brands` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_custom_tabs_to_store` (
-  `tab_id` INT(11) NOT NULL,
+  `cust_tab_id` INT(11) NOT NULL,
   `store_id` INT(11) NOT NULL,
-  PRIMARY KEY (`tab_id`,`store_id`)
+  PRIMARY KEY (`cust_tab_id`,`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_faq` (
@@ -315,42 +325,58 @@ CREATE TABLE IF NOT EXISTS `oc_prostore_faq` (
   `product_id` INT(11) NOT NULL DEFAULT '0',
   `customer_id` INT(11) NOT NULL DEFAULT '0',
   `author` VARCHAR(64) NOT NULL DEFAULT '',
+  `email` VARCHAR(255) NOT NULL DEFAULT '',
   `text` TEXT NOT NULL,
-  `reply` TEXT NOT NULL,
-  `status` TINYINT(1) NOT NULL DEFAULT '0',
   `date_added` DATETIME NOT NULL,
   `date_modified` DATETIME NOT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT '0',
+  `store_id` INT(11) NOT NULL DEFAULT '0',
+  `text_admin_answer` TEXT NOT NULL,
+  `answer_date_added` DATE NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`faq_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_key` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `value` TEXT NOT NULL,
   `key` VARCHAR(255) NOT NULL DEFAULT '',
-  `status` TINYINT(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `license_key` VARCHAR(255) NOT NULL DEFAULT '',
+  `date_added` DATE NOT NULL DEFAULT '0000-00-00'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_news_related` (
-  `blog_id` INT(11) NOT NULL,
-  `product_id` INT(11) NOT NULL,
-  PRIMARY KEY (`blog_id`,`product_id`)
+  `news_id` INT(11) NOT NULL,
+  `related_id` INT(11) NOT NULL,
+  PRIMARY KEY (`news_id`,`related_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_product_to_set` (
-  `product_id` INT(11) NOT NULL,
+  `set_product_id` INT(11) NOT NULL AUTO_INCREMENT,
   `set_id` INT(11) NOT NULL,
-  PRIMARY KEY (`product_id`,`set_id`)
+  `row_id` INT(11) NOT NULL DEFAULT '0',
+  `product_id` INT(11) NOT NULL,
+  `quantity` INT(11) NOT NULL DEFAULT '1',
+  `sort_order` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`set_product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `oc_prostore_review_shop` (
   `review_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` INT(11) NOT NULL DEFAULT '0',
   `author` VARCHAR(64) NOT NULL DEFAULT '',
+  `email` VARCHAR(255) NOT NULL DEFAULT '',
   `text` TEXT NOT NULL,
-  `rating` INT(1) NOT NULL DEFAULT '0',
+  `r1` INT(1) NOT NULL DEFAULT '0',
+  `r2` INT(1) NOT NULL DEFAULT '0',
+  `r3` INT(1) NOT NULL DEFAULT '0',
+  `r4` INT(1) NOT NULL DEFAULT '0',
+  `r5` INT(1) NOT NULL DEFAULT '0',
   `status` TINYINT(1) NOT NULL DEFAULT '0',
+  `store_id` INT(11) NOT NULL DEFAULT '0',
   `date_added` DATETIME NOT NULL,
   `date_modified` DATETIME NOT NULL,
+  `text_admin_answer` TEXT NOT NULL,
+  `answer_date_added` DATE NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`review_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
