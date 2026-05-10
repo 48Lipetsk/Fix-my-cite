@@ -82,7 +82,32 @@ $twig = new \Twig\Environment($loader, $config);
    rm -rf /home/c/cl244319/Smart-Tochka/storage/cache/template/*
    ```
 
-4. **Проверьте сайт** — откройте любую категорию с товарами. Фильтр OCFilter должен отображаться.
+4. **Исправьте также модификационную копию** (если есть):
+   ```bash
+   cp fixes/twig.php \
+      /home/c/cl244319/Smart-Tochka/storage/modification/system/library/template/twig.php
+   ```
+
+5. **Зарегистрируйте OCFilter библиотеку** в startup.php:
+   
+   Откройте файл `storage/modification/catalog/controller/startup/startup.php` и после строки:
+   ```php
+   $this->registry->set('cart', new Cart\Cart($this->registry));
+   ```
+   добавьте:
+   ```php
+   // OCFilter
+   $this->registry->set('ocfilter', new OCFilter($this->registry));
+   ```
+
+6. **Очистите кэш шаблонов** OpenCart:
+   ```bash
+   rm -rf /home/c/cl244319/Smart-Tochka/storage/cache/template/*
+   ```
+
+7. **Обновите OCMOD**: Зайдите в Админку → Расширения → Модификаторы → нажмите синюю кнопку «Обновить».
+
+8. **Проверьте сайт** — откройте любую категорию с товарами. Фильтр OCFilter должен отображаться.
 
 ### Вариант 2: Ручное редактирование
 
@@ -151,7 +176,9 @@ Fix-my-cite/
 ├── sql/
 │   ├── 01_opencart_base.sql    # Базовые таблицы OpenCart 3.0.4.1-rs
 │   ├── 02_missing_tables.sql   # Недостающие таблицы (ProStore + OCFilter)
-│   └── 03_data_dump.sql        # Дамп данных сайта
+│   ├── 03_ocfilter_setup.sql   # Регистрация модуля OCFilter в БД
+│   ├── 04_ocfilter_modification.sql # Регистрация OCMOD модификации
+│   └── 05_data_dump.sql        # Дамп данных сайта
 ├── fixes/
 │   └── twig.php                # Исправленный twig.php (готов к копированию)
 ├── site/
