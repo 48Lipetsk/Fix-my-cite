@@ -1,7 +1,14 @@
 -- ==============================================================
--- Missing tables for prostore theme + ocfilter module
--- These tables are NOT part of the base OpenCart 3.0.4.1-rs
+-- Missing tables and columns for prostore theme + ocfilter module
+-- These tables/columns are NOT part of the base OpenCart 3.0.4.1-rs
 -- ==============================================================
+
+-- ---- ALTER existing base tables to add missing columns ----
+
+ALTER TABLE `oc_product` ADD COLUMN `link` VARCHAR(255) DEFAULT NULL;
+ALTER TABLE `oc_product_option_value` ADD COLUMN `is_default` TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE `oc_product_option_value` ADD COLUMN `link` VARCHAR(255) DEFAULT NULL;
+ALTER TABLE `oc_product_to_category` ADD COLUMN `main_category` TINYINT(1) NOT NULL DEFAULT '0';
 
 -- ---- OCFilter tables (10) ----
 
