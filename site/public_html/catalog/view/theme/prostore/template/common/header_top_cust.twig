@@ -1,0 +1,9 @@
+{% for id,link in header_navs[number].type[2].links %}
+    <li><a class="header__info-link" href="{{ link }}" {% if (header_navs[number].type[2].target[id]) %} {{ 'target="'~header_navs[number].type[2].target[id]~'"' }}{% endif %}>
+        {% if (header_nav_icons[id]['image']['h'][naw_row_id]) %}
+           {{header_nav_icons[id]['image']['h'][naw_row_id]}}
+        {% endif %}
+        {{  header_navs[number].type[2].name[id] }}
+        </a>
+    </li>
+{% endfor %}

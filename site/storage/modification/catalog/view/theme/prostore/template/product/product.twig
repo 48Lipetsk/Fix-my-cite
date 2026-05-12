@@ -1,0 +1,1986 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<small class="breadcrumbs__counter">{{ product_num }}</small>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a>
+			{% if (breadcrumb.breadList is defined) %}
+			<div class="breadcrumbs__dropdown">
+				<!-- <strong class="breadcrumbs__dropdown-title"></strong> -->
+				<ul class="breadcrumbs__dropdown-menu">
+					{% for i,category in breadcrumb.breadList %}
+					<li><a class="breadcrumbs__dropdown-link" href="{{ category.href }}">{{ category.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
+			</li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<div class="container-fluid">
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+			<!-- Sku :: Start-->
+			<div class="sku">
+				{% if sku_compact %}
+				<div class="sku__compact js-sku-compact">
+					<div class="container-fluid">
+						<div class="sku__compact-wrapper">
+							<div class="sku__compact-item">
+								<div class="sku__compact-item-image">
+									<img src="{{ additional }}" alt="{{ heading_title }}" width="{{ image_additional_width }}" height="{{ image_additional_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+								</div>
+								<div class="sku__compact-item-desc">
+									<span class="sku__compact-item-title">{{ heading_title }}</span>
+									{% if review_status and rating %}
+									<span class="sku__compact-item-rating">{{ rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+										</svg>
+									</span>
+									{% endif %}
+									{% if price %}
+									<span class="sku__compact-item-price">
+										{% if special %}
+										<ins class="sku__compact-item-price-ins">{{ special }}</ins>
+										<del class="sku__compact-item-price-del">{{ price }}</del>
+										{% else %}
+										{{ price }}
+										{% endif %}
+									</span>
+									{% endif %}
+								</div>
+								<div class="sku__compact-item-action">
+									<div class="ui-add-to-cart {% if isincart %}is-active{% endif %}">
+										{% if isincart %}
+										<button type="button" data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart_product }}"  onclick="window.location.href='{{cart_link}}';" class="ui-btn ui-btn--primary" {{ buy_btn ? 'disabled' : ''}}>
+											<span>{{ text_prostore_in_cart_product }}</span>
+											<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use></svg>
+										</button>
+									{% else %}
+										<button type="button" id="button-cart-additional" data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart_product }}" class="ui-btn ui-btn--primary" {{ buy_btn ? 'disabled' : ''}}>
+											<span>{{ button_cart }}</span>
+											<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use></svg>
+										</button>
+									{% endif %}
+									</div>	
+								</div>
+							</div>
+							<div class="sku__compact-control">
+								<ul class="sku__compact-control-menu">
+									{% if description %}
+									<li>
+										<button class="sku__compact-control-btn" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="description">{{ tab_description }}</button>
+									</li>
+									{% endif %}
+									{% if attribute_groups %}<li>
+										<button class="sku__compact-control-btn" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="specifications">{{ tab_attribute }}</button>
+									</li>
+									{% endif %}
+									{% if review_status %}
+									<li>
+										<button class="sku__compact-control-btn" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="reviews">{{ text_prostore_review }} <span class="sku__compact-control-counter">{{ reviews_num }}</span>
+										</button>
+									</li>
+									{% endif %}
+									{% if faq_status %}
+									<li>
+										<button class="sku__compact-control-btn" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="faq">{{text_prostore_faq}}<span class="sku__compact-control-counter">{{faqs_total}}</span>
+										</button>
+									</li>
+									{% endif %}
+									{% if customTabs.tab is defined %}
+									{% for i,tab in customTabs.tab %}
+									<li>
+										<button class="sku__compact-control-btn" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="tab_custom_tab_{{ i }}">{{ tab.title }}</button>
+									</li>
+									{% endfor %}
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				<div class="sku__view js-sku-view">
+					<div class="sku__view-head">
+						<button class="sku__view-back" data-fancybox-close>
+							<svg class="icon-arrow-back"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-back"></use>
+							</svg>
+						</button>
+						<span class="sku__view-title">{{ heading_title }}</span>
+					</div>
+					<div class="sku__view-body">
+						<div class="row">
+							<div class="col-xl-6">
+								<div class="sku__sticky">
+									<div class="{% if images %}sku__{{ product_thumbs }} js-swiper-{{ product_thumbs }} {% endif %}swiper-{{ product_thumbs }}">
+										<div class="{% if images %}sku__{{ product_thumbs }}-slides{% else %}sku__{{ product_thumbs }}-one{% endif %}">
+											<div class="swiper-container swiper-{{ product_thumbs }}-slides js-swiper-{{ product_thumbs }}-slides" {% if zoom_ezplus %}data-zoom{% endif %}>
+												<div class="swiper-wrapper">
+													{% if thumb %}
+													<div class="swiper-slide">
+														<a class="sku__slide" {% if zoom_fancybox %}href="{{ popup }}" data-fancybox="sku"{% endif %}>
+															<img src="{{ thumb }}" alt="{{ heading_title }}" width="{{ image_thumb_width }}" height="{{ image_thumb_height }}" {% if lazyload %}loading="lazy"{% endif %} {% if zoom_ezplus %} data-zoom-{{ zoom_ezplus }} data-zoom-image="{{ popup }}"{% endif %}>
+														</a>
+													</div>
+													{% endif %}
+													{% if images %}
+													{% for image in images %}
+													<div class="swiper-slide">
+														<a class="sku__slide" {% if zoom_fancybox %}href="{{ image.popup }}" data-fancybox="sku"{% endif %}>
+															<img src="{{ image.thumb }}" alt="{{ heading_title }}" width="{{ image_thumb_width }}" height="{{ image_thumb_height }}" {% if lazyload %}loading="lazy"{% endif %} {% if zoom_ezplus %} data-zoom-{{ zoom_ezplus }} data-zoom-image="{{ image.popup }}"{% endif %}>
+														</a>
+													</div>
+													{% endfor %}
+													{% endif %}
+												</div>
+											</div>
+											<div class="sku__badges">
+												{% if isnewest %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %} 
+												{% if special and sales %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %} 
+												{% if popular %}<span class="ui-badge ui-badge--orange">{{ popular }}</span>{% endif %} 
+												{% if hit %}<span class="ui-badge ui-badge--purple">{{ hit }}</span>{% endif %} 
+												{% if nocatch %}<span class="ui-badge">{{ catch }}</span>{% elseif catch %}<span class="ui-badge">{{ catch }}</span>{% endif %} 
+												{% if reward %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ reward }}</span>{% endif %}
+											</div>
+											{% if review_status and rating %}
+											<a class="sku__rating" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="reviews" href="#">
+												<span class="sku__rating-star">{{ rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+													</svg>
+												</span>
+												<span class="sku__rating-counter">({{ review_num }})</span>
+											</a>
+											{% endif %}
+											{% if count_videos == 1 %}
+												{% if video.0.description %}
+												<!-- одно видео -->
+												<div class="sku__video">
+													{% if video.0.description|length > 20 %}
+														<a class="ui-link ui-link--blue" href="https://rutube.ru/video/{{video.0.description}}/" data-fancybox>
+															<span class="icon-video-span"></span>
+															
+															
+															<!--<svg class="icon-video-rutube"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-video-rutube"></use>
+															</svg>-->{{ text_show_video }}
+														</a>
+													{% else %}
+														<a class="ui-link ui-link--blue" href="https://www.youtube.com/watch?v={{video.0.description}}" data-fancybox>
+															<svg class="icon-video"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-video"></use>
+															</svg>{{ text_show_video }}
+														</a>
+													{% endif %}
+												</div>
+												{% endif %}
+											{% elseif count_videos > 1 %}
+											<!--  несколько видео  -->
+											<div class="sku__video">
+												<a class="ui-link ui-link--blue" href="#youtube" data-fancybox>
+													<svg class="icon-video"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-video"></use>
+													</svg>{{ text_show_video }}
+												</a>
+											</div>
+											{% endif %}
+										</div>
+										{% if images %}
+										<div class="sku__{{ product_thumbs }}-control">
+											<div class="sku__{{ product_thumbs }}-thumbs">
+												<div class="swiper-container swiper-{{ product_thumbs }}-thumbs js-swiper-{{ product_thumbs }}-thumbs">
+													<div class="swiper-wrapper">
+														{% if thumb %}
+														<div class="swiper-slide">
+															<div class="sku__thumb">
+																<img src="{{ additional }}" alt="{{ heading_title }}" width="{{ image_additional_width }}" height="{{ image_additional_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+															</div>
+														</div>
+														{% endif %}
+														{% for image in images %}
+														<div class="swiper-slide">
+															<div class="sku__thumb">
+																<img src="{{ image.additional }}" alt="{{ heading_title }}" width="{{ image_additional_width }}" height="{{ image_additional_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+															</div>
+														</div>
+														{% endfor %}
+													</div>
+												</div>
+											</div>
+											{% if product_thumbs == 'vertical' %}
+											<div class="sku__vertical-nav {% if images|length < 4 %}hide{% endif %}">
+												<button class="swiper-next js-swiper-vertical-next">
+													<svg class="icon-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-down"></use>
+													</svg>
+												</button>
+												<button class="swiper-prev js-swiper-vertical-prev">
+													<svg class="icon-up"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-up"></use>
+													</svg>
+												</button>
+											</div>
+											{% else %}
+											<div class="sku__horizontal-nav {% if images|length < 4 %}hide{% endif %}">
+												<button class="swiper-prev js-swiper-horizontal-prev">
+													<svg class="icon-prev"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-prev"></use>
+													</svg>
+												</button>
+												<button class="swiper-next js-swiper-horizontal-next">
+													<svg class="icon-next"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-next"></use>
+													</svg>
+												</button>
+											</div>
+											{% endif %}
+										</div>
+										{% endif %}
+									</div>
+									{% if (category_time and special and special_date_end) %}
+									<div class="sku__discount">
+										<div class="ui-discount">
+											<div class="row">
+												<div class="col-md-auto">
+													<div class="ui-discount__desc">
+														<figure class="ui-discount__icon">
+															<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+															</svg>
+														</figure>
+														<p class="ui-discount__caption">{{ time_text_1 }} <small>{{ time_text_2 }}</small>
+														</p>
+													</div>
+												</div>
+												<div class="col-md-auto">
+													<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ special_date_end }}"></time>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="col-xl-6">
+								<div class="sku__desc" id="product">
+									<div class="sku__group order-1 order-xl-2">
+										<span class="sku__availability {% if (quantity > 0) %}sku__availability--true{% else %}sku__availability--false{% endif %}">{{ stock }}</span>
+										{% if model %}
+										<span class="sku__id">{{ text_prostore_model }} {{ model }}</span>
+										{% endif %}
+										{% if manufacturer %}
+										<div class="sku__brand">
+											<a class="sku__brand-link" href="{{ manufacturers }}">{{ manufacturer }}</a>
+											<span class="sku__brand-text">{{ text_manufacturer|replace({':' : ''}) }}</span>
+										</div>
+										{% endif %}
+										{% if price %}
+											<p class="sku__price {% if buy_btn %}sku__price--disabled{% endif %}">
+												{% if special %}
+												<ins class="sku__price-ins">{{ special }}</ins>
+												<del class="sku__price-del">{{ price }}</del>
+												<span class="sku__price-economy">{{ text_prostore_economy }} {{ economy }}</span>
+												{% else %}
+												{{ price }}
+												{% endif %}
+											</p>
+											{% if tax or points or discounts or minimum > 1 %}
+											<p class="sku__price-option {% if buy_btn %}sku__price--disabled{% endif %}">
+												{% if tax %}
+													<span>{{ text_tax }} {{ tax }}</span>
+												{% endif %}
+												{% if points %}
+													<span>{{ text_points }} {{ points }}</span>
+												{% endif %}
+												{% if discounts %}
+													{% for discount in discounts %}
+														<span>{{ discount.quantity }}{{ text_discount }}{{ discount.price }}</span>
+													{% endfor %}
+												{% endif %}
+												{% if minimum > 1 %}
+													<span>{{ text_minimum }}</span>
+												{% endif %}
+											</p>
+											{% endif %}
+										{% else %}	
+											<p class="sku__price"></p>
+										{% endif %}
+										<div class="sku__action">
+											<div class="row">
+												<div class="col-md-auto">
+													<div class="ui-add-to-cart {% if isincart %}is-active{% endif %}">
+														{% if isincart %}
+															<button type="button" data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart_product }}"  onclick="window.location.href='{{cart_link}}';" class="ui-btn ui-btn--primary" {{ buy_btn ? 'disabled' : ''}}>
+																<span>{{ text_prostore_in_cart_product }}</span>
+																<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use></svg>
+															</button>
+														{% else %}
+															<button type="button" id="button-cart" data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart_product }}" class="ui-btn ui-btn--primary" {{ buy_btn ? 'disabled' : ''}}>
+																<span>{{ button_cart }}</span>
+																<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use></svg>
+															</button>
+														{% endif %}	
+														<div class="ui-number">
+															<button class="ui-number__decrease">
+																<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+																</svg>
+															</button>
+															<button class="ui-number__increase">
+																<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+																</svg>
+															</button>
+															<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product_id }}]" min="{{ minimum }}" max="9999" value="{{ to_cart_quantity }}">
+															<input type="hidden" name="product_id" value="{{ product_id }}">
+														</div>
+													</div>
+												</div>
+												{% if (buy_click.status and not buy_btn) %}
+												<div class="col-md-auto">
+													<a class="ui-btn js-button-fast-cart ui-btn--grey" href="#popup-buy-click" data-for="{{ product_id }}" data-typefrom="{{ buy_click_typefrom }}" data-fancybox>{{ text_prostore_fast_order }}</a>
+												</div>
+												{% endif %}
+												{% if (found_cheaper_config.status) %}
+												<div class="col-md">
+													<div class="ui-found">
+														<a class="ui-link ui-link--blue" href="#popup-found-it-cheaper" data-fancybox>{{ text_prostore_found_it_cheaper }}</a>
+													</div>
+												</div>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+									<div class="sku__group order-3 order-xl-1">
+										<ul class="sku__addto">
+											<li>
+												<button type="button" class="sku__addto-btn {% if wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product_id }}">
+													<span class="sku__addto-btn-icon">
+													  <svg class="icon-favorites{% if wish_data.is_in_wish %}-active{% endif %}">
+														  <use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if wish_data.is_in_wish %}-active{% endif %}"></use>
+													  </svg>
+													</span>
+													<span class="sku__addto-btn-text">{{ text_prostore_to_wishlist }} <small>{{wish_data.text_in_wishlist}}</small>
+													</span>
+												</button>
+											</li>
+											<li style="display: none;">
+												<button type="button" class="sku__addto-btn {% if compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product_id }}">
+													<span class="sku__addto-btn-icon">
+													  <svg class="icon-compare{% if compare_data.is_in_compare %}-active{% endif %}">
+														  <use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if compare_data.is_in_compare %}-active{% endif %}"></use>
+													  </svg>
+													</span>
+													<span class="sku__addto-btn-text">{{ text_prostore_to_comp }} <small>{{compare_data.text_in_compare}}</small>
+													</span>					  
+												</button>
+											</li>
+										</ul>
+									</div>
+									{% if (options or recurrings or (customTabs.popup is defined)) %}
+									<div class="sku__group sku__group--options {% if isRequired %}order-xl-1{% else %}order-4 order-xl-4{% endif %}">
+										<div class="sku__settings">
+											{% for option_row in prep_options %}
+											<div class="row">
+												{% for i,option in option_row %}
+												<div class="{% if (option_row|length  == 2) %}col-xl-6{% else %}col-xl-12{% endif %}">
+													{% if (option.type == 'select') %}
+													<div class="ui-group">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-select">
+														<select name="option[{{ option.product_option_id }}]" id="input-option{{ option.product_option_id }}">
+															<option value="">{{ text_select }}</option>
+															{% for option_value in option.product_option_value %} 
+															<option value="{{ option_value.product_option_value_id }}" {{ '1' == option_value.is_default ? 'selected' : '' }}>{{ option_value.name }} 
+															{% if (option_value.price and opt_price) %} 
+															{{ option_value.price_prefix }}{{ option_value.price }} 
+															{% endif %} 
+															</option>
+															{% endfor %} 
+														</select>
+														</div>
+													</div>
+													{% endif %}
+													{% if (option.type == 'radio') %}
+													<div class="ui-group">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<ul class="ui-checklist" id="input-option{{ option.product_option_id }}">
+															{% for option_value in option.product_option_value %}
+															<li title="{{ option_value.name }}">
+                                                                         <label class="ui-check"
+                                                                             {% if option_value.link %}
+                                                                                      data-link="{{ option_value.link }}"
+                                                                                    {% endif %}>
+
+                                                                               <input class="ui-check__input" type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" {{ '1' == option_value.is_default ? 'checked="checked"' : '' }} />
+
+                                                                               <span class="ui-check__option">
+																		 		 	{% if option.isimage %}
+																				 		<img src="{{ option_value.image }}" alt="{{ option_value.name }}" width="21" height="15" loading="lazy">
+																		 		 				{% endif %}
+																								{% if (option.name == 'Объём памяти') %}{{ option_value.name }}{% endif %}
+																			 			 		{% if (option_value.price and opt_price) %}
+																			 		({{ option_value.price_prefix }}{{ option_value.price }})
+																			 		{% endif %}
+																	            </span>
+
+                                                                             </label>
+															</li>
+															{% endfor %}
+														</ul>
+													</div>
+													{% endif %}
+													{% if (option.type == 'checkbox') %}
+													<div class="ui-group">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<ul class="ui-checklist" id="input-option{{ option.product_option_id }}">
+															{% for option_value in option.product_option_value %}
+															<li>
+																<label class="ui-check">
+																	<input class="ui-check__input" type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" {{ '1' == option_value.is_default ? 'checked="checked"' : '' }} />
+																	<span class="ui-check__option">
+																		{% if option.isimage %}
+																			<img src="{{ option_value.image }}" alt="{{ option_value.name }}" width="21" height="15" loading="lazy">
+																		{% endif %}
+																		{{ option_value.name }}
+																		{% if (option_value.price and opt_price) %}
+																		({{ option_value.price_prefix }}{{ option_value.price }})
+																		{% endif %}
+																	</span>
+																</label>
+															</li>
+															{% endfor %}
+														</ul>
+													</div>
+													{% endif %}
+													{% if (option.type == 'text') %}
+													<div class="ui-group">
+													<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-field">
+															<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="ui-input">
+														</div>
+													</div>
+													{% endif %}
+													{% if (option.type == 'textarea') %}
+													<div class="ui-group">
+													<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-field">
+															<textarea class="ui-textarea" name="option[{{ option.product_option_id }}]" rows="3" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}">{{ option.value }}</textarea>
+														</div>
+													</div>
+													{% endif %}
+													{% if (option.type == 'file') %}
+													<div class="ui-group">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-field">
+															<button type="button" id="button-upload{{ option.product_option_id }}" class="ui-btn ui-btn--36 ui-btn--grey ui-btn--file">{{ button_upload }}</button>
+															<input type="hidden" name="option[{{ option.product_option_id }}]" value="" id="input-option{{ option.product_option_id }}">
+														</div>
+													</div>
+													{% endif %}
+													{% if (option.type == 'date') %}
+													<div class="ui-group ui-group--date">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-field">
+															<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="ui-input date" data-date-format="{{ date_format }}" data-toggle="datetimepicker" data-target=".date">
+														</div>
+													</div>
+													{% endif %}
+													{% if (option.type == 'datetime') %}
+													<div class="ui-group ui-group--datetime">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-field">
+															<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="ui-input datetime" data-date-format="{{ datetime_format }}" data-toggle="datetimepicker" data-target=".datetime">
+														</div>
+													</div>
+													{% endif %}
+													{% if (option.type == 'time') %}
+													<div class="ui-group ui-group--time">
+														<label class="ui-label{% if option.required %} required{% endif %}">{{ option.name }}</label>
+														<div class="ui-field">
+															<input type="text" name="option[{{ option.product_option_id }}]" value="{{ option.value }}" placeholder="{{ option.name }}" id="input-option{{ option.product_option_id }}" class="ui-input time" data-date-format="{{ time_format }}" data-toggle="datetimepicker" data-target=".time">
+														</div>
+													</div>
+													{% endif %}
+												</div>
+												{% endfor %}
+											</div>
+											{% endfor %}
+											{% if (recurrings) %}
+											<div class="row">
+												<div class="col-xl-12">
+													<div class="sku__type recurring">
+														<label class="ui-label">{{ text_payment_recurring }}</label>
+														<div class="ui-select">
+															<select name="recurring_id">
+																<option value="">{{ text_select }}</option>
+																{% for recurring in recurrings %}
+																<option value="{{ recurring.recurring_id }}">{{ recurring.name }}</option>
+																{% endfor %} 
+															</select>
+														</div>
+														<div id="recurring-description"></div>
+													</div>
+												</div>
+											</div>
+											{% endif %}
+											
+											{% if (customTabs.popup is defined) %}
+											{% for key,popup in customTabs.popup %}
+											<a class="ui-link ui-link--blue ui-link--dashed" href="#custom-popup-{{ key }}" data-fancybox>{{ popup.title }}</a>
+											<!-- Popups :: Start-->
+											<div class="fancybox-is-hidden popup popup--custom" id="custom-popup-{{ key }}">
+												<span class="popup__title">{{ popup.title }}</span>
+												<div class="popup__form">
+													{{ popup.description }}
+												</div>
+											</div>
+											<!-- Popups :: End-->
+											{% endfor %}
+											{% endif %}
+										</div>
+										
+										 
+									</div>
+									{% endif %}
+									{% if buy_in_credit.status and 3000 < item_price and not buy_btn %}
+									<div class="sku__group order-2 order-xl-3">
+										<div class="sku__credit">
+											<span class="sku__credit-currency">₽</span>
+											<span class="sku__credit-title">{{ buy_in_credit.promocode == 'default' ? text_prostore_credit_help : text_prostore_installment_help }}</span>
+											<span class="sku__credit-help" data-toggle="tooltip" data-placement="top" title="{{ buy_in_credit.promocode == 'default' ? text_prostore_credit_help_text : text_prostore_installment_help_text }}">
+												<svg class="icon-help"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-help"></use>
+												</svg>
+											</span>
+											<div class="sku__credit-action">
+												<div class="row">
+													<div class="col-auto">
+														<button type="button" class="ui-btn ui-btn--purpleSm js-button-installment buy_in_credit"">{{ buy_in_credit.promocode == 'default' ? text_prostore_credit_button : text_prostore_installment_button }}</button>
+													</div>
+													<div style="display: none;" class="col-auto">
+														<span class="ui-credit-payments">{% if buy_in_credit_help %}{{ buy_in_credit_help }}{% else %}{{ buy_in_credit_price }}{% endif %}</span>
+													</div>
+												
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endif %}
+									{% if attribute_groups and att_right %}
+									<div class="sku__group order-5 order-xl-5">
+										<div class="sku__details">
+											<strong class="sku__details-title">{{tab_attribute}}</strong>
+											<table class="sku__details-table">
+												{% for attributes_row in attributes %}
+												<tr>
+													{% for attribute in attributes_row %}
+													<td>
+														<small>{{attribute.name}}</small>{{attribute.text}}
+													</td>
+													{% endfor %}
+												</tr>
+												{% endfor %}
+											</table>
+											<div class="sku__details-action">
+												{% if href %}
+													<a class="ui-link ui-link--blue" href="{{ href }}">{{text_readmore_attributes}}</a>
+												{% else %}
+													<a class="ui-link ui-link--blue" {% if product_in_tab %}data-scroll-top data-tabs-btn{% else %}data-accordion-btn{% endif %}="specifications" href="#">{{text_readmore_attributes}}</a>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+									{% endif %}
+									{% if has_shipping and shipping_forecast %}
+									<div class="sku__group order-6 order-xl-6">
+										<div class="sku__delivery">
+											<strong class="sku__delivery-title">{{text_prostore_ship_info}}</strong>
+											<div class="sku__delivery-action"></div>
+										</div>
+									</div>
+									{% endif %}
+									{% if (short_descr and shortdescription) %}
+									<div class="sku__group order-7 order-xl-7">
+										<div class="sku__details">
+											<strong class="sku__delivery-title">{{ text_prostore_short_descr }}</strong>
+											<div class="sku__details-shortdescription">{{ shortdescription }}</div>
+										</div>
+									</div>
+									{% endif %}
+									{% if soc_share_prod %}
+									<div class="sku__group order-8 order-xl-8">
+										<a class="ui-btn ui-btn--40 ui-btn--primary js-share" href="#">{{ text_prostore_share }}<svg class="icon-share"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-share"></use></svg></a>
+										<!-- Popups :: Start-->
+										<div class="fancybox-is-hidden popup" id="share">
+											<span class="popup__title">{{ text_prostore_share }}</span>
+											<div class="popup__form">{% if soc_share_code %}{{ soc_share_code }}{% else %}{% endif %}</div>
+										</div>
+										<!-- Popups :: End-->
+									</div>
+									{% endif %}
+									{% if href %}
+									<div class="sku__group order-9 order-xl-9">
+										<a class="ui-btn ui-btn--primary" href="{{ href }}">{{ text_prostore_popup_link }}</a>
+									</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Popups :: Start-->
+
+					<!--  несколько видео  -->
+					{% if count_videos > 1 %}
+					<div class="fancybox-is-hidden popup popup--custom" id="youtube">
+						<span class="popup__title">{{ text_show_video }}</span>
+						<div class="popup__form">
+							{% for item_video in video %}
+							{% if item_video.description|length > 20 %}
+							<a class="rutube-video-place" href="//rutube.ru/play/embed/{{item_video.description}}">
+								<figure class="ui-video__figure">
+									<picture class="ui-video__image">
+										<img src="//rutube.ru/api/video/{{item_video.description}}/thumbnail/?redirect=1" alt="" width="820" height="400"  loading="lazy">
+									</picture>
+									<svg class="icon-video hide"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-video"></use></svg>
+								</figure>
+							</a>
+							{% else %}
+							<a class="youtube-video-place" href="https://www.youtube.com/embed/{{item_video.description}}?rel=0&showinfo=0&autoplay=1">
+								<figure class="ui-video__figure">
+									<picture class="ui-video__image">
+										<source type="image/webp" srcset="//img.youtube.com/vi_webp/{{item_video.description}}/maxresdefault.webp">
+										<img src="//img.youtube.com/vi/{{item_video.description}}/maxresdefault.jpg" alt="" width="820" height="400"  loading="lazy">
+									</picture>
+									<svg class="icon-video hide"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-video"></use></svg>
+								</figure>
+							</a>
+							{% endif %}
+							{% endfor %}
+							</div>
+					</div>
+					{% endif %}
+
+					{% if (found_cheaper_config.status) %}
+					<div class="fancybox-is-hidden popup" id="popup-found-it-cheaper">
+						{{ found_cheaper }}
+					</div>
+					{% endif %}
+					{% if has_shipping and shipping_forecast %}
+					<div class="fancybox-is-hidden popup" id="popup-calculate-ship">
+						<span class="popup__title">{{ text_prostore_enter_address }}</span>
+						{{ shipping_address_form }}
+					</div>
+					{% endif %}
+					<!-- Popups :: End-->
+				</div>
+			</div><!-- Sku :: End-->
+			
+			{{ content_top }}
+			
+			<!-- Details :: Start-->
+			<div class="details" {% if product_in_tab %}data-tabs{% else %}data-accordion{% endif %}>
+
+				{% if product_in_tab %}
+				<div class="details__control">
+					<ul class="details__control-menu">
+						{% if description %}
+						<li>
+							<button class="details__control-btn is-active" data-tabs-btn="description">{{ tab_description }}</button>
+						</li>
+						{% endif %}
+						{% if attribute_groups %}
+						<li>
+							<button class="details__control-btn {% if not description %}is-active{% endif %}" data-tabs-btn="specifications">{{ tab_attribute }}</button>
+						</li>
+						{% endif %}
+						{% if review_status %}
+						<li>
+							<button class="details__control-btn" data-tabs-btn="reviews">{{ text_prostore_review }} <span class="details__control-counter">{{ reviews_num }}</span>
+							</button>
+						</li>
+						{% endif %}
+						{% if faq_status %}
+						<li>
+							<button class="details__control-btn" data-tabs-btn="faq">{{ text_prostore_faq }} <span class="details__control-counter">{{ faq_total }}</span>
+							</button>
+						</li>
+						{% endif %}
+						{% if (customTabs.tab is defined) %}
+						{% for i,tab in customTabs.tab %}
+						<li>
+							<button class="details__control-btn" data-tabs-btn="tab_custom_tab_{{ i }}">{{ tab.title }}</button>
+						</li>
+						{% endfor %}
+						{% endif %}
+					</ul>
+				</div>
+				{% endif %}
+						
+				<div class="details__wrapper">
+				{% if product_in_tab %}<div class="details__tabs">{% endif %}
+
+					{% if description %}
+						{% if product_in_tab %}
+							<div class="details__tabs-content is-active" data-tabs-content="description">
+							<span class="details__title">{{ tab_description }}</span>
+						{% else %}	
+						<div class="details__accordion is-active" data-accordion-content="description">
+							<div class="details__accordion-toggle is-active" data-accordion-btn="description">
+								<span class="details__accordion-title">{{ tab_description }}</span>
+								<span class="details__accordion-arrow">
+									<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use>
+									</svg>
+								</span>
+							</div>
+							<div class="details__accordion-collapse" data-accordion-collapse style="display: block;">
+						{% endif %}
+								<!-- Txt :: Start-->
+								<div class="details__txt">
+									<div class="details__txt-readmore js-readmore" data-readmore-toggle="{{ text_readmore_more }}" data-readless-toggle="{{ text_readmore_less }}">
+										<div class="editor">{{ description }}</div>
+									</div>
+								</div><!-- Txt :: End-->
+							</div>
+						{% if not product_in_tab %}</div>{% endif %}
+					{% endif %}
+
+					{% if attribute_groups %}
+						{% if product_in_tab %}
+							<div class="details__tabs-content {% if not description %}is-active{% endif %}" data-tabs-content="specifications">
+							<span class="details__title">{{ text_prostore_attributes }} {{ heading_title }}</span>
+						{% else %}
+						<div class="details__accordion is-active" data-accordion-content="specifications">
+							<div class="details__accordion-toggle is-active" data-accordion-btn="specifications">
+								<span class="details__accordion-title">{{ text_prostore_attributes }} {{ heading_title }}</span>
+								<span class="details__accordion-arrow">
+									<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use>
+									</svg>
+								</span>
+							</div>
+							<div class="details__accordion-collapse" data-accordion-collapse style="display: block;">
+						{% endif %}
+								<!-- Specifications :: Start-->
+								<div class="details__specifications">
+									<div class="row">
+										{% for attribute_group in attribute_groups %}
+										<div class="col-xl-{% if typeOptAtt %}12{% else %}6{% endif %}">
+											<div class="details__specifications-title">{{ attribute_group.name }}</div>
+											<table class="details__specifications-table">
+												<tbody>
+													{% for attribute in attribute_group.attribute %}
+													{% if attribute.text %}
+													<tr>
+														<th>
+															<span class="details__specifications-table-line">{{ attribute.name }}</span>
+														</th>
+														<td>{{ attribute.text }}</td>
+													</tr>
+													{% endif %}
+													{% endfor %}
+												</tbody>
+											</table>
+										 </div>
+										{% endfor %}
+									</div>
+								</div><!-- Specifications :: End-->
+							</div>
+						{% if not product_in_tab %}</div>{% endif %}
+					{% endif %}
+
+					{% if review_status %}
+						{% if product_in_tab %}
+							<div class="details__tabs-content" data-tabs-content="reviews">
+							<span class="details__title">{{ text_prostore_review }}</span>
+						{% else %}
+						<div class="details__accordion is-active" data-accordion-content="reviews">
+							<div class="details__accordion-toggle is-active" data-accordion-btn="reviews">
+								<span class="details__accordion-title">{{ text_prostore_review }} <span class="details__accordion-counter">{{ reviews_num }}</span>
+								</span>
+								<span class="details__accordion-arrow">
+									<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use>
+									</svg>
+								</span>
+							</div>
+							<div class="details__accordion-collapse" data-accordion-collapse style="display: block;">
+						{% endif %}
+								<!-- Reviews :: Start-->
+								<div class="details__comments">
+									<div class="details__comments-content">
+										{% if rating > 0 %}
+										<div class="details__comments-rating is-xl-hidden">
+											<span class="details__comments-rating-title">{{ rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+												</svg>
+												<small>{{ text_prostore_sum_rating }}</small>
+											</span>
+											<span class="details__comments-rating-counter">{{ review_num }}</span>
+											<ul class="details__comments-rating-list">
+												{% for i,reviewsStat in reviewsStats %}
+												<li>
+													{% if reviewsStat.count != 0 %}<a href="#" data-progress-link="{{ reviewsStat.link }}" class="ui-progress">{% else %}<div class="ui-progress">{% endif %}
+														<div class="ui-progress__star">{{ i }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+															</svg>
+														</div>
+														<div class="ui-progress__line">
+															<div class="ui-progress__line-bar" style="width: {{ reviewsStat.percent }}%"></div>
+														</div>
+													{% if reviewsStat.count != 0 %}</a>{% else %}</div>{% endif %}
+												</li>
+												{% endfor %}
+											</ul>
+										</div>
+										{% endif %}
+										<div id="review">{{ reviewsdata }}</div>
+									</div>
+									<div class="details__comments-sidebar">
+										{% if rating > 0 %} 
+										<div class="details__comments-rating is-xl-visible">
+											<span class="details__comments-rating-title">{{ rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+												</svg>
+												<small>{{ text_prostore_sum_rating }}</small>
+											</span>
+											<span class="details__comments-rating-counter">{{ review_num }}</span>
+											<ul class="details__comments-rating-list">
+												{% for i,reviewsStat in reviewsStats %}
+												<li>
+													{% if reviewsStat.count != 0 %}<a href="#" data-progress-link="{{ reviewsStat.link }}" class="ui-progress">{% else %}<div class="ui-progress">{% endif %}
+														<div class="ui-progress__star">{{ i }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+															</svg>
+														</div>
+														<div class="ui-progress__line">
+															<div class="ui-progress__line-bar" style="width: {{ reviewsStat.percent }}%"></div>
+														</div>
+													{% if reviewsStat.count != 0 %}</a>{% else %}</div>{% endif %}
+												</li>
+												{% endfor %}
+											</ul>
+										</div>
+										{% endif %}
+										<div class="details__comments-form js-toggle">
+										{% if review_guest %}
+											<button class="details__comments-form-btn js-toggle-btn">{{text_prostore_products_review}}</button>
+											<div class="details__comments-form-offcanvas js-toggle-offcanvas">
+												<div class="details__comments-form-offcanvas-in">
+													<form id="form-review">
+														<span class="ui-legend"> {{ text_write }}</span>
+														<label class="ui-label required">{{ entry_name }}</label>
+														<input class="ui-input" type="text" name="name" value="{{ customer_name }}" aria-label="{{ entry_name }}">
+
+														<label class="ui-label required">{{ entry_review }}</label>
+														<textarea class="ui-textarea" name="text" aria-label="{{ entry_review }}"></textarea>
+														<label class="ui-label">{{ text_review_plus }}</label>
+														<textarea class="ui-textarea ui-textarea--46" name="text_plus" aria-label="{{ text_review_plus }}"></textarea>
+														<label class="ui-label">{{ text_review_minus }}</label>
+														<textarea class="ui-textarea ui-textarea--46" name="text_minus" aria-label="{{ text_review_minus }}"></textarea>
+														{{ captcha }}
+														<label class="ui-label required">{{ entry_rating }}</label>
+														<div class="ui-rating ui-rating--responsive">
+															{% set i=5 %}{% for i in i..1 %}
+															<input class="ui-rating__input" type="radio" name="rating" value="{{ i }}" id="star_{{ i }}">
+															<label class="ui-rating__star" for="star_{{ i }}">
+																<svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+																</svg>
+															</label>
+															{% endfor %}
+														</div>
+														<button class="ui-btn ui-btn--primary ui-btn--fullwidth"  data-loading-text="{{ text_loading }}" onclick="reviewAdd(); return false;">{{ button_continue }}</button>
+														{% if (text_review_pdata) %}
+															<div class="personal-data">{{ text_review_pdata }}</div>
+														{% endif %}
+													</form>
+												</div>
+												<button class="details__comments-form-close js-toggle-btn">{{ text_prostore_menu_close }}</button>
+											</div>
+										{% else %}
+										{{ text_login }}
+										{% endif %}
+										</div>
+									</div>
+								</div><!-- Reviews :: End-->
+							</div>
+						{% if not product_in_tab %}</div>{% endif %}
+					{% endif %}
+					
+					{% if faq_status %}
+						{% if product_in_tab %}
+							<div class="details__tabs-content" data-tabs-content="faq">
+							<span class="details__title">{{ text_prostore_faq }}</span>
+						{% else %}
+						<div class="details__accordion" data-accordion-content="faq">
+							<div class="details__accordion-toggle" data-accordion-btn="faq">
+								<span class="details__accordion-title">{{ text_prostore_faq }} <span class="details__accordion-counter">{{ faq_total }}</span>
+								</span>
+								<span class="details__accordion-arrow">
+									<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use>
+									</svg>
+								</span>
+							</div>
+							<div class="details__accordion-collapse" data-accordion-collapse>
+						{% endif %}
+								{{ faqs_content }}
+							</div>
+						{% if not product_in_tab %}</div>{% endif %}
+					{% endif %}
+					
+					{% if (customTabs.tab is defined) %}
+					{% for i,tab in customTabs.tab %}
+						{% if product_in_tab %}
+							<div class="details__tabs-content" data-tabs-content="tab_custom_tab_{{ i }}">
+							<span class="details__title">{{ tab.title }}</span>
+						{% else %}
+						<div class="details__accordion" data-accordion-content="tab_custom_tab_{{ i }}">
+							<div class="details__accordion-toggle" data-accordion-btn="tab_custom_tab_{{ i }}">
+								<span class="details__accordion-title">{{ tab.title }}</span>
+								<span class="details__accordion-arrow">
+									<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use>
+									</svg>
+								</span>
+							</div>
+							<div class="details__accordion-collapse" data-accordion-collapse>
+						{% endif %}
+								<!-- Txt :: Start-->
+								<div class="details__txt editor">
+									{{ tab.description }} 
+								</div><!-- Txt :: End-->
+							</div>
+						{% if not product_in_tab %}</div>{% endif %}
+					{% endfor %}
+					{% endif %}
+					
+						</div>
+					{% if product_in_tab %}</div>{% endif %}
+					
+			</div><!-- Details :: End-->
+			{% if products %}				
+			<!-- Products :: Start-->
+			<div class="products-featured">
+				<span class="h2 products-featured__title">{{ text_related }}</span>
+				{% if (p_related_view == 0) %}
+				<div class="products-featured__swiper">
+					<div class="swiper-container swiper-products {% if (mobile_view == 'grid-responsive') %}swiper-products--responsive{% endif %} js-swiper-products">
+						<div class="swiper-wrapper">
+						  {% for product in products %}
+						  <div class="swiper-slide">
+								<div class="products__item {% if (mobile_view == 'grid-responsive') %}products__item--responsive{% endif %} {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %}">
+									<div class="products__item-in">
+										<div class="products__item-topleft">
+											<div class="products__item-badges">
+												{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+												{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+												{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+												{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+												{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+												{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+											</div>
+											{% if (product.rating != constant('false')) %}
+											<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+											</span>
+											{% endif %}
+										</div>
+										<div class="products__item-buttons">
+											<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+												<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+													<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+												</svg>
+											</button>
+											<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+												<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+													<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+												</svg>
+											</button>
+										</div>
+										{% if product.images %}
+										<a class="products__item-gallery" href="{{ product.href }}">
+											<div class="products__item-image is-active">
+												<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+											</div>
+											{% for imageX in product.images %}
+											<div class="products__item-image">
+												<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+											</div>
+											{% endfor %}
+											<div class="products__item-pagination">
+												<div class="products__item-bullet is-active"></div>
+												{% for imageX in product.images %}
+												<div class="products__item-bullet"></div>
+												{% endfor %}
+											</div>
+										</a>
+										{% else %}
+										<a class="products__item-image" href="{{ product.href }}">
+											<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</a>
+										{% endif %}
+										<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+										{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+										<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+										{% if product.price %}
+										<p class="products__item-price">{% if (product.special) %}<mark>-{{ product.discount }}</mark><ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+										</p>
+										{% endif %}
+										{% if (category_time and product.special and product.special_date_end) %}
+										<div class="products__item-discount">
+											<div class="ui-discount">
+												<div class="row">
+													<div class="col-12">
+														<div class="ui-discount__desc">
+															<figure class="ui-discount__icon">
+																<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+																</svg>
+															</figure>
+															<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+															</p>
+														</div>
+													</div>
+													<div class="col-12">
+														<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+													</div>
+												</div>
+											</div>
+										</div>
+										{% endif %}
+										<div class="products__item-action">
+											<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+												<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+													</svg>
+												</button>
+												<div class="ui-number">
+													<button class="ui-number__decrease">
+														<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+														</svg>
+													</button>
+													<button class="ui-number__increase">
+														<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+														</svg>
+													</button>
+													<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+												</div>
+												<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+													<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+													</svg>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+						<div class="swiper-scrollbar js-swiper-products-scrollbar"></div>
+					</div>
+				</div>
+				{% else %}
+				<div class="products">
+					<ul class="products__list {% if (mobile_view == 'grid-responsive') %}products__list--responsive{% endif %} products__list--grid-{{ p_related_view }}">
+						{% for product in products %}
+						<li>
+							<div class="products__item {% if (mobile_view == 'grid-responsive') %}products__item--responsive{% endif %} {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %}">
+								<div class="products__item-in">
+									<div class="products__item-topleft">
+										<div class="products__item-badges">
+											{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+											{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+											{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+											{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+											{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+											{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+										</div>
+										{% if (product.rating != constant('false')) %}
+										<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+										</span>
+										{% endif %}
+									</div>
+									<div class="products__item-buttons">
+										<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+											<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+											</svg>
+										</button>
+										<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+											<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+											</svg>
+										</button>
+									</div>
+									{% if product.images %}
+									<a class="products__item-gallery" href="{{ product.href }}">
+										<div class="products__item-image is-active">
+											<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% for imageX in product.images %}
+										<div class="products__item-image">
+											<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% endfor %}
+										<div class="products__item-pagination">
+											<div class="products__item-bullet is-active"></div>
+											{% for imageX in product.images %}
+											<div class="products__item-bullet"></div>
+											{% endfor %}
+										</div>
+									</a>
+									{% else %}
+									<a class="products__item-image" href="{{ product.href }}">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</a>
+									{% endif %}
+									<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+									{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+									<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+									{% if product.price %}
+									<p class="products__item-price">{% if (product.special) %}<mark>-{{ product.discount }}</mark><ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+									</p>
+									{% endif %}
+									{% if (category_time and product.special and product.special_date_end) %}
+									<div class="products__item-discount">
+										<div class="ui-discount">
+											<div class="row">
+												<div class="col-12">
+													<div class="ui-discount__desc">
+														<figure class="ui-discount__icon">
+															<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+															</svg>
+														</figure>
+														<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+														</p>
+													</div>
+												</div>
+												<div class="col-12">
+													<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endif %}
+									<div class="products__item-action">
+										<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+											<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+												</svg>
+											</button>
+											<div class="ui-number">
+												<button class="ui-number__decrease">
+													<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+													</svg>
+												</button>
+												<button class="ui-number__increase">
+													<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+													</svg>
+												</button>
+												<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+											</div>
+											<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+												<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+												</svg>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+			</div>
+			<!-- Products :: End-->
+			{% endif %}
+
+			{% if buy_in_credit.status %}			
+				<span  id="buy-in-credit-data">
+					<input name="quantity" type="hidden"  value="1">
+					<input name="buy-click-type" type="hidden"  value="product_in_credit">
+					<input name="product_id" type="hidden"  value="{{product_id}}">
+					<input name="name" type="hidden"  value="">
+					<input name="phone" type="hidden"  value="">
+					<input name="comment" type="hidden"  value="">
+					<input name="email" type="hidden"  value="">
+					<input name="marketing_id" type="hidden"  value="">
+					<input name="redirect"  value="1" class="fast-redirect" type="hidden">					
+				</span>
+			{% endif %}
+
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	
+	{{ blogs_related }}
+	
+	{{ content_bottom }}
+	
+	{% if tags %}
+	<div class="container-fluid">
+		<p class="tags">{{ text_tags }}
+		{% for i in 0..tags|length - 1 %}
+		{% if i < (tags|length - 1) %} <a class="ui-link ui-link--blue ui-link--underline" href="{{ tags[i].href }}">{{ tags[i].tag }}</a>,
+		{% else %} <a class="ui-link ui-link--blue ui-link--underline" href="{{ tags[i].href }}">{{ tags[i].tag }}</a> {% endif %}
+		{% endfor %} </p>
+	</div>
+	{% endif %}
+	
+</main>
+<!-- Main :: End-->
+
+
+{{ footer }}
+<script>
+$('select[name=\'recurring_id\'], #product input[name="quantity"]').change(function(){
+	$.ajax({
+		url: 'index.php?route=product/product/getRecurringDescription',
+		type: 'post',
+		data: $('input[name=\'product_id\'], #product input[name=\'quantity\'], select[name=\'recurring_id\']'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#recurring-description').html('');
+		},
+		success: function(json) {
+			$('.alert, .recurring .ui-error').remove();
+			$('.recurring .ui-field').removeClass('is-error');
+
+			if (json['success']) {
+				$('#recurring-description').html(json['success']);
+			}
+		}
+	});
+});
+
+
+
+$(document).on('ready',function(e) {
+
+{% if buy_in_credit.status %}
+// --------------------------------------------------------------------------
+// TINKOFF Credit
+// --------------------------------------------------------------------------
+
+	tinkoff.methods.on(tinkoff.constants.SUCCESS, onMessage);
+	tinkoff.methods.on(tinkoff.constants.REJECT, onMessage);
+	tinkoff.methods.on(tinkoff.constants.CANCEL, onMessage);
+	function onMessage(data) {
+		switch (data.type) {
+			case tinkoff.constants.SUCCESS:
+			var itemData = $('#buy-in-credit-data input, #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product input[type=\'text\']:not([name=\'quantity\']), #product select, #product textarea');
+			setTimeout(checkOrderTinkoffStatus(itemData),1000);
+			break;
+			case tinkoff.constants.REJECT:
+			console.log('REJECT', data.meta.iframe.url);
+			alert('{{ buy_in_credit.promocode == 'default' ? text_prostore_credit_rejected : text_prostore_installment_rejected }}');
+			break;
+			case tinkoff.constants.CANCEL:
+			console.log('CANCEL', data.meta.iframe.url);
+			alert('{{ buy_in_credit.promocode == 'default' ? text_prostore_credit_rejected : text_prostore_installment_rejected }}');
+			break;
+			default:
+			return;
+		}
+//		tinkoff.methods.off(tinkoff.constants.SUCCESS, onMessage);
+//		tinkoff.methods.off(tinkoff.constants.REJECT, onMessage);
+//		tinkoff.methods.off(tinkoff.constants.CANCEL, onMessage);
+		data.meta.iframe.destroy();
+	}
+{% endif %}
+// --------------------------------------------------------------------------
+// Calculate shipping cost
+// --------------------------------------------------------------------------
+	if ($('.sku__delivery-action').length) {
+		$('.sku__delivery-action').html('<table class="ui-table-delivery"><thead><tr><th colspan="2"><span class="loading">{{ text_loading }}</span></th></tr></thead></table>');
+		$('.sku__delivery-action').load('index.php?route=extension/module/prostore/prostore_theme/get_shipping_info&item_id='+{{product_id}},function(){
+			$('[data-fancybox]').fancybox(fancyboxOptions);
+		});
+	}
+});
+
+
+var product_id = {{ product_id }};
+
+{% if buy_in_credit.status %}
+// --------------------------------------------------------------------------
+// TINKOFF Credit
+// --------------------------------------------------------------------------
+
+function tinkoffAdd() { 
+	var tinkoffOrder = (Math.round(+new Date()/1000)).toString();
+	$('#buy-in-credit-data input[name=\'marketing_id\']').val(tinkoffOrder);
+
+	var requestData = {
+		sum: {{item_price}},
+		items: [
+			{name: '{{ heading_title|replace({"\'":""}) }}', price: {{item_price}},vendorCode: "{{ model }}", quantity: 1}
+		],
+		demoFlow: 'sms',
+		promoCode: '{{ buy_in_credit.promocode ? buy_in_credit.promocode : 'default' }}',
+		orderNumber: tinkoffOrder,
+		shopId: "{{buy_in_credit.shop_id}}",
+		showcaseId: "{{buy_in_credit.showcase_id}}"		
+	}
+
+	var datapr = $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'number\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea');
+	$.ajax
+		({
+			url: 'index.php?route=product/product/options_info',
+			type: 'post',
+			data: datapr,
+			dataType: 'json',
+			success: function (json){
+				$('.alerts-wrapper, .ui-error').remove();
+				$('[id^="input-option"],.ui-field,.ui-select').removeClass('is-error');
+				
+				if (json['error']) {
+					if (json['error']['option']) {
+						for (i in json['error']['option']) {
+							var element = $('#input-option' + i.replace('_', '-'));
+
+							if (element.parent().hasClass('ui-select')) {
+								element.parent().after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').addClass('is-error');
+							} else if (element.hasClass('ui-input') || element.hasClass('ui-textarea')) {
+								element.after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').parent().addClass('is-error');
+							} else {
+								element.after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').addClass('is-error');
+							}
+						}
+					}
+					
+					tab_target = $('.sku__settings').offset().top - 20;
+
+					if (window.matchMedia('(min-width: 1200px)').matches) {
+						if ( $('body').is('.is-page-header-fixed') ) {
+							tab_target -= $('.header-fixed').data('fixed-height') || $('.header-fixed').innerHeight();
+						}
+					} else {
+						tab_target = tab_target - $('.header__mobile-fixed').innerHeight();
+					}
+					
+					$('html, body').animate({
+						scrollTop: tab_target
+					}, 'fast');
+				
+				}else{
+					if(json['total_options_price'] > 0 && !json['discount_option']){
+						requestData.sum = requestData.sum+json['total_options_price'];
+						json['product_option_value_data'].forEach(function(optionInfo) {
+							if (optionInfo.price) {
+								var optionData = {name: optionInfo.name, price: optionInfo.price, quantity: 1};
+								requestData.items.push(optionData);								
+							}
+						});
+					}else if(json['total_options_price'] < 0 || json['discount_option']){
+						// if at lest one option with negative price is selected
+						// - provide to tinkoff summary item price only
+						correctProductPrice = requestData.items[0]['price']+json['total_options_price'];
+						requestData.items[0]['price'] = correctProductPrice;
+						requestData.sum = requestData.sum+json['total_options_price'];
+					}
+					{% if buy_in_credit.demo_mode %}
+						tinkoff.createDemo(requestData,{view: 'newTab'});
+					{% else %}
+						tinkoff.create(requestData,{view: 'newTab'});
+					{% endif %}
+				}
+			}
+		});
+	return;
+}
+
+function checkOrderTinkoffStatus(data) {
+	var tinkoffOrder = $('#buy-in-credit-data input[name=\'marketing_id\']').val();
+	$.ajax
+	({
+		type: "GET",
+		url: "https://forma.tinkoff.ru/api/partners/v2/orders/"+tinkoffOrder+"/info",
+		dataType: 'json',
+		headers: {
+			"Authorization": "Basic {{buy_in_credit_token}}"
+		},
+		success: function (json){
+			console.log('orderStatus', json);
+			if(json['status'] == 'signed' || json['status'] == 'approved'){
+				$('#buy-in-credit-data input[name=\'name\']').val(json['first_name']);
+				$('#buy-in-credit-data input[name=\'phone\']').val(json['phone']);
+				$('#buy-in-credit-data input[name=\'comment\']').val('tinkoff-'+json['id'].toString()+'-'+json['status']);
+				$('#buy-in-credit-data input[name=\'marketing_id\']').val(json['id']);
+				$('#buy-in-credit-data input[name=\'email\']').val(json['email']);
+				cart.add2cartFast(data);
+			}
+		}
+	});
+
+}
+
+{% endif %}
+// --------------------------------------------------------------------------
+// found_cheaper call
+// --------------------------------------------------------------------------
+
+$(document).on('click','.found_cheaper_send',function(e) {
+	e.preventDefault();
+	var success = 'false';
+	$.ajax({
+		url: 'index.php?route=extension/module/found_cheaper',
+		type: 'post',
+		data: $('#popup-found-it-cheaper form').serialize() + '&action=send',
+		dataType: 'json',
+		beforeSend: function() {
+			$('#popup-found-it-cheaper button.ui-btn').attr('disabled', 'disabled');
+		},
+		complete: function() {
+			$('#popup-found-it-cheaper button.ui-btn').removeAttr('disabled');
+		},
+		success: function(json) {
+			$('#popup-found-it-cheaper .alert, #popup-found-it-cheaper .ui-error').remove();
+			$('#popup-found-it-cheaper .ui-field').removeClass('is-error');
+						
+			if (json['warning']) {
+				if (json['warning']['name']) {
+					$('#popup-found-it-cheaper form input[name=\'name\']').after('<span class="error ui-error">' + json['warning']['name'] + '</span>').parent().addClass('is-error');
+				}
+				if (json['warning']['email']) {
+					$('#popup-found-it-cheaper form input[name=\'email\']').after('<span class="error ui-error">' + json['warning']['email'] + '</span>').parent().addClass('is-error');
+				}
+				if (json['warning']['link']) {
+					$('#popup-found-it-cheaper form input[name=\'link\']').after('<span class="error ui-error">' + json['warning']['link'] + '</span>').parent().addClass('is-error');
+				}							
+				if (json['warning']['captcha']) {	
+					$('#popup-found-it-cheaper form input[name=\'captcha\']').after('<span class="error ui-error">' + json['warning']['captcha'] + '</span>').parent().addClass('is-error');
+				}
+			}
+			if (json['success']){
+				$('#popup-found-it-cheaper button.ui-btn').before('<div class="alert alert--green alert--opacity"><p class="alert__text">' + json['success'] + '</p></div>');
+							
+				success = 'true';
+							
+				$('#popup-found-it-cheaper form input').val('');
+							
+				setTimeout(function(){
+					$.fancybox.close();	
+					$('#popup-found-it-cheaper .alert--green').remove();
+				}, 3000)
+			} 
+		}
+
+	});
+});
+
+$(document).on('click','#button-cart,#button-cart-additional', function() {
+
+	var datapr = $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'number\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea');
+
+	$.ajax({
+		url: 'index.php?route=checkout/cart/add',
+		type: 'post',
+		data: datapr,
+		dataType: 'json',
+		beforeSend: function() {
+		},
+		complete: function() {
+		},
+		success: function(json) {
+			$('.alerts-wrapper, .ui-error').remove();
+			$('[id^="input-option"],.ui-field,.ui-select').removeClass('is-error');
+
+			if (json['error']) {
+				if (json['error']['option']) {
+					for (i in json['error']['option']) {
+						var element = $('#input-option' + i.replace('_', '-'));
+
+						if (element.parent().hasClass('ui-select')) {
+							element.parent().after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').addClass('is-error');
+						} else if (element.hasClass('ui-input') || element.hasClass('ui-textarea')) {
+							element.after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').parent().addClass('is-error');
+						} else {
+							element.after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').addClass('is-error');
+						}
+					}
+				}
+
+				if (json['error']['recurring']) {
+					$('select[name=\'recurring_id\']').parent().after('<span class="error ui-error">' + json['error']['recurring'] + '</span>').parent().addClass('is-error');
+				}
+				
+				tab_target = $('.sku__settings').offset().top - 20;
+
+				if (window.matchMedia('(min-width: 1200px)').matches) {
+					if ( $('body').is('.is-page-header-fixed') ) {
+						tab_target -= $('.header-fixed').data('fixed-height') || $('.header-fixed').innerHeight();
+					}
+				} else {
+					tab_target = tab_target - $('.header__mobile-fixed').innerHeight();
+				}
+				
+				$('html, body').animate({
+					scrollTop: tab_target
+				}, 'fast');
+
+			}
+
+			if (json['success']) {
+				cartExrtaElem(json['total']);
+				toCartButton();
+				
+				if ($('.js-cart-call').length && window.matchMedia('(min-width: 1200px)').matches) {
+					$('.js-cart-call').trigger('click');
+				} else {
+					$('main').prepend($('<div class="alerts-wrapper"><div class="alert alert--green"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text"> ' + json['success'] + ' </p></div></div>'));
+					alertAutoClose();
+				}
+				$('.js-cart-total').html('<span id="cart-total">' + json['total'] + '</span>');
+
+				sendYM('prostore_addtocart_product');
+				sendGA(datapr,'prostore_addtocart_product');
+				
+				$('#cart .header__cart-load').load('index.php?route=common/cart/info .header__cart-offcanvas',function(){
+					hasScrollBar();
+					$('[data-fancybox]').fancybox(fancyboxOptions);
+				});
+			}
+		},
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+	});
+});
+
+
+$(document).on('click','.js-button-cart', function(e) {
+	e.preventDefault();
+	$('#button-cart').trigger('click');
+	
+});
+
+$(document).on('click','.js-button-fast-cart', function(e) {
+	$('#cat_prod_id').val({{product_id}});
+	setTimeout(function () {
+		$('#popup-buy-click input[name="comment"], #popup-buy-click textarea[name="comment"]')
+            .val('')
+            .trigger('change') // на случай, если есть обработчики
+			.show();
+
+        $('#popup-buy-click .popup__title').text('Быстрый заказ');
+    }, 0);
+
+    $('#popup-buy-click').find('label.ui-label').each(function () {
+            if ($(this).text().toLowerCase().indexOf('комментар') !== -1) {
+                $(this).show();
+            }
+        });
+
+});
+
+
+
+$(document).on('click', '.js-button-installment', function (e) {
+    e.preventDefault();
+
+    // Открываем стандартное окно быстрой покупки
+    $('[href="#popup-buy-click"]').trigger('click');
+
+    // Меняем заголовок после открытия
+    setTimeout(function () {
+        $('#popup-buy-click .popup__title').text('Купить в рассрочку');
+		$('#popup-buy-click input[name="comment"], #popup-buy-click textarea[name="comment"]')
+            .val('Рассрочка')
+            .trigger('change')
+			.hide(); // на случай, если есть обработчики
+    }, 0);
+
+	 $('#popup-buy-click').find('label.ui-label').each(function () {
+            if ($(this).text().toLowerCase().indexOf('комментар') !== -1) {
+                $(this).hide();
+            }
+        });
+	
+
+});
+
+
+if ($('body').is('.bootstrap-5')) {
+	if ($('.date').length) {
+		$('.date').daterangepicker({
+			singleDatePicker: true,
+			autoApply: true,
+			locale: {
+				format: 'YYYY-MM-DD'
+			}
+		});
+	}
+	if ($('.time').length) {
+		$('.time').daterangepicker({
+			singleDatePicker: true,
+			datePicker: false,
+			autoApply: true,
+			timePicker: true,
+			timePicker24Hour: true,
+			locale: {
+				format: 'HH:mm'
+			}
+		}).on('show.daterangepicker', function (ev, picker) {
+			picker.container.find('.calendar-table').hide();
+		});
+	}
+	if ($('.datetime').length) {
+		$('.datetime').daterangepicker({
+			singleDatePicker: true,
+			autoApply: true,
+			timePicker: true,
+			timePicker24Hour: true,
+			locale: {
+				format: 'YYYY-MM-DD HH:mm'
+			}
+	});
+	}
+} else {
+	if ($('.date').length) {
+		$('.date').datetimepicker({
+			language: '{{ datepicker }}',
+			pickTime: false
+		});
+	}
+	if ($('.datetime').length) {
+		$('.datetime').datetimepicker({
+			language: '{{ datepicker }}',
+			pickDate: true,
+			pickTime: true
+		});
+	}
+	if ($('.time').length) {
+		$('.time').datetimepicker({
+			language: '{{ datepicker }}',
+			pickDate: false
+		});
+	}
+}
+
+$('button[id^=\'button-upload\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file"></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$('.ui-error').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<span class="error ui-error">' + json['error'] + '</span>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(node).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+
+$('#review').delegate('.pagination a', 'click', function(e) {
+	e.preventDefault();
+
+	$('#review').fadeOut('slow');
+
+	$('#review').load(this.href);
+
+	$('#review').fadeIn('slow');
+
+	$('.sku [{% if product_in_tab %}data-tabs-btn{% else %}data-accordion-btn{% endif %}=\'reviews\']').trigger('click');
+});
+
+$(document).on('click','[data-progress-link]', function(e) {
+	e.preventDefault();
+	$('#review').load('index.php?route=product/product/review&' + $(this).attr('data-progress-link'));
+});
+
+{% if faq_status %}
+$('#faq_content').delegate('.pagination a', 'click', function(e) {
+    e.preventDefault();
+
+    $('#faq_content').fadeOut('slow');
+
+    $('#faq_content').load(this.href + " #faq_content");
+
+    $('#faq_content').fadeIn('slow');
+
+    $('.sku [{% if product_in_tab %}data-tabs-btn{% else %}data-accordion-btn{% endif %}=\'faq\']').trigger('click');
+});
+{% endif %}
+
+function reviewAdd() {
+
+	$.ajax({
+	  url: 'index.php?route=product/product/write&product_id=' + product_id,
+	  type: 'post',
+	  dataType: 'json',
+	  data: $("#form-review").serialize(),
+	  beforeSend: function() {
+		$('#form-review .ui-btn').button('loading');
+	  },
+	  complete: function() {
+		$('#form-review .ui-btn').button('reset');
+	  },
+	  success: function(json) {
+		$('#form-review .alert').remove();
+		
+		if (json['error']) {
+		  $('#form-review .ui-btn').before('<div class="alert alert--red alert--opacity"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error'] + '</p></div>');
+		}
+		if (json['success']) {
+		  $('#form-review .ui-btn').before('<div class="alert alert--green alert--opacity"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['success'] + '</p></div>');
+		  
+		  $('input[name=\'name\']').val('');
+		  $('textarea[name=\'text\']').val('');
+		  $('textarea[name=\'text_plus\']').val('');
+		  $('textarea[name=\'text_minus\']').val('');
+		  $('input[name=\'rating\']:checked').prop('checked', false);
+
+		}
+	  }
+	});
+}
+
+{% if faq_status %}
+function faqAdd() {
+
+	$.ajax({
+		url: 'index.php?route=extension/module/prostore/prostore_theme/write_faq&product_id=' + product_id,
+		type: 'post',
+		dataType: 'json',
+		data: $("#form-faq").serialize(),
+		beforeSend: function() {
+			$('#form-faq .ui-btn').button('loading');
+		},
+		complete: function() {
+			$('#form-faq .ui-btn').button('reset');
+		},
+		success: function(json) {
+			$('#form-faq .alert').remove();
+			
+			if (json['error']) {
+			$('#form-faq .ui-btn').before('<div class="alert alert--red alert--opacity"><button class="alert__close"> <svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['error'] + '</p></div>');
+			}
+			if (json['success']) {
+			$('#form-faq .ui-btn').before('<div class="alert alert--green alert--opacity"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text">' + json['success'] + '</p></div>');
+			
+			$('input[name=\'faq_name\']').val('');
+			$('textarea[name=\'faq_text\']').val('');
+
+			}
+		}
+	});
+}
+{% endif %}
+
+$(document).on('click','.details__comments-item-vote .ui-btn', function(e) {
+	e.preventDefault();
+
+	var subj = $(this);
+	var review_id = subj.attr("data-for");
+
+	var like = 0;
+	if (subj.hasClass('ui-btn--like')) {  like = 1; }
+
+	    $.ajax({
+	      url: 'index.php?route=product/product/like&review_id=' + review_id + '&islike=' + like,
+	      type: 'post',
+	      dataType: 'json',
+	      data: '',
+	      complete: function() {
+
+	      },
+	      success: function(json) {
+
+	        if (json['success']) {
+	        	subj.find('span').text(json['success']['likes']);
+	        }
+	      }
+	    });
+
+});
+
+$(document).on('click','.youtube-video-place', function(e) {
+	e.preventDefault();
+	$(this).html('<iframe allow="autoplay" width="820" height="400" allowfullscreen frameborder="0" class="embed-responsive-item" src="' + $(this).attr('href') + '"></iframe>');
+});
+
+$(document).on('click','.rutube-video-place', function(e) {
+	e.preventDefault();
+	$(this).html('<iframe id="my-player" allow="clipboard-write; autoplay" width="820" height="400" allowfullscreen frameborder="0" class="embed-responsive-item" src="' + $(this).attr('href') + '"></iframe>');
+	$(this).find('#my-player').on('load', function() {
+	
+		var rutubePlayer = $(this)[0];
+
+			rutubePlayer.contentWindow.postMessage(JSON.stringify(
+				{
+					type: 'player:play',
+					data: {}
+				}
+			), '*');	
+			
+			rutubePlayer.contentWindow.postMessage(JSON.stringify(
+				{
+					type: 'player:unMute'
+				}
+			), '*');
+
+	});
+});
+
+
+
+$(document).on('change','.sku__group--options input.ui-check__input,.sku__group--options select', function(e) {
+	toCartButtonReset(product_id);
+});
+
+function reviewScroll() {
+	if (window.location.hash.indexOf('review') == 1) {
+		var hash = window.location.hash;
+		if ($(hash).length) {
+{% if product_in_tab %}
+			$('.details__control-btn[data-tabs-btn="reviews"]').trigger('click');
+{% endif %}
+			tab_target = $(hash).offset().top - 10;
+
+			if (window.matchMedia('(min-width: 1200px)').matches) {
+				tab_target -= $('.sku__compact').innerHeight();
+				
+				if ( $('body').is('.is-page-header-fixed') ) {
+					tab_target -= $('.header-fixed').data('fixed-height') || $('.header-fixed').innerHeight();
+				}
+			} else {
+				tab_target = tab_target - $('.header__mobile-fixed').innerHeight();
+			}
+
+			$('html, body').animate({
+				scrollTop: tab_target
+			}, 'fast');
+		}
+	}
+}
+
+$(function() {
+{% if (reviewsdata is same as(false)) %}	
+	$('#review').load('index.php?route=product/product/review&product_id=' + {{ product_id }}, function(e) {
+	reviewScroll();
+	});
+{% else %}
+reviewScroll();
+{% endif %}
+
+});
+
+</script>
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
+	{% for i,breadcrumb in breadcrumbs %}
+	{
+	  "@type": "ListItem",
+	  "position": {{ i + 1 }},
+	  "item": {
+		"@id": "{{ breadcrumb['href'] }}",
+		"name": "{{ breadcrumb['text'] }}"
+	  }
+	}{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+	{% endfor %}
+	]
+}
+</script>
+<script type="application/ld+json">
+{
+	"@context": "http://schema.org/",
+	"@type": "Product",
+	"name": "{{ heading_title }}",
+	"image": [
+	{% if (images_for_schema) %}
+	{{ images_for_schema }}
+	{% endif %} 
+	 ],
+	"description": "{{ schema_description }}",
+	"mpn": "{{ model }}",
+	"sku": "{{ model }}",
+	"brand": "{{ manufacturer }}",
+	{% if (review_status and rating) %}
+	"aggregateRating": {
+	  "@type": "AggregateRating",
+	  "bestRating": "5",
+	  "worstRating": "1",
+	  "ratingValue": "{{ rating }}",
+	  "reviewCount": "{{ reviews_num }}"
+	},
+	{% endif %}
+	"offers": {
+	  "@type": "Offer",
+	  "url": "{{ href }}",
+	  "priceCurrency": "{{ currency }}",
+	  {% if (not special) %}
+	  "price": "{{ price_schema }}",
+	  {% if (discount_date_end) %}"priceValidUntil": "{{ discount_date_end }}",{% endif %}
+	  {% else %}
+	  "price": "{{ special_schema }}",
+	  {% if (special_date_end) %}"priceValidUntil": "{{ special_date_end }}",{% endif %}
+	  {% endif %}
+	  {% if (quantity > 0) %}
+	  "availability": "http://schema.org/InStock",
+	  {% else %}
+	  "availability": "http://schema.org/OutOfStock",
+	  {% endif %}
+	  "seller": {
+		"@type": "Organization",
+		"name": "{{ store }}"
+	  }
+	}
+}
+</script>
+<!-- Schema Org :: End-->
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  document.querySelectorAll('.ui-check[data-link]').forEach(function (label) {
+
+    label.addEventListener('click', function () {
+      const link = this.dataset.link;
+      if (!link) return;
+
+      // редирект в этой же вкладке
+      window.location.href = link;
+    });
+
+  });
+
+});
+</script>
+</body></html>

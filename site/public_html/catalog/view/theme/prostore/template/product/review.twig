@@ -1,0 +1,81 @@
+{% if reviews %} 
+	<ul class="details__comments-list">
+		{% for review in reviews %} 
+		<li>
+			<div class="details__comments-item" id="review-{{ review.review_id }}">
+				<div class="details__comments-item-head">
+					<span class="details__comments-item-letter">{{ review.author|first|upper }}</span>
+					<div class="row">
+						<div class="col-xl">
+							<span class="details__comments-item-title">{{ review.author }}
+							</span>
+							<span class="details__comments-item-rating">{{ text_prostore_review_user }} {{ review.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+								</svg>
+							</span>
+						</div>
+						<div class="col-xl-auto">
+							<span class="details__comments-item-date">{{ review.date_added }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="details__comments-item-body">
+					<div class="details__comments-item-readmore js-readmore" data-readmore-toggle="{{ text_prostore_products_readmore }}">
+						{{ review.text }}
+					</div>
+					{% if (review.text_plus or review.text_minus) %}
+					<dl class="details__comments-item-dl">
+						{% if review.text_plus %}
+						<dt>{{ text_review_plus }}</dt>
+						<dd>{{ review.text_plus }}</dd>
+						{% endif %}
+						{% if review.text_minus %}
+						<dt>{{ text_review_minus }}</dt>
+						<dd>{{ review.text_minus }}</dd>
+						{% endif %}
+					</dl>
+					{% endif %}
+				</div>
+				<div class="details__comments-item-foot">
+					<div class="details__comments-item-vote">
+						<button class="ui-btn ui-btn--like" data-for="{{ review.review_id }}">
+							<svg class="icon-like"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-like"></use>
+							</svg><span>{{ review.count_good }}</span>
+						</button>
+						<button class="ui-btn ui-btn--dislike" data-for="{{ review.review_id }}">
+							<svg class="icon-dislike"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-dislike"></use>
+							</svg><span>{{ review.count_bad }}</span>
+						</button>
+					</div>
+				</div>
+				{% if review.text_admin_answer %}
+				<div class="details__comments-item-answer">
+					<div class="details__comments-item-answer-head">
+						<span class="details__comments-item-answer-title">{{entry_admin_answer}}</span>
+						<span class="details__comments-item-answer-date is-xl-visible">{{review.answer_date_added}}</span>
+					</div>
+					<div class="details__comments-item-answer-body">
+						<p>{{ review.text_admin_answer }}</p>
+					</div>
+					<div class="details__comments-item-answer-foot">
+						<span class="details__comments-item-answer-date is-xl-hidden">{{review.answer_date_added}}</span>
+					</div>
+				</div>
+				{% endif %}				
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+	{% if (pagination) %}
+	<div class="container-pagination">
+		{{ pagination }}
+	</div>
+	{% endif %}
+{% else %}
+	<ul class="details__comments-list">
+		<li>
+			<div class="details__comments-item">
+				{{ text_no_reviews }}
+			</div>
+		</li>
+	</ul>
+{% endif %}

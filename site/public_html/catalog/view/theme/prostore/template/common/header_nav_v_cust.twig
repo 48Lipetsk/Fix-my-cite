@@ -1,0 +1,16 @@
+{% for id,link in main_navs_v[number].type[2].links %}
+{% if main_navs_v[number].type[2].name[id] %}
+<li>
+    <a class="header__catalog-link" href="{{ link }}" 
+		{% if (main_navs_v[number].type[2].target[id]) %} {{ 'target="'~main_navs_v[number].type[2].target[id]~'"' }}{% endif %} 
+		data-catalog-target>
+		{% if (nav_icons[id]['image']['v'][naw_row_id]) %}
+		<span class="header__catalog-link-icon">
+			{{nav_icons[id]['image']['v'][naw_row_id]}}
+		 </span>
+		{% endif %}
+        <span class="header__catalog-link-text">{{  main_navs_v[number].type[2].name[id] }}</span>
+    </a>
+</li>
+{% endif %}
+{% endfor %}

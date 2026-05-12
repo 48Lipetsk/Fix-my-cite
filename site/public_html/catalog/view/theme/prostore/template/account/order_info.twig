@@ -1,0 +1,274 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Alerts :: Start-->
+<div class="alerts-wrapper">
+	{% if success %}
+	<div class="alert alert--green">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ success }}</p>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert--red">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ error_warning }}</p>
+	</div>
+	{% endif %}
+</div><!-- Alerts :: End-->
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row personal__wrapper">
+		{{ column_left|replace({'<div id="column-left" class="col-xl-3">': '<div id="column-left" class="col-xl-3 personal__sidebar">'}) }}
+		<div class="col-xl-{{ col }}">
+			<div class="personal__order">
+				<div class="personal__order-head">
+					<div class="row">
+						<div class="col-md">
+							<span class="h2 personal__order-title">{% if invoice_no %}{{ text_invoice_no }}{{ invoice_no }}<br />{% endif %} {{ text_prostore_my_single_order }} #{{ order_id }}</span>
+						</div>
+						<div class="col-md-auto">
+							<p class="personal__order-total">{{ product_num }} {{ text_prostore_product_total }} {{ sum_total }}</p>
+						</div>
+					</div>
+				</div>
+				<div class="personal__order-body">
+					<ul class="personal__order-data">
+						<li>
+							<table class="personal__order-data-table">
+								<tr>
+									<th colspan="2">{{ text_order_detail }}</th>
+								</tr>
+								<tr>
+									<td>{{ text_prostore_my_single_order }}</td>
+									<td>{% if invoice_no %}{{ text_invoice_no }}{{ invoice_no }}<br />{% endif %}#{{ order_id }}</td>
+								</tr>
+								<tr>
+									<td>{{ text_date_added }}</td>
+									<td>{{ date_added }}</td>
+								</tr>
+								{% if payment_method %}
+								<tr>
+									<td>{{ text_payment_method }}</td>
+									<td>{{ payment_method }}</td>
+								</tr>
+								{% endif %}
+								<tr>
+								{% if shipping_method %}
+								<tr>
+									<td>{{ text_shipping_method }}</td>
+									<td>{{ shipping_method }}</td>
+								</tr>
+								{% endif %}
+							</table>
+						</li>
+						{% if payment_address %}
+						<li>
+							<table class="personal__order-data-table">
+								<tr>
+									<th>{{ text_payment_address }}</th>
+								</tr>
+								<tr>
+									<td>{{ payment_address }}</td>
+							</table>
+						</li>
+						{% endif %}
+						{% if shipping_address %}
+						<li>
+							<table class="personal__order-data-table">
+								<tr>
+									<th>{{ text_shipping_address }}</th>
+								</tr>
+								<tr>
+									<td>{{ shipping_address }}</td>
+							</table>
+						</li>
+						{% endif %}
+						{% if comment %}
+						<li>
+							<table class="personal__order-data-table">
+								<tr>
+									<th>{{ text_comment }}</th>
+								</tr>
+								<tr>
+									<td>{{ comment }}</td>
+								</tr>
+							</table>
+						</li>
+						{% endif %}
+					</ul>
+					<table class="personal__order-table">
+						<thead>
+							<tr>
+								<th>{{ text_prostore_product }}</th>
+								<th>{{ column_quantity }}</th>
+								<th>{{ column_total }}</th>
+								<th></th>
+							</tr>
+						</thead>
+						{% for product in products %}
+						<tbody>
+							<tr>
+								<td>
+									<div class="personal__order-table-item">
+										{% if product.thumb %}
+										<div class="personal__order-table-item-image">
+											<img src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy">
+										</div>
+										{% endif %}
+										<div class="personal__order-table-item-desc">
+											<strong class="personal__order-table-item-title">{{ product.name }}</strong>
+											<p class="personal__order-table-item-price">{{ product.price }}</p>
+											<span class="personal__order-table-item-counter">{{ product.quantity }} {{ text_prostore_cart_quantity }}</span>
+										</div>
+									</div>
+								</td>
+								<td>
+									<p class="personal__order-table-counter">{{ product.quantity }}</p>
+								</td>
+								<td>
+									<p class="personal__order-table-price">{{ product.total }}</p>
+								</td>
+								<td>
+									{% if product.reorder %}
+									<div class="personal__order-table-action">
+										<a class="ui-btn ui-btn--primary ui-btn--fullwidth is-md-hidden" href="{{ product.reorder }}">{{ button_reorder }}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+											</svg>
+										</a>
+										<a class="ui-btn ui-btn--40x40 ui-btn--primary is-md-visible" href="{{ product.reorder }}">
+											<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+											</svg>
+										</a>
+									</div>
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<ul class="personal__order-table-info">
+										{% for option in product.option %}
+										<li>{{ option.name }}: {{ option.value }}</li>
+										{% endfor %}
+										<li>
+											<mark class="personal__order-table-id">{{ column_model }}: {{ product.model }}</mark>
+										</li>
+									</ul>
+								</td>
+								<td colspan="2">
+									<p class="personal__order-table-return">
+										<a class="ui-link ui-link--blue" href="{{ product.return }}">{{ button_return }}</a>
+									</p>
+								</td>
+							</tr>
+						</tbody>
+						{% endfor %}
+						{% for voucher in vouchers %}
+						<tbody>
+							<tr>
+								<td>
+									<div class="personal__order-table-item">
+										<div class="personal__order-table-item-desc">
+											<strong class="personal__order-table-item-title">{{ voucher.description }}</strong>
+											<p class="personal__order-table-item-price">{{ voucher.amount }}</p>
+											<span class="personal__order-table-item-counter">1 {{ text_prostore_cart_quantity }}</span>
+										</div>
+									</div>
+								</td>
+								<td>
+									<p class="personal__order-table-counter">1</p>
+								</td>
+								<td>
+									<p class="personal__order-table-price">{{ voucher.amount }}</p>
+								</td>
+								<td>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+								</td>
+								<td colspan="2">
+								</td>
+							</tr>
+						</tbody>
+						{% endfor %}
+						<tfoot>
+							<tr>
+								<td colspan="2">
+									{% for i,total in totals %}
+									{% if (i + 1 < totals|length) %}
+									<p class="personal__order-table-total">
+										<small>{{ total.title }} {{ total.text }}</small> 
+									</p>
+									{% else %}
+									<p class="personal__order-table-total">
+										<small>{{ total.title }}</small> {{ total.text }}
+									</p>
+									{% endif %}
+									{% endfor %}
+								</td>
+								<!-- <td colspan="2">
+									<p class="personal__order-table-repeat">
+										<a class="ui-link ui-link--blue" href="#">
+											<svg class="icon-repeat"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-repeat"></use>
+											</svg>Repeat order
+										</a>
+									</p>
+								</td> -->
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+			{% if histories %}
+			<div class="personal__history">
+				<span class="h3 personal__history-title">{{ text_history }}</span>
+				<ul class="personal__history-list">
+					{% for history in histories %}
+					<li>
+						<div class="personal__history-item">
+							<div class="personal__history-item-date">{{ history.date_added }}</div>
+							<div class="personal__history-item-comment">{{ history.comment }}</div>
+							<div class="personal__history-item-status">
+								<span class="ui-badge ui-badge--35 {% if history.status_style %}{{ history.status_style }}{% else %}ui-badge--yellow{% endif %}">{{ history.status }}</span>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
+		</div>
+		{{ column_right }}
+		</div>
+		</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+</body></html>

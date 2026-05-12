@@ -1,0 +1,63 @@
+<div class="cart__code cart__code--coupon">
+	<div class="cart__code-head">
+		<div class="row">
+			<div class="col">
+				<span class="cart__code-title">{{ text_prostore_coupon }}</span>
+			</div>
+			<div class="col-auto">
+				<div class="cart__code-action" style="display: none;">
+					<a class="ui-link ui-link--blue ui-link--dashed" href="#">{{ text_prostore_voucher_1 }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cart__code-body">
+		<div class="ui-code">
+			<input class="ui-code__input" type="text" name="coupon" value="{{ coupon }}" placeholder="{{ text_prostore_coupon_0 }}">
+			<button id="button-coupon" data-loading-text="{{ text_loading }}" class="ui-code__btn">{{ button_submit }}</button>
+		</div>
+	</div>
+</div>
+<script>
+// --------------------------------------------------------------------------
+// Loading ocAddCoupon
+// --------------------------------------------------------------------------
+
+function ocAddCoupon() {
+	$('#button-coupon').on('click', function(e) {
+	e.preventDefault();
+		$.ajax({
+			url: 'index.php?route=extension/total/coupon/coupon',
+			type: 'post',
+			data: 'coupon=' + encodeURIComponent($('input[name=\'coupon\']').val()),
+			dataType: 'json',
+			beforeSend: function() {
+				$('input[name=\'coupon\']').attr('disabled', 'disabled');
+			},
+			complete: function() {
+				$('input[name=\'coupon\']').removeAttr('disabled');
+			},
+			success: function(json) {
+				$('.alert').remove();
+
+				if (json['error']) {
+					$('.alerts-wrapper').append($('<div class="alert alert--red"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text"> ' + json['error'] + ' </p></div>'));
+				}
+
+				if (json['redirect']) {
+					location = json['redirect'];
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});
+	$('input[name=\'coupon\']').keypress(function(e){
+		if(e.which == 13){
+			$('#button-coupon').trigger('click');
+		}
+	});
+}
+document.addEventListener('DOMContentLoaded', ocAddCoupon);
+</script>

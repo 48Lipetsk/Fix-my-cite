@@ -1,0 +1,28 @@
+{% if (newss is not empty) %}
+<!-- News Aside :: Start-->
+<div class="blog-aside is-xl-visible">
+	<span class="h2 blog-aside__title">{{ heading_title }} <a class="ui-link ui-link--blue" href="{{ news_href }}">{{ text_all_news_1 }}</a></span>
+	<ul class="blog-aside__list">
+		{% for news in newss %}
+		<li>
+			<a class="news-featured__item" href="{{ news.href }}">
+				{% if news.badges %}
+				<div class="news__item-badges">
+					<span class="ui-badge ui-badge--30 ui-badge--lightred">{{ text_badges }}</span>
+				</div>
+				{% endif %}
+				<div class="news-featured__item-image {% if news.badges %}news-featured__item-image--badges{% endif %}" {% if news.badges %}style="background: #{{ news.background }};"{% endif %}>
+					{% if news.thumb %}
+					<img src="{{ news.thumb }}" alt="{{ news.title }}" width="{{ news.width }}" height="{{ news.height }}" loading="lazy">
+					{% endif %}
+				</div>
+				<span class="h3 news-featured__item-title">
+					<u>{{ news.title }}</u>
+				</span>
+				<span class="news-featured__item-date">{{ news.date_added }}</span>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div><!-- News Aside :: End-->
+{% endif %}

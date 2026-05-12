@@ -1,0 +1,235 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Alerts :: Start-->
+<div class="alerts-wrapper">
+	{% if error_warning %}
+	<div class="alert alert--red">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ error_warning }}</p>
+	</div>
+	{% endif %}
+</div><!-- Alerts :: End-->
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row personal__wrapper">
+		{{ column_left|replace({'<div id="column-left" class="col-xl-3">': '<div id="column-left" class="col-xl-3 personal__sidebar">'}) }}
+		<div class="col-xl-{{ col }}">
+			<div class="auth__body">
+				<div class="auth__form">
+					<form action="{{ action }}" method="post" enctype="multipart/form-data">
+						<p>{{ text_description }}</p>
+						<fieldset class="ui-fieldset">
+							<legend class="ui-legend">{{ text_order }}</legend>
+								<div class="form-group">
+									<label class="ui-label required" for="input-firstname">{{ entry_firstname }}</label>
+									<div class="ui-field{% if error_firstname %} is-error{% endif %}">
+										<input class="ui-input" type="text" name="firstname" placeholder="{{ entry_firstname }}" value="{{ firstname }}" id="input-firstname">
+										{% if error_firstname %}
+										<span class="error ui-error">{{ error_firstname }}</span>
+										{% endif %} 
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="ui-label required" for="input-lastname">{{ entry_lastname }}</label>
+									<div class="ui-field{% if error_lastname %} is-error{% endif %}">
+										<input class="ui-input" type="text" name="lastname" placeholder="{{ entry_lastname }}" value="{{ lastname }}" id="input-lastname">
+										{% if error_lastname %}
+										<span class="error ui-error">{{ error_lastname }}</span>
+										{% endif %} 
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="ui-label required" for="input-email">{{ entry_email }}</label>
+									<div class="ui-field{% if error_email %} is-error{% endif %}">
+										<input class="ui-input" type="email" name="email" placeholder="{{ entry_email }}" value="{{ email }}" id="input-email">
+										{% if error_email %}
+										<span class="error ui-error">{{ error_email }}</span>
+										{% endif %} 
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="ui-label required" for="input-telephone">{{ entry_telephone }}</label>
+									<div class="ui-field{% if error_telephone %} is-error{% endif %}">
+										<input class="ui-input" type="text" name="telephone" placeholder="{{ entry_telephone }}" value="{{ telephone }}" id="input-telephone">
+										{% if error_telephone %}
+										<span class="error ui-error">{{ error_telephone }}</span>
+										{% endif %} 
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="ui-label required" for="input-order-id">{{ entry_order_id }}</label>
+									<div class="ui-field{% if error_order_id %} is-error{% endif %}">
+										<input class="ui-input" type="text" name="order_id" placeholder="{{ entry_order_id }}" value="{{ order_id }}" id="input-order-id">
+										{% if error_order_id %}
+										<span class="error ui-error">{{ error_order_id }}</span>
+										{% endif %} 
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="ui-label" for="input-date-ordered">{{ entry_date_ordered }}</label>
+									<div class="ui-field">
+										<input class="ui-input date" type="text" name="date_ordered" data-date-format="YYYY-MM-DD" placeholder="{{ entry_date_ordered }}" value="{{ date_ordered }}" id="input-date-ordered" data-toggle="datetimepicker" data-target=".date">
+									</div>
+								</div>					
+						</fieldset>
+						<fieldset class="ui-fieldset">
+							<legend class="ui-legend">{{ text_product }}</legend>
+								<div class="form-group">
+									<label class="ui-label required" for="input-product">{{ entry_product }}</label>
+									<div class="ui-field{% if error_product %} is-error{% endif %}">
+										<input class="ui-input" type="text" name="product" placeholder="{{ entry_product }}" value="{{ product }}" id="input-product">
+										<input type="hidden" name="product_id" value="{{ product_id }}">
+										{% if error_product %}
+										<span class="error ui-error">{{ error_product }}</span>
+										{% endif %} 
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="ui-label required" for="input-model">{{ entry_model }}</label>
+									<div class="ui-field{% if error_model %} is-error{% endif %}">
+										<input class="ui-input" type="text" name="model" placeholder="{{ entry_model }}" value="{{ model }}" id="input-model">
+										{% if error_model %}
+										<span class="error ui-error">{{ error_model }}</span>
+										{% endif %} 
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="ui-label" for="input-quantity">{{ entry_quantity }}</label>
+									<div class="ui-field">
+										<input class="ui-input" type="text" name="quantity" placeholder="{{ entry_quantity }}" value="{{ quantity }}" id="input-quantity">
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="ui-label required" for="input-telephone">{{ entry_reason }}</label>
+									<div class="ui-field{% if error_reason %} is-error{% endif %}">
+										{% for return_reason in return_reasons %}
+										{% if return_reason.return_reason_id == return_reason_id %}
+										<label class="ui-check">
+											<input class="ui-check__input" name="return_reason_id" type="radio" value="{{ return_reason.return_reason_id }}" checked="checked">
+											<span class="ui-check__radio"></span>
+											<span class="ui-check__text">{{ return_reason.name }}</span>
+										</label>
+										{% else %}
+										<label class="ui-check">
+											<input class="ui-check__input" name="return_reason_id" type="radio" value="{{ return_reason.return_reason_id }}">
+											<span class="ui-check__radio"></span>
+											<span class="ui-check__text">{{ return_reason.name }}</span>
+										</label>
+										{% endif %}
+										{% endfor %}
+										{% if error_reason %}
+										<span class="error ui-error">{{ error_reason }}</span>
+										{% endif %} 
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="ui-label required" for="input-opened">{{ entry_opened }}</label>
+									<div class="ui-field">
+										{% if opened %}
+										<label class="ui-check ui-check--inline">
+											<input class="ui-check__input" name="opened" type="radio" value="1" checked="checked">
+											<span class="ui-check__radio"></span>
+											<span class="ui-check__text">{{ text_yes }}</span>
+										</label>
+										{% else %}
+										<label class="ui-check ui-check--inline">
+											<input class="ui-check__input" name="opened" type="radio" value="1">
+											<span class="ui-check__radio"></span>
+											<span class="ui-check__text">{{ text_yes }}</span>
+										</label>
+										{% endif %}
+										{% if not opened %}
+										<label class="ui-check ui-check--inline">
+											<input class="ui-check__input" name="opened" type="radio" value="0" checked="checked">
+											<span class="ui-check__radio"></span>
+											<span class="ui-check__text">{{ text_no }}</span>
+										</label>
+										{% else %}
+										<label class="ui-check ui-check--inline">
+											<input class="ui-check__input" name="opened" type="radio" value="0">
+											<span class="ui-check__radio"></span>
+											<span class="ui-check__text">{{ text_no }}</span>
+										</label>
+										{% endif %}
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="ui-label" for="input-comment">{{ entry_fault_detail }}</label>
+									<div class="ui-field">
+										<textarea class="ui-textarea" name="comment" placeholder="{{ entry_fault_detail }}" id="input-comment">{{ comment }}</textarea>
+									</div>
+								</div>	
+								{{ captcha }}
+						</fieldset>
+						{% if text_agree %}
+						<fieldset class="ui-fieldset">
+							<hr>
+							<label class="ui-check">
+								<input class="ui-check__input" type="checkbox" value="1" name="agree" {{ agree ? 'checked="checked"' : ''}}>
+								<span class="ui-check__checkbox"></span>
+								<span class="ui-check__text ui-check__text--agree">{{ text_agree }}</span>
+							</label>
+						</fieldset>
+						{% endif %}
+						<fieldset class="ui-fieldset">
+							<div class="row">
+								<div class="col-auto">
+								   <a href="{{ back }}" class="ui-btn ui-btn--grey">{{ button_back }}</a>
+								</div>
+								<div class="col-auto">
+									<button type="submit" class="ui-btn ui-btn--primary">{{ button_continue }}</button>	
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+<script>
+if ($('body').is('.bootstrap-5')) {
+	$('.date').daterangepicker({
+		singleDatePicker: true,
+		autoApply: true,
+		locale: {
+			format: 'YYYY-MM-DD'
+		}
+	});
+} else {
+	$('.date').datetimepicker({
+		language: '{{ datepicker }}',
+		pickTime: false
+	});
+}
+</script> 
+</body></html>

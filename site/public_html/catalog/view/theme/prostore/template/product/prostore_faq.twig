@@ -1,0 +1,82 @@
+	<!-- Comments :: Start-->
+	<div class="details__comments">
+	  <div id="faq_content">		
+		<div class="details__comments-content">
+{% if faqs %} 
+			<ul class="details__comments-list">
+				{% for faq in faqs %} 
+				<li>
+					<div class="details__comments-item">
+						<div class="details__comments-item-head">
+							<span class="details__comments-item-letter">{{ faq.author|first|upper }}</span>
+							<div class="row">
+								<div class="col-xl">
+									<span class="details__comments-item-title">{{ faq.author }}</span>
+								</div>
+								<div class="col-xl-auto">
+									<span class="details__comments-item-date">{{ faq.date_added }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="details__comments-item-body">
+							<p>{{ faq.text }}</p>
+						</div>
+						{% if faq.text_admin_answer %}
+						<div class="details__comments-item-answer">
+							<div class="details__comments-item-answer-head">
+								<span class="details__comments-item-answer-title">{{entry_admin_answer}}</span>
+								<span class="details__comments-item-answer-date is-xl-visible">{{faq.answer_date_added}}</span>
+							</div>
+							<div class="details__comments-item-answer-body">
+								<p>{{ faq.text_admin_answer }}</p>
+							</div>
+							<div class="details__comments-item-answer-foot">
+								<span class="details__comments-item-answer-date is-xl-hidden">{{faq.answer_date_added}}</span>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+			{% if (pagination) %}
+			<div class="container-pagination">
+				{{ pagination }}
+			</div>
+			{% endif %}		
+{% else %}
+			<ul class="details__comments-list">
+				<li>
+					<div class="details__comments-item">
+						{{ text_prostore_no_faq }}
+					</div>
+				</li>
+			</ul>
+{% endif %}
+		</div>
+	  </div>
+		<div class="details__comments-sidebar">
+			<div class="details__comments-form js-toggle">
+				<button class="details__comments-form-btn js-toggle-btn">{{text_prostore_faq_ask}}</button>
+				<div class="details__comments-form-offcanvas js-toggle-offcanvas">
+					<div class="details__comments-form-offcanvas-in">
+						<form id="form-faq">
+							<span class="ui-legend">{{text_prostore_faq_ask}}</span>
+							<label class="ui-label required">{{ entry_name }}</label>
+							<input class="ui-input" type="text" name="faq_name" value="{{ customer_name }}">
+							<label class="ui-label">{{text_prostore_email}}</label>
+							<input class="ui-input" type="email" name="faq_email" value="{{ customer_email }}">
+							<label class="ui-label required">{{text_prostore_faq_text}}</label>
+							<textarea class="ui-textarea" name="faq_text"></textarea>
+							{{ captcha }}
+							<button class="ui-btn ui-btn--primary ui-btn--fullwidth" onclick="faqAdd(); return false;">{{text_prostore_faq_send}}</button>
+							{% if (text_review_pdata) %}
+								<div class="personal-data">{{ text_review_pdata }}</div>
+							{% endif %}
+						</form>
+					</div>
+					<button class="details__comments-form-close js-toggle-btn">{{text_prostore_menu_close}}</button>
+				</div>
+			</div>
+		</div>		
+	</div>

@@ -1,0 +1,46 @@
+{% if (reviews is not empty) %}
+<!-- Reviews Featured :: Start-->
+<div class="reviews-featured">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col-md">
+				<span class="h2 reviews-featured__title">{{ heading_title }}</span>
+			</div>
+		</div>
+		<div class="reviews-featured__swiper">
+			<div class="swiper-container swiper-reviews js-swiper-reviews">
+				<div class="swiper-wrapper">
+					{% for review in reviews %}
+					<div class="swiper-slide">
+						<div class="reviews-featured__item">
+							<div class="reviews-featured__item-head">
+								<div class="reviews-featured__item-product">
+									<div class="reviews-featured__item-product-image">
+										<img src="{{ review.thumb }}" alt="{{ review.name }}" width="45" height="45" {% if lazyload %}loading="lazy"{% endif %}>
+									</div>
+									<span class="reviews-featured__item-product-title">{{ review.name }}</span>
+								</div>
+							</div>
+							<div class="reviews-featured__item-body">
+								<p>{{ review.description }}</p>
+								<span>{{ review.date_added }}</span>
+								<a href="{{ review.href }}">{{ text_all }} </a>
+							</div>
+							<div class="reviews-featured__item-foot">
+								<span class="reviews-featured__item-letter">{{ review.author|first|upper }}</span>
+								<span class="reviews-featured__item-title">{{ review.author }} <small>{{ text_rate }} <span class="ui-rate">{{ review.rating }}<svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use>
+											</svg>
+										</span>
+									</small>
+								</span>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+				<div class="swiper-scrollbar js-swiper-reviews-scrollbar"></div>
+			</div>
+		</div>
+	</div>
+</div><!-- Reviews Feautred :: End-->
+{% endif %}

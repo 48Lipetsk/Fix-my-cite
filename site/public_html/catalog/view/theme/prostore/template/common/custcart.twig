@@ -1,0 +1,68 @@
+<div class="checkout__data js-data">
+	<div class="checkout__data-head js-data-toggle">
+		<span class="checkout__data-title">{{ text_custcart }} <mark class="checkout__data-counter">{{ cart_total_product }}</mark>
+		</span>
+		<span class="checkout__data-total">{{ product_total }}</span>
+		<span class="checkout__data-arrow">
+			<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use>
+			</svg>
+		</span>
+	</div>
+	{% if products or vouchers %}
+	<div class="checkout__data-body js-data-content">
+		<span class="checkout__data-change">
+			<a class="ui-link ui-link--blue" href="{{ cart }}">{{ text_prostore_edit_cart }}</a>
+		</span>
+		<table class="checkout__data-table">
+			<tr>
+				<th colspan="2">{{ text_prostore_cart_sum }}</th>
+			</tr>
+			<tr>
+				<td>{{ product_num }}</td>
+				<td class="text-right">{{ product_sub_total }}</td>
+			</tr>
+			{% for i,total in totals %}
+			{% if (i + 1 < totals|length) %}
+			<tr>
+				<td class="{% if total.value < 0 %}text-red{% endif %}">{{ total.title }}</td>
+				<td class="text-right {% if total.value < 0 %}text-red{% endif %}">{{ total.text }}</td>
+			</tr>
+			{% endif %}
+			{% endfor %}
+		</table>
+		<p class="checkout__data-total">
+		{% for i,total in totals %}
+		{% if not (i + 1 < totals|length) %}
+			<small>{{ total.title }}</small> {{ total.text }}
+		{% endif %}
+		{% endfor %}
+		</p>
+	</div>
+	{% endif %}
+</div>
+{% if (buy_click.status is defined and buy_click.status) %}
+<div class="checkout__quick">
+	<div class="checkout__quick-action">
+		<a class="ui-btn ui-btn--55 ui-btn--grey ui-btn--fullwidth js-fancy-popup-cart" href="#popup-buy-click-cc" data-fancybox data-typefrom="cart-popup">{{ text_prostore_fast_order }}</a>
+	</div>
+	<p class="checkout__quick-text">{{ text_prostore_cart_quick_text }}</p>
+</div>
+{% if products or vouchers %}
+<!-- Popups :: Start-->
+	{% if (buy_click.status is defined and buy_click.status) %}
+	<div class="fancybox-is-hidden popup popup--buy-click" id="popup-buy-click-cc">
+		<span class="popup__title">{{ text_prostore_fast_order }}</span>
+		<div class="popup__form">
+				{{ buyclick_form }}
+				{{ captcha_fo }}
+				<button type="button" class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth quickbuy-send" onclick="cart.add2cartFast($('#popup-buy-click-cc input,#popup-buy-click-cc textarea'));">{{ button_fastorder_sendorder }}</button>
+				<input name="redirect"  value="1" class="fast-redirect" type="hidden">
+				{% if (text_prostore_pdata) %} 
+					<div class="personal-data">{{ text_prostore_pdata }}</div>
+				{% endif %} 
+		</div>
+	</div>
+	{% endif %}
+<!-- Popups :: End-->
+{% endif %}
+{% endif %}

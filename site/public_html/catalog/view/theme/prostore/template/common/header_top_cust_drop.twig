@@ -1,0 +1,15 @@
+<li>
+	<a class="header__info-link" {% if (header_navs[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{ header_navs[number]['type'][1]['language'][language_id]['href'] }}"{% endif %}>
+		{% if (header_nav_icons['custom_drop']['image']['h'][naw_row_id]) %}
+		   {{header_nav_icons['custom_drop']['image']['h'][naw_row_id]}}
+		{% endif %}
+		{{ header_navs[number]['type'][1]['language'][language_id]['name'] }}
+	</a>
+	<div class="header__info-offcanvas">
+		<ul class="header__info-submenu">
+			{% for id,link in header_navs[number].type[1].links %}
+			<li><a class="header__info-sublink" href="{{ link }}" {% if (header_navs[number].type[1].target[id]) %} {{ 'target="'~header_navs[number].type[1].target[id]~'"' }}{% endif %}>{{ header_navs[number].type[1].name[id] }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</li>

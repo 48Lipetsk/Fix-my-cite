@@ -1,0 +1,25 @@
+ <li>
+	 <a class="header__catalog-link" {% if (main_navs_v[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{ main_navs_v[number]['type'][1]['language'][language_id]['href'] }}"{% endif %} data-catalog-target="cust_drop_{{ naw_row_id }}">
+		 {% if (nav_icons['custom_drop']['image']['v'][naw_row_id]) %}
+		 <span class="header__catalog-link-icon">
+			{{nav_icons['custom_drop']['image']['v'][naw_row_id]}}
+		 </span>
+		 {% endif %}
+		 <span class="header__catalog-link-text">{{ main_navs_v[number]['type'][1]['language'][language_id]['name'] }}</span>
+		 <span class="header__catalog-link-arrow">
+			 <svg class="icon-arrow-right"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-right"></use>
+			 </svg>
+		 </span>
+	 </a>
+	 <div class="header__catalog-dropdown" data-catalog-dropdown="cust_drop_{{ naw_row_id }}">
+		 <ul class="header__catalog-menu">
+			 {% for id,link in main_navs_v[number].type[1].links %}
+			 <li>
+				 <a class="header__catalog-link" href="{{ link }}" {% if (main_navs_v[number].type[1].target[id]) %} {{ 'target="'~main_navs_v[number].type[1].target[id]~'"' }}{% endif %}>
+					 <span class="header__catalog-link-text">{{ main_navs_v[number].type[1].name[id] }}</span>
+				 </a>
+			 </li>
+			 {% endfor %}
+		 </ul>
+	 </div>
+ </li>

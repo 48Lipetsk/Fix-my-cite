@@ -1,0 +1,31 @@
+<!-- Partners :: Start-->
+<div class="partners">
+	<div class="container-fluid">
+		<div class="swiper-container swiper-partners js-swiper-partners">
+			<div class="swiper-wrapper" style='grid-template-rows:{{grid_data['grid-template-rows']}};grid-template-columns:{{grid_data['grid-template-columns']}};grid-template-areas:{{grid_data['grid-template-areas']}};'>
+				{% for banner in banners %}
+				{% for image in banner.images %}
+				<div class="swiper-slide">
+					<a class="partners__item partners__item--{{ image.position }} partners__item--{{ image.color }}" href="{{ image.link }}">
+						<div class="partners__item-image">
+							<img src="{{ image.image }}" alt="" width="{{ image.width }}" height="{{ image.height }}" {% if lazyload %}loading="lazy"{% endif %}>
+						</div>
+						<div class="partners__item-desc">
+							{% if image.title %}
+							<p class="partners__item-text">{{ image.title }}</p>
+							{% endif %}
+							{% if image.text_big %}
+							<p class="partners__item-text">{{ image.text_big }}</p>
+							{% endif %}
+							{% if image.text_small %}
+							<span class="ui-btn ui-btn--36 ui-btn--{{ image.color }}">{{ image.text_small }}</span>
+							{% endif %}
+						</div>
+					</a>
+				</div>
+				{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div><!-- Partners :: End-->

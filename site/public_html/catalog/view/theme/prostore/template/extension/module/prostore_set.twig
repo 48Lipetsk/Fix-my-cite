@@ -1,0 +1,344 @@
+ {% if sets %} 
+<!-- Set :: Start-->
+{% for setid,set in sets %}
+<div class="set">
+	<div class="container-fluid">
+		<span class="h2 set__title">{{ set.heading_title }}</span>
+		<div class="set__wrapper js-set-container" data-for="{{ setid }}">
+			<div class="row">
+				<div class="col-xl-9">
+					<div class="set__swiper">
+						<div class="swiper-container swiper-set js-swiper-set">
+							<div class="swiper-wrapper">
+								{% for product in set.products %}
+								<div class="swiper-slide js-products-in-set" data-for="{{ product.product_id }}">
+									<div class="products__item {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %} products__item--responsive">
+										<div class="products__item-in">
+											<div class="products__item-topleft">
+												<div class="products__item-badges">
+													{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+													{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+													{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+													{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+													{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+													{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+												</div>
+												{% if (product.rating != constant('false')) %}
+												<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+												</span>
+												{% endif %}
+											</div>
+											<div class="products__item-buttons">
+												<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+													<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+														<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+													</svg>
+												</button>
+												<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+													<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+														<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+													</svg>
+												</button>
+											</div>
+											{% if product.images %}
+											<a class="products__item-gallery" href="{{ product.href }}">
+												<div class="products__item-image is-active">
+													<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+												</div>
+												{% for imageX in product.images %}
+												<div class="products__item-image">
+													<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+												</div>
+												{% endfor %}
+												<div class="products__item-pagination">
+													<div class="products__item-bullet is-active"></div>
+													{% for imageX in product.images %}
+													<div class="products__item-bullet"></div>
+													{% endfor %}
+												</div>
+											</a>
+											{% else %}
+											<a class="products__item-image" href="{{ product.href }}">
+												<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+											</a>
+											{% endif %}
+											<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+											{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+											<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+											<div class="products__item-row">
+												{% if product.price %}
+												<p class="products__item-price">{% if (product.special) %}<ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+												</p>
+												{% endif %}
+												{% if (product.countvariants > 1) %}
+												<div class="products__item-replace">
+													<a class="ui-link ui-link--primary js-set-chng-btn" href="#popup-set-click" data-for="{{ product.product_id }}" data-fancybox>
+														<svg class="icon-replace"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-replace"></use>
+														</svg>{{ text_prostore_products_replace }}
+													</a>
+												</div>
+												{% endif %}
+											</div>
+											{% if (category_time and product.special and product.special_date_end) %}
+											<div class="products__item-discount">
+												<div class="ui-discount">
+													<div class="row">
+														<div class="col-12">
+															<div class="ui-discount__desc">
+																<figure class="ui-discount__icon">
+																	<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+																	</svg>
+																</figure>
+																<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+																</p>
+															</div>
+														</div>
+														<div class="col-12">
+															<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+														</div>
+													</div>
+												</div>
+											</div>
+											{% endif %}
+											<div class="products__item-action">
+												<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+													<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+														</svg>
+													</button>
+													<div class="ui-number">
+														<button class="ui-number__decrease">
+															<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+															</svg>
+														</button>
+														<button class="ui-number__increase">
+															<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+															</svg>
+														</button>
+														<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+													</div>
+													<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+														<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+														</svg>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+								<div class="swiper-slide swiper-slide--discount {% if set.products|length >= 3  %}is-xl-hidden{% endif %}">
+									<div class="products__discount products__discount--responsive">
+										<form class="setdata setdata-{{ setid }}">
+											{% if (set.discount > 0) %}
+											<div class="products__discount-circle">
+												<div class="products__discount-circle-in">
+													<span class="products__discount-title">{{ text_discount_title }}</span>
+													<span class="products__discount-price">
+														<ins class="products__discount-price-ins js-set-totalf">{{ set.totalf }}</ins>
+														<del class="products__discount-price-del js-set-total">{{ set.total }}</del>
+														<small class="products__discount-price-economy js-set-discount">{{ text_sale }} {{ set.discount }}</small>
+													</span>
+												</div>
+											</div>
+											{% else %}
+											<div class="products__discount-circle">
+												<div class="products__discount-circle-in">
+													<span class="products__discount-title">{{ set.heading_title }}</span>
+													<span class="products__discount-price">
+														<ins class="products__discount-price-ins js-set-totalf">{{ set.totalf }}</ins>
+													</span>
+												</div>
+											</div>
+											{% endif %}
+											<div class="products__discount-action">
+												<a class="ui-btn ui-btn--primary js-btn-add-set2cart" href="#" data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+													</svg>
+												</a>
+											</div>
+											<input type="hidden" class="set_product_data" name="setid" value="{{ setid }}" >
+											<input type="hidden" class="set_product_data" name="mode" value="{{ set.mode }}" >
+											{% for product in set.products %} 
+												<input type="hidden" class="set_product_data" data-for="{{ product.product_id }}" name="setproducts[{{ product.product_id }}]" value="{{ product.quantity }}" >
+											{% endfor %}
+										</form>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-scrollbar js-swiper-set-scrollbar"></div>
+						</div>
+					</div>
+				</div>
+				{% if set.products|length >= 3  %}
+				<div class="col-xl-3 is-xl-visible">
+					<div class="products__discount products__discount--responsive">
+						<form class="setdata setdata-{{ setid }}">
+							{% if (set.discount > 0) %}
+							<div class="products__discount-circle">
+								<div class="products__discount-circle-in">
+									<span class="products__discount-title">{{ text_discount_title }}</span>
+									<span class="products__discount-price">
+										<ins class="products__discount-price-ins js-set-totalf">{{ set.totalf }}</ins>
+										<del class="products__discount-price-del js-set-total">{{ set.total }}</del>
+										<small class="products__discount-price-economy js-set-discount">{{ text_sale }} {{ set.discount }}</small>
+									</span>
+								</div>
+							</div>
+							{% else %}
+							<div class="products__discount-circle">
+								<div class="products__discount-circle-in">
+									<span class="products__discount-title">{{ set.heading_title }}</span>
+									<span class="products__discount-price">
+										<ins class="products__discount-price-ins js-set-totalf">{{ set.totalf }}</ins>
+									</span>
+								</div>
+							</div>
+							{% endif %}
+							<div class="products__discount-action">
+								<a class="ui-btn ui-btn--primary js-btn-add-set2cart" href="#" data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+									</svg>
+								</a>
+							</div>
+							<input type="hidden" class="set_product_data" name="setid" value="{{ setid }}" >
+							<input type="hidden" class="set_product_data" name="mode" value="{{ set.mode }}" >
+							{% for product in set.products %} 
+								<input type="hidden" class="set_product_data" data-for="{{ product.product_id }}" name="setproducts[{{ product.product_id }}]" value="{{ product.quantity }}" >
+							{% endfor %}
+						</form>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}
+<!-- Set :: End-->
+
+<!-- Popups :: Start-->
+<div class="fancybox-is-hidden popup popup--replace" id="popup-set-click">
+	<span class="popup__title">{{ text_popup_package_title }}</span>
+	<div class="popup__replace" id="popup-set-click-content"></div>
+</div>
+<!-- Popups :: End-->
+
+{% endif %}
+<script>
+// --------------------------------------------------------------------------
+// SETS
+// --------------------------------------------------------------------------
+
+function prostoreSet() {
+
+	$(document).on('click','.js-set-chng-btn', function(e){
+	  var product_id = $(this).attr('data-for');
+	  var set_id = $(this).closest('.js-set-container').attr('data-for');
+	  //var popup = $('.js-popup-package');
+
+	   $('#popup-set-click-content').empty();
+
+		$('#popup-set-click-content').load('index.php?route=extension/module/prostore_set/getvariants&setproduct_id='+product_id+'&set_id='+set_id,function(){
+		});
+
+	});
+
+
+	$(document).on('click','.js-add-toset', function(e){
+	  e.preventDefault();
+	  var old_product_id = $(this).attr("data-for");
+	  var set_id = $(this).closest('ul.js-set-popup').attr("data-for");
+	  var qty = $(this).attr("data-qty");
+	  var elm = $('.js-set-container[data-for = "'+set_id+'"]').find('.js-products-in-set[data-for = "'+old_product_id+'"]'); 
+	  var product_id = $(this).find('.js-set-item-add').attr("data-for");
+	  //var popup = $('.js-popup-package'); 
+	  //var proddata =  $('.set_product_data');
+	  //console.log(elm);
+	  $('.set_product_data').each(function(indx, element){
+
+			if ($(element).attr("data-for") == old_product_id) {
+				$(element).attr("data-for",product_id);
+				$(element).attr("name",'setproducts['+product_id+']');
+				
+			}
+		});
+
+	  elm.empty();
+
+		elm.load('index.php?route=extension/module/prostore_set/getproduct&setproduct_id='+product_id+'&qty='+qty,function(){
+			//fancyPopUp(); lazyLoad();slick('.js-slick-products');
+			initFancybox();
+		});
+
+	  elm.attr("data-for",product_id);
+
+	  setTimeout(function() { $.fancybox.close() }, 1000);
+
+			var datas = $('.setdata-'+set_id+'').serialize();
+			$.ajax({
+				url: 'index.php?route=extension/module/prostore_set/refreshtotal',
+				type: 'post',
+				data: datas,
+				dataType: 'json',
+				beforeSend: function() {
+				},
+				complete: function() {
+				},
+				success: function(json) {
+
+					if (json['success']) {
+						$('.setdata-'+set_id+' .js-set-totalf').html(json['success']['actualprice']);
+						$('.setdata-'+set_id+' .js-set-total').html(json['success']['total']);
+						$('.setdata-'+set_id+' .js-set-discount').html(json['success']['discount']);
+					}
+					
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+				
+			});
+
+	});
+	
+	$(document).on('click', '.js-btn-add-set2cart', function(e) {
+		e.preventDefault();
+		$.ajax({
+			url: 'index.php?route=checkout/cart/setadd',
+			type: 'post',
+			data: $(this).closest('.setdata').serialize(),
+			dataType: 'json',
+			beforeSend: function() {
+
+			},
+			complete: function() {
+			},
+			success: function(json) {
+
+					setTimeout(function () {
+						$('.js-cart-total').html('<span id="cart-total">' + json['total'] + '</span>');
+					}, 100);
+
+					cartExrtaElem(json['total']);
+					
+					if ($('.js-cart-call').length && window.matchMedia('(min-width: 1200px)').matches) {
+						$('.js-cart-call').trigger('click');
+					} else {
+						$('main').prepend($('<div class="alerts-wrapper"><div class="alert alert--green"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text"> ' + json['success'] + ' </p></div></div>'));
+						alertAutoClose();
+					}
+					
+					//sendMetrics('prostore_settocart');
+						
+					$('#cart .header__cart-load').load('index.php?route=common/cart/info .header__cart-offcanvas',function(){
+						hasScrollBar();
+					});
+		
+			}
+
+		});
+		return;
+	});
+
+}
+
+document.addEventListener('DOMContentLoaded', prostoreSet);
+</script>

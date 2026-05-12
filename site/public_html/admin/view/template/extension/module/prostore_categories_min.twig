@@ -1,0 +1,221 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-slideshow" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-slideshow" class="form-horizontal">
+          <div class="form-group required">
+            <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+              {% if (error_name) %} 
+              <div class="text-danger">{{ error_name }}</div>
+              {% endif %} 
+            </div>
+          </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="input-title">Заголовок модуля</label>
+          <div class="col-sm-10">
+            {% for language in languages %} 
+            <div class="input-group"><span class="input-group-addon"><img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" /></span> {% set fieldName = "title" ~ language['language_id'] %} 
+            <input type="text" name="title{{ language['language_id'] }}" value="{{ attribute(titles, fieldName)  is defined  ? attribute(titles, fieldName)  : '' }}" placeholder="Заголовок модуля" id="input-title{{ language['language_id'] }}" class="form-control" />
+            </div>
+            {% endfor %} 
+          </div>    
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="input-status">Тип сетки</label>
+        <div class="col-sm-2">
+          <select name="column" class="form-control">
+            <option value="3" {{ column == '3' ? 'selected="selected"' : '' }}>3 блока в ряд</option>
+            <option value="4" {{ column == '4' ? 'selected="selected"' : '' }}>4 блока в ряд</option>           
+          </select>
+        </div>          
+      </div>  
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+        <div class="col-sm-2">
+          <div class="btn-group on-off" data-toggle="buttons">
+            <label class="btn btn-default btn-on {{ status == '1' ? 'active' : '' }}">
+              <input value="1" type="radio" name="status" id="status-1" autocomplete="off" {{ status == '1' ? 'checked' : '' }}>Вкл.
+            </label>
+            <label class="btn btn-default btn-off {{ status == '0' ? 'active' : '' }}">
+              <input value="0" type="radio" name="status" id="status-0" autocomplete="off" {{ status == '' ? 'checked' : '' }}>Откл.
+            </label>
+          </div>
+        </div>          
+      </div>  
+    <div class="form-group">
+ 
+        {% set prostore_categories_min_row = 0 %} 
+
+              <table id="images{{ language['language_id'] }}" class="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <td class="text-center">Изображение</td>
+                    <td class="text-left">Размер картинки (Ш х В)</td>
+                    <td class="text-left">Категория</td>
+                    <td class="text-left">Цвет блока</td>
+                    <td class="text-left">Сортировка</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% set prostore_categories_min_row = 0 %} 
+                  {% if (categories_min_images is defined) %} 
+                  {% for categories_min_image in categories_min_images %} 
+                  <tr id="image-row-{{ prostore_categories_min_row }}">
+                     <td class="text-center"><a href="" id="thumb-image-{{ prostore_categories_min_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ categories_min_image['thumb'] }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                      <input type="hidden" name="categories_min_image[{{ prostore_categories_min_row }}][image]" value="{{ categories_min_image['image'] }}" id="input-image{{ prostore_categories_min_row }}" />
+                    </td>
+           
+                    <td class="text-left" style="width: 20%;">
+                    <div class="row">
+                    <div class="col-xs-5">
+                    <input type="text" name="categories_min_image[{{ prostore_categories_min_row }}][width]" value="{{ categories_min_image['width'] is defined ? categories_min_image['width'] : '' }}" placeholder="Ширина" class="form-control" />
+                    </div>
+                    <div class="col-xs-2"><span style="line-height: 30px;">x</span></div>
+                    <div class="col-xs-5">
+                    <input type="text" name="categories_min_image[{{ prostore_categories_min_row }}][height]" value="{{ categories_min_image['height'] is defined ? categories_min_image['height'] : '' }}" placeholder="Высота" class="form-control" />
+                    </div>
+                    <div class="col-xs-12" style="display: none;">
+                      <div class="checkbox" style="padding-left: 0;">
+                      <label>
+                        <input name="categories_min_image[{{ prostore_categories_min_row }}][full]" value="{{ categories_min_image['full'] is defined ? 1 : '' }}" type="checkbox" {{ categories_min_image['full'] is defined ? 'checked' : '' }}> Блок в 2 раза шире
+                      </label>
+                      </div>
+                    </div>
+                    </div>
+                    
+                    
+                    </td>
+                    
+                    <td class="text-left">
+                      <input type="text" name="path[{{ prostore_categories_min_row }}]" value="{{ categories_info[rows_category[prostore_categories_min_row]] }}" placeholder="{{ entry_parent }}" class="form-control category_id" />
+                      <input type="hidden" name="category_id[{{ prostore_categories_min_row }}]" value="{{ rows_category[prostore_categories_min_row] }}" />            
+                    </td>
+                            
+                    <td class="text-left">
+                      <input type="text" name="categories_min_image[{{ prostore_categories_min_row }}][background]" value="{{ categories_min_image['background'] is defined ? categories_min_image['background'] : '' }}" placeholder="Цвет блока" class="form-control jscolor" {% if categories_min_image['background'] is defined %} style="background-color: #{{  categories_min_image['background'] }};"{% endif %} />
+                      </td>
+
+                    <td class="text-right" style="width: 10%;">
+                      <input type="text" name="categories_min_image[{{ prostore_categories_min_row }}][sort_order]" value="{{ categories_min_image['sort_order'] is defined ? categories_min_image['sort_order'] : '' }}" placeholder="Сортировка" class="form-control" />
+                    </td>
+                    
+                    <td class="text-left">
+                      <button type="button" onclick="$('#image-row-{{ prostore_categories_min_row }}, .tooltip').remove();" data-toggle="tooltip" title="Удалить" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                    </td>
+                  </tr>
+                    {% set prostore_categories_min_row = prostore_categories_min_row +1 %}
+                  {% endfor %} 
+                  {% endif %} 
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5"></td>
+                    <td class="text-left"><button type="button" onclick="addImage();" data-toggle="tooltip" title="Добавить" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                  </tr>
+                </tfoot>
+              </table>
+ 
+    </div>  
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  <script type="text/javascript"><!--
+  
+var prostore_categories_min_row = {{ prostore_categories_min_row }} ;
+
+function addImage() {
+  html  = '<tr id="image-row-' + prostore_categories_min_row + '">';
+  html += '  <td class="text-center"><a href="" id="thumb-image-' + prostore_categories_min_row + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="categories_min_image[' + prostore_categories_min_row + '][image]" value="" id="input-image-' + prostore_categories_min_row+ '" /></td>'; 
+  
+  html += '  <td class="text-left" style="width: 20%;"><div class="row"><div class="col-xs-5"><input type="text" name="categories_min_image[' + prostore_categories_min_row + '][width]" value="400" placeholder="Ширина" class="form-control" /></div><div class="col-xs-2"><span style="line-height: 30px;">x</span></div><div class="col-xs-5"><input type="text" name="categories_min_image[' + prostore_categories_min_row + '][height]" value="300" placeholder="Высота" class="form-control" /></div><div class="col-xs-12" style="display: none;"><div class="checkbox" style="padding-left: 0;"><label><input name="categories_min_image[' + prostore_categories_min_row + '][full]" value="" type="checkbox"> Блок в 2 раза шире</label></div></div></div></td>'; 
+  
+  html += '  <td class="text-left">'; 
+  html += '  <input type="text" name="path[' + prostore_categories_min_row + ']" value="" placeholder="{{ entry_parent }}" class="form-control category_id" />'; 
+  html += '  <input type="hidden" name="category_id[' + prostore_categories_min_row + ']" value="" />'; 
+  html += '  </td>'; 
+
+  html += '  <td class="text-left"><input type="text" name="categories_min_image[' + prostore_categories_min_row + '][background]" value="" placeholder="Цвет блока" class="form-control jscolor" /></td>'; 
+
+  html += '  <td class="text-right" style="width: 10%;"><input type="text" name="categories_min_image[' + prostore_categories_min_row + '][sort_order]" value="" placeholder="Сортировка" class="form-control" /></td>';
+
+  html += '  <td class="text-left"><button type="button" onclick="$(\'#image-row-' + prostore_categories_min_row  + ', .tooltip\').remove();" data-toggle="tooltip" title="Удалить" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  
+  html += '</tr>';
+  
+  $('#images tbody').append(html);
+  jscolor();
+  prostore_categories_min_row++;
+}
+function jscolor() {
+	$('.jscolor').colorpicker({
+			format:'hex',
+			template: '<div class="colorpicker dropdown-menu">' +
+			'<div class="colorpicker-saturation"><i><b></b></i></div>' +
+			'<div class="colorpicker-hue"><i></i></div>' +
+			'<div class="colorpicker-alpha"><i></i></div>' +
+			'</div>',
+			hexNumberSignPrefix:false
+		}).on('changeColor', function() {
+			$(this).css('background-color', '#' + $(this).colorpicker('getValue', 'ffffff'));
+	});
+}
+$(function() {
+jscolor();
+});
+var input_elem;
+$('body').on('click', '.category_id', function() {
+  $(this).autocomplete({
+    'source': function(request, response) {
+      input_elem = $(this);
+      $.ajax({
+        url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+        dataType: 'json',
+        success: function(json) {
+          json.unshift({
+            category_id: 0,
+            name: '{{ text_none }}'
+          });
+
+          response($.map(json, function(item) {
+            return {
+              label: item['name'],
+              value: item['category_id']
+            }
+          }));
+        }
+      });
+    },
+    'select': function(item) {
+      input_elem.val(item['label']).siblings('input').val(item['value']);
+    }
+  });
+});
+//--></script>
+{{ footer }}

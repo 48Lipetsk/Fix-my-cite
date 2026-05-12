@@ -1,0 +1,694 @@
+<!-- Footer :: Start-->
+<div class="fancybox-is-hidden" id="popupprod">
+	<span class="popup__title">{{ text_prostore_option_required }}</span>
+	<div class="js-sku-view"></div>
+	<button class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth">{{ button_cart }}</button>
+</div>
+				
+{% if buy_click.status %}
+<div class="fancybox-is-hidden popup popup--buy-click" id="popup-buy-click">
+	<span class="popup__title">{{ text_prostore_fast_order }}</span>
+	<div class="popup__form">
+		{{ buyclick_form }}
+		{{ captcha_fo }}
+		<div class="captcha-error"></div>
+		<button class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth js-btn-add-cart-fast quickbuy-send">{{ button_fastorder_sendorder }}</button>
+		<input name="quantity" id="cat_qty" type="hidden"  value="1">
+		<input name="buy-click-type" id="buy-click-type" type="hidden"  value="product">
+		<input name="product_id" id="cat_prod_id" type="hidden"  value="">
+		<input name="redirect"  value="1" class="fast-redirect" type="hidden">
+		{% if text_click_pdata %} 
+		<div class="personal-data">{{ text_click_pdata }}</div>
+		{% endif %} 
+	</div>
+</div>
+{% endif %}
+
+
+{% if (text_prostore_cookieagry) %} 
+	{% if (not islogged and not cookieagry) %} 
+			<div class="cookieagry" style="display: block;">
+				<div class="cookieagry-alert">
+					<p class="cookieagry__text">{{ text_prostore_cookieagry }}</p>
+					<div class="cookieagry__action">
+						<a class="ui-btn ui-btn--38 ui-btn--white" id="cookieagry" href="#">{{ text_prostore_cookie_required_btn }}</a>
+					</div>
+				</div>	
+			</div>
+	{% endif %} 
+{% endif %} 
+
+{% if (footer_type == 1 or footer_type == 2) %} 
+<!-- Footer v1 or v2 :: Start-->
+<footer class="footer footer--v{{ footer_type }}">
+	<div class="container-fluid">
+		<div class="footer__desc is-xl-hidden">
+			{% if (footer_t_logo or footer_logo) %}
+				{% if (footer_logo) %} 
+					<a class="footer__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+				{% else %} 
+					<a class="footer__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+				{% endif %} 
+			{% endif %}
+			<p class="footer__copyright">{{ footer_text }}
+				<br> {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}
+			</p>
+		</div>
+		{% if (footer_navs is not empty) %}
+		<div class="footer__nav">
+			<div class="row">
+				{% for key,footer_nav in footer_navs %}
+				<div class="col-5 col-xl is-xl-visible">
+					{% if (footer_nav.language[language_id].name) %}
+					<strong class="footer__nav-title">{{ footer_nav.language[language_id].name }}</strong>
+					{% endif %}
+					{% if (footer_nav.settype) %}
+						{{ footer_nav.type[footer_nav.settype].links.html }}
+					{% else %}
+					<ul class="footer__nav-menu">
+						{% for id,link in footer_nav.type[footer_nav.settype].links %}
+						<li>
+							<a class="footer__nav-link" href="{{ link }}" {% if (top_links[id].target is defined) %}target="{{ top_links[id].target }}" {% endif %}>{{ footer_nav.type[footer_nav.settype].names[id] is defined ? footer_nav.type[footer_nav.settype].names[id] : '' }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+				{% endfor %}
+				<div class="col-12 col-xl-auto">
+					<div class="footer__support">
+						<strong class="footer__support-title">{{ text_prostore_support }}</strong>
+						{% if prostore_phones %}
+						<ul class="footer__support-phones">
+							{% for key, prostore_phone in prostore_phones %}
+							<li>
+								<a class="footer__support-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }}</a>
+							</li>
+							{% endfor %}
+							{% if (callback_status) %}
+							<li>
+								<a class="footer__support-link footer__support-link--callback" href="#callback-footer" data-fancybox>{{ text_header_callback }}</a>
+								<div class="fancybox-is-hidden popup" id="callback-footer">{{ callback }}</div>
+							</li>
+							{% endif %}
+						</ul>
+						{% endif %}
+						{% if config_open %}
+						<p class="footer__support-worktime">
+							{{ config_open }}
+						</p>
+						{% endif %}
+						{% if messenger_status and messenger_pos == 'footer' %}
+						{% if messenger_navs is defined and messenger_navs is not null %}
+						<dl class="footer__support-dl">
+							<dt>{{ text_prostore_support_mess }}</dt>
+							<dd>
+								<ul class="footer__support-social">
+									{% for key,messenger_nav in messenger_navs %}
+									<li>
+										<a class="footer__support-link" target="_blank" rel="nofollow" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}">
+											<svg class="icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+											</svg>
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</dd>
+						</dl>
+						{% endif %}
+						{% endif %}
+						{% if soc_stat %}
+						{% if social_navs is defined and social_navs is not null %}
+						<dl class="footer__support-dl">
+							<dt>{{ text_social_navs }}</dt>
+							<dd>
+								<ul class="footer__social-social">
+									{% for social_nav in social_navs %}
+									<li>
+										<a class="footer__social-link" target="{{ social_nav.attr }}" rel="nofollow" href="{{ social_nav.link }}">
+											<img src="catalog/view/theme/prostore/images/icons/social/{{ (social_links[social_nav.settype])|lower|replace({' ': '_'}) }}.svg" alt="{{ social_nav.language[language_id].name }}" title="{{ social_nav.language[language_id].name }}" width="32" height="32">
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</dd>
+						</dl>
+						{% endif %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		<div class="footer__bottom {% if messenger_status %}footer__bottom--{{ messenger_pos }}{% endif %}">
+			{% if (footer_t_logo or footer_logo) %}
+				{% if (footer_logo) %} 
+					<a class="footer__logo is-xl-visible" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+				{% else %} 
+					<a class="footer__logo is-xl-visible" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+				{% endif %} 
+			{% endif %}
+			{% if (footer_text or footer_copyright) %}
+			<p class="footer__copyright is-xl-visible">{{ footer_text }}{% if (footer_copyright) %}, {{ footer_copyright }} {% endif %}</p>
+			{% endif %}
+			{% if (payment_icons is not empty) %}
+			<ul class="footer__payments">
+				{% for key,payment_icon in payment_icons %}
+				<li>
+					{% if (payment_icon.link[language_id]) %}
+					<a class="footer__payments-link" href="{{ payment_icon.link[language_id] }}" rel="nofollow" target="{{ payment_icon.attr }}"><img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24"></a>
+					{% else %}
+					<img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24">
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+</footer>
+<!-- Footer v1 or v2 :: End-->
+{% endif %} 
+{% if (footer_type == 3 or footer_type == 4) %} 
+<!-- Footer v3 or v4 :: Start-->
+<footer class="footer footer--v{{ footer_type }}">
+	<div class="container-fluid">
+		<div class="footer__desc is-xl-hidden">
+			{% if (footer_t_logo or footer_logo) %}
+				{% if (footer_logo) %} 
+					<a class="footer__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+				{% else %} 
+					<a class="footer__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+				{% endif %} 
+			{% endif %}
+			<p class="footer__copyright">{{ footer_text }}
+				<br> {% if (footer_copyright) %} <br> {{ footer_copyright }} {% endif %}
+			</p>
+		</div>
+		<div class="footer__nav">
+			<div class="row">
+				{% if (footer_navs is not empty) %}
+				{% for key,footer_nav in footer_navs %}
+				<div class="col-5 col-md-4 col-xl is-xl-visible">
+					{% if (footer_nav.language[language_id].name) %}
+					<strong class="footer__nav-title">{{ footer_nav.language[language_id].name }}</strong>
+					{% endif %}
+					{% if (footer_nav.settype) %}
+						{{ footer_nav.type[footer_nav.settype].links.html }}
+					{% else %}
+					<ul class="footer__nav-menu">
+						{% for id,link in footer_nav.type[footer_nav.settype].links %}
+						<li>
+							<a class="footer__nav-link" href="{{ link }}" {% if (top_links[id].target is defined) %}target="{{ top_links[id].target }}" {% endif %}>{{ footer_nav.type[footer_nav.settype].names[id] is defined ? footer_nav.type[footer_nav.settype].names[id] : '' }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+				{% endfor %}
+				{% endif %}
+				<div class="col-12 col-md-4 col-xl-auto">
+					<div class="footer__support">
+						<strong class="footer__support-title">{{ text_prostore_support }}</strong>
+						{% if prostore_phones %}
+						<ul class="footer__support-phones">
+							{% for key, prostore_phone in prostore_phones %}
+							<li>
+								<a class="footer__support-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }}</a>
+							</li>
+							{% endfor %}
+							{% if (callback_status) %}
+							<li>
+								<a class="footer__support-link footer__support-link--callback" href="#callback-footer" data-fancybox>{{ text_header_callback }}</a>
+								<div class="fancybox-is-hidden popup" id="callback-footer">{{ callback }}</div>
+							</li>
+							{% endif %}
+						</ul>
+						{% endif %}
+						{% if config_open %}
+						<p class="footer__support-worktime">
+							{{ config_open }}
+						</p>
+						{% endif %}
+						<dl class="footer__support-dl">
+							{% if messenger_status and messenger_pos == 'footer' %}
+							{% if messenger_navs is defined and messenger_navs is not null %}
+							<dt>{{ text_prostore_support_mess }}</dt>
+							<dd>
+								<ul class="footer__support-social">
+									{% for key,messenger_nav in messenger_navs %}
+									<li>
+										<a class="footer__support-link" target="_blank" rel="nofollow" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}">
+											<svg class="icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+											</svg>
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</dd>
+							{% endif %}
+							{% endif %}
+							{% if config_open %}
+							<dt>{{ text_prostore_email }}</dt>
+							<dd>{{ shop_email }}</dd>
+							{% endif %}
+							{% if config_address %}
+							<dt>{{ text_prostore_address }}</dt>
+							<dd>{{ config_address }}</dd>
+							{% endif %}
+							{% if soc_stat %}
+							{% if social_navs is defined and social_navs is not null %}
+							<dt>{{ text_social_navs }}</dt>
+							<dd>
+								<ul class="footer__social-social">
+									{% for social_nav in social_navs %}
+									<li>
+										<a class="footer__social-link" target="{{ social_nav.attr }}" rel="nofollow" href="{{ social_nav.link }}">
+											<img src="catalog/view/theme/prostore/images/icons/social/{{ (social_links[social_nav.settype])|lower|replace({' ': '_'}) }}.svg" alt="{{ social_nav.language[language_id].name }}" title="{{ social_nav.language[language_id].name }}" width="32" height="32">
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</dd>
+							{% endif %}
+							{% endif %}
+						</dl>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		{% if subscribe_status %}
+		<div class="footer__subsc">
+			<div class="row">
+				{% if subscribe_email_logo %}
+				<div class="col-xl-3 is-xl-visible">
+					<div class="footer__subsc-image">
+						<img src="{{ subscribe_email_logo }}" alt="{{ subscribe_title }}" loading="lazy">
+					</div>
+				</div>
+				{% endif %}
+				<div class="col-xl-6">
+					<div class="footer__subsc-form">
+							<div class="ui-subsc">
+								<label class="ui-label">{{ subscribe_title }}</label>
+								{% if subscribe_subtitle %}
+								<p class="ui-caption is-xl-hidden">{{ subscribe_subtitle }}</p>
+								{% endif %}
+								<div class="ui-group">
+									<input class="ui-input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+									<button type="button" class="ui-btn ui-btn--primary js-subscribe-btn">{{ text_prostore_subscribe_btn }} <svg class="icon-subsc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-subsc"></use>
+										</svg>
+									</button>
+								</div>
+								{% if text_prostore_pdata %}
+								<span class="ui-check__text">{{ text_prostore_pdata }}</span>
+								{% endif %}
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		<div class="footer__bottom {% if messenger_status %}footer__bottom--{{ messenger_pos }}{% endif %}">
+			{% if (footer_t_logo or footer_logo) %}
+				{% if (footer_logo) %} 
+					<a class="footer__logo is-xl-visible" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+				{% else %} 
+					<a class="footer__logo is-xl-visible" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+				{% endif %} 
+			{% endif %}
+			{% if (footer_text or footer_copyright) %}
+			<p class="footer__copyright is-xl-visible">{{ footer_text }}{% if (footer_copyright) %}, {{ footer_copyright }} {% endif %}</p>
+			{% endif %}
+			{% if (payment_icons is not empty) %}
+			<ul class="footer__payments">
+				{% for key,payment_icon in payment_icons %}
+				<li>
+					{% if (payment_icon.link[language_id]) %}
+					<a class="footer__payments-link" href="{{ payment_icon.link[language_id] }}" rel="nofollow" target="{{ payment_icon.attr }}"><img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24"></a>
+					{% else %}
+					<img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24">
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+</footer>
+<!-- Footer v3 or v4 :: End-->
+{% endif %} 
+{% if (footer_type == 5) %} 
+<!-- Footer v5 :: Start-->
+<footer class="footer footer--v5">
+	<div class="container-fluid">
+		<div class="footer__middle">
+			<div class="row">
+				<div class="col-xl-4 is-xl-visible">
+				{% if (footer_t_logo or footer_logo) %}
+					{% if (footer_logo) %} 
+						<a class="footer__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+					{% else %} 
+						<a class="footer__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+					{% endif %} 
+				{% endif %}
+					<p class="footer__caption">{{ footer_text }}</p>
+				</div>
+				{% if subscribe_status %}
+				<div class="col-xl-5">
+					<div class="footer__subsc">
+						<div class="footer__subsc-form">
+								<div class="ui-subsc">
+									<label class="ui-label">{{ subscribe_title }}</label>
+									{% if subscribe_subtitle %}
+									<p class="ui-caption is-xl-hidden">{{ subscribe_subtitle }}</p>
+									{% endif %}
+									<div class="ui-group">
+										<input class="ui-input" name="emailsubscr" type="email" value="" placeholder="{{ text_footer_subscribe_email }}">
+										<button type="button" class="ui-btn ui-btn--primary js-subscribe-btn">{{ text_prostore_subscribe_btn }} <svg class="icon-subsc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-subsc"></use>
+											</svg>
+										</button>
+									</div>
+									{% if text_prostore_pdata %}
+									<span class="ui-check__text">{{ text_prostore_pdata }}</span>
+									{% endif %}
+								</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				<div class="col-xl-3">
+					<div class="footer__support">
+						<div class="row">
+							<div class="col-xl-auto">
+								<span class="footer__support-title">{{ text_prostore_support }}</span>
+							</div>
+							<div class="col-xl">
+								{% if prostore_phones %}
+								<ul class="footer__support-phones">
+									{% for key, prostore_phone in prostore_phones %}
+									<li>
+										<a class="footer__support-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }}</a>
+									</li>
+									{% endfor %}
+									{% if (callback_status) %}
+									<li>
+										<a class="footer__support-link footer__support-link--callback" href="#callback-footer" data-fancybox>{{ text_header_callback }}</a>
+										<div class="fancybox-is-hidden popup" id="callback-footer">{{ callback }}</div>
+									</li>
+									{% endif %}
+								</ul>
+								{% endif %}
+								{% if config_open %}
+								<p class="footer__support-worktime">
+									{{ config_open }}
+								</p>
+								{% endif %}
+								{% if messenger_status and messenger_pos == 'footer' %}
+								{% if messenger_navs is defined and messenger_navs is not null %}
+								<ul class="footer__support-social">
+									{% for key,messenger_nav in messenger_navs %}
+									<li>
+										<a class="footer__support-link" target="_blank" rel="nofollow" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}">
+											<svg class="icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+											</svg>
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+								{% endif %}
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer__bottom {% if messenger_status %}footer__bottom--{{ messenger_pos }}{% endif %}">
+			{% if (footer_t_logo or footer_logo) %}
+				{% if (footer_logo) %} 
+					<a class="footer__logo is-xl-hidden" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+				{% else %} 
+					<a class="footer__logo is-xl-hidden" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+				{% endif %} 
+			{% endif %}
+			{% if footer_copyright %}
+			<p class="footer__copyright is-xl-visible">{{ footer_copyright }}</p>
+			{% endif %}
+			{% if (payment_icons is not empty) %}
+			<ul class="footer__payments">
+				{% for key,payment_icon in payment_icons %}
+				<li>
+					{% if (payment_icon.link[language_id]) %}
+					<a class="footer__payments-link" href="{{ payment_icon.link[language_id] }}" rel="nofollow" target="{{ payment_icon.attr }}"><img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24"></a>
+					{% else %}
+					<img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24">
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+</footer>
+	  <!-- Footer v5 :: End-->
+{% endif %} 
+{% if (footer_type == 6) %} 
+<!-- Footer v6 :: Start-->
+<footer class="footer footer--v6">
+	<div class="container-fluid">
+		<div class="footer__support is-xl-hidden">
+			<span class="footer__support-title">{{ text_prostore_support }}</span>
+			{% if prostore_phones %}
+			<ul class="footer__support-phones">
+				{% for key, prostore_phone in prostore_phones %}
+				<li>
+					<a class="footer__support-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }}</a>
+				</li>
+				{% endfor %}
+				{% if (callback_status) %}
+				<li>
+					<a class="footer__support-link" href="#callback-footer" data-fancybox>{{ text_header_callback }}</a>
+					<div class="fancybox-is-hidden popup" id="callback-footer">{{ callback }}</div>
+				</li>
+				{% endif %}
+			</ul>
+			{% endif %}
+			{% if config_open %}
+			<p class="footer__support-worktime">
+				{{ config_open }}
+			</p>
+			{% endif %}
+			{% if messenger_status and messenger_pos == 'footer' %}
+			{% if messenger_navs is defined and messenger_navs is not null %}
+			<ul class="footer__support-social">
+				{% for key,messenger_nav in messenger_navs %}
+				<li>
+					<a class="footer__support-link" target="_blank" rel="nofollow" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}">
+						<svg class="icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+						</svg>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			{% endif %}
+		</div>
+		<div class="footer__bottom {% if messenger_status %}footer__bottom--{{ messenger_pos }}{% endif %}">
+			{% if (footer_t_logo or footer_logo) %}
+				{% if (footer_logo) %} 
+					<a class="footer__logo is-xl-visible" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}><img src="{{ footer_logo }}" title="{{ name }}" alt="{{ name }}"></a>
+				{% else %} 
+					<a class="footer__logo is-xl-visible" {{ home == og_url ? '' : 'href="' ~ home ~'"' }}>{{ text_logo }}</a>
+				{% endif %} 
+			{% endif %}
+			{% if (footer_text or footer_copyright) %}
+			<p class="footer__copyright is-xl-visible">{{ footer_text }}{% if (footer_copyright) %}, {{ footer_copyright }} {% endif %}</p>
+			{% endif %}
+			{% if prostore_phones %}
+			<div class="footer__call is-xl-visible">
+				<a href="tel:{{ prostore_phones_main[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}" class="footer__call-btn">
+					<mark>{{ text_prostore_support }}</mark>{{ prostore_phones_main[language_id] }}<svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use>
+					</svg>
+				</a>
+				<div class="footer__call-offcanvas">
+					<ul class="footer__call-menu">
+						{% for key, prostore_phone in prostore_phones %}
+						<li>
+							<a class="footer__call-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}"> {{ prostore_phone[language_id] }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			{% endif %}
+			{% if (payment_icons is not empty) %}
+			<ul class="footer__payments">
+				{% for key,payment_icon in payment_icons %}
+				<li>
+					{% if (payment_icon.link[language_id]) %}
+					<a class="footer__payments-link" href="{{ payment_icon.link[language_id] }}" rel="nofollow" target="{{ payment_icon.attr }}"><img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24"></a>
+					{% else %}
+					<img src="{{ payment_icon.thumb }}" alt="{{ payment_icon.description[language_id].name }}" title="{{ payment_icon.description[language_id].name }}" width="34" height="24">
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+</footer>
+<!-- Footer v6 :: End-->
+{% endif %} 
+{% if (footer_type == 'maintenance') %} 
+<!-- Footer maintenance :: End-->
+	</div><!-- .container-fluid :: End-->
+</div><!-- .tech :: End-->
+<!-- Footer maintenance :: End-->
+{% endif %} 
+{% if (footer_type == 'checkout') %} 
+<!-- Footer Checkout :: Start-->
+<footer class="footer footer--checkout">
+	<div class="container-fluid">
+		<div class="footer__checkout">
+			<div class="footer__support is-xl-hidden">
+				<span class="footer__support-title">{{ text_prostore_support }}</span>
+				{% if prostore_phones %}
+				<ul class="footer__support-phones">
+					{% for key, prostore_phone in prostore_phones %}
+					<li>
+						<a class="footer__support-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }}</a>
+					</li>
+					{% endfor %}
+					{% if (callback_status) %}
+					<li>
+						<a class="footer__support-link" href="#callback-footer" data-fancybox>{{ text_header_callback }}</a>
+						<div class="fancybox-is-hidden popup" id="callback-footer">{{ callback }}</div>
+					</li>
+					{% endif %}
+				</ul>
+				{% endif %}
+				{% if config_open %}
+				<p class="footer__support-worktime">
+					{{ config_open }}
+				</p>
+				{% endif %}
+				{% if messenger_status and messenger_pos == 'footer' %}
+				{% if messenger_navs is defined and messenger_navs is not null %}
+				<ul class="footer__support-social">
+					{% for key,messenger_nav in messenger_navs %}
+					<li>
+						<a class="footer__support-link" target="_blank" rel="nofollow" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}">
+							<svg class="icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+							</svg>
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+				{% endif %}
+			</div>
+			<ul class="footer__copyright">
+				{% if footer_copyright %}
+				<li>{{ footer_copyright }}</li>
+				{% endif %}
+				{% if checkout_info_title %}
+				<li>
+					<a class="footer__copyright-link" href="{{ checkout_info_link }}">{{ checkout_info_title }}</a>
+				</li>
+				{% endif %}
+			</ul>
+			<div class="footer__call is-xl-visible">
+				<a href="tel:{{ prostore_phones_main[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}" class="footer__call-btn">
+					<mark>{{ text_prostore_support }}</mark>{{ prostore_phones_main[language_id] }}<svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use>
+					</svg>
+				</a>
+				<div class="footer__call-offcanvas">
+					<ul class="footer__call-menu">
+						{% for key, prostore_phone in prostore_phones %}
+						<li>
+							<a class="footer__call-link" rel="nofollow" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}"> {{ prostore_phone[language_id] }}</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer><!-- Footer Checkout :: End-->
+{% endif %} 
+
+<!-- Footer :: End-->
+</div><!-- .app :: End-->
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+
+{% if (js_footorhead == 2) %} 
+<!-- Scripts :: Start-->
+    <!--<script src="catalog/view/javascript/prostore/plugins.min.js{{ '?v'~version }}"></script>-->
+	<script src="catalog/view/javascript/prostore/plugins/jquery.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/jquery.fancybox.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/swiper.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/readmore.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/jquery.countdown.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/css-vars-ponyfill.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/sticky-kit.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/priority-nav.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/matchMedia.min.js{{ '?v'~version }}"></script>
+
+	{{ fontawesome == 1 ? '<script defer src="catalog/view/javascript/prostore/fontawesome/js/all.min.js?v' ~ version ~ '"></script>' : '' }} 
+	<script src="catalog/view/javascript/prostore/bootstrap/{{ bootstrap_ver ? '5.1.3' : '3.3.5' }}/bootstrap.min.js{{ '?v'~version }}"></script>
+	{% if bootstrap_ver %}<script src="catalog/view/javascript/prostore/bootstrap/5.1.3/bootstrap.bundle.min.js{{ '?v'~version }}"></script>{% endif %}
+	<script src="catalog/view/javascript/prostore/app.min.js{{ '?v'~version }}"></script>
+	{% if custom_js %} 
+	<script>{{ custom_js }}</script>
+	{% endif %}
+<!-- Scripts :: End-->
+{% endif %}
+
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "{{ name }}",
+  {% if footer_logo %}
+  "image": "{{ footer_logo }}",
+  {% endif %}
+  {% if telephone %}
+  "telephone": "{{ telephone }}",
+  {% endif %}
+  "email": "{{ shop_email }}",
+  "priceRange": "{{ currency }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ address_schema }}",
+    {% if zone_name %}
+    "addressRegion": "{{ zone_name }}",
+    {% endif %}
+    "addressCountry": "{{ country_name }}"
+  },
+  {% if geocode %}
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "{{ latitude }}",
+    "longitude": "{{ longitude }}"
+  },
+  {% endif %}
+  {% if meta_description %}
+  "description": "{{ meta_description }}",
+  {% endif %}
+  "url": "{{ home }}"
+}
+</script>
+<!-- Schema Org :: End-->
+{% endif %}
+
+{# </body></html> #}

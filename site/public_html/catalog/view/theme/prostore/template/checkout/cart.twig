@@ -1,0 +1,248 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Alerts :: Start-->
+<div class="alerts-wrapper">
+	{% if attention %}
+	<div class="alert alert--yellow">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ attention }}</p>
+	</div>
+	{% endif %}
+	{% if success %}
+	<div class="alert alert--green">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ success }}</p>
+	</div>
+	{% endif %}
+	{% if error_warning %}
+	<div class="alert alert--red">
+		<button class="alert__close">
+			<svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use>
+			</svg>
+		</button>
+		<p class="alert__text">{{ error_warning }}</p>
+	</div>
+	{% endif %}
+</div><!-- Alerts :: End-->
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}{% if weight %} {{ ' (' ~ weight ~ ')' }} {% endif %}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+			<!-- Cart :: Start-->
+			<div class="cart">
+				<span class="h2 cart__title">{{ text_prostore_my_cart }}</span>
+				<div class="cart__wrapper">
+					<div class="cart__content">
+						<ul class="cart__list">
+							{% for product in products %}
+							<li>
+								<div class="cart__item">
+									{% if product.thumb %}
+									<a href="{{ product.href }}" class="cart__item-image">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}">
+									</a>
+									{% endif %}
+									<div class="cart__item-desc">
+										<span class="cart__item-id">{{ product.model }}</span>
+										<a href="{{ product.href }}" class="cart__item-title{% if not product.stock %} cart__item-title--out-of-stock{% endif %}">{{ product.name }}{% if not product.stock %} ***{% endif %}</a>
+										{% if (product.option or product.reward or product.recurring) %}
+											{% if product.option %}
+											<p class="cart__item-text">
+											{% for option in product.option %}
+											{{ option.name }}: {{ option.value }}{% if (i + 1 < product.option|length) %}, {% endif %}
+											{% endfor %}
+											</p>
+											{% endif %}
+											<p class="cart__item-text">
+											{% if product.reward %} 
+												{{ text_prostore_reward }}: {{ product.reward_num }}
+											{% endif %}
+											{% if product.recurring %} 
+												{{ text_recurring_item }}: {{ product.recurring }}
+											{% endif %}
+										{% endif %}
+										</p>
+									</div>
+									<div class="cart__item-number">
+										<div class="ui-number">
+											<input class="ui-number__input" type="number" name="quantity[{{ product.cart_id }}]" min="{% if product.minimum > 1 %}{{ product.minimum }}{% else %}0{% endif %}" max="9999" value="{{ product.quantity }}">
+											<button class="ui-number__decrease">
+												<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+												</svg>
+											</button>
+											<button class="ui-number__increase">
+												<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+												</svg>
+											</button>
+										</div>
+									</div>
+									<div class="cart__item-price">
+										{{ product.total }}
+										<small class="cart__item-price-piece">{{ product.price }} / {{ text_prostore_cart_quantity }}</small>
+									</div>
+									<div class="cart__item-action js-action">
+										<button class="cart__item-action-toggle js-action-toggle">
+											<svg class="icon-dots"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-dots"></use>
+											</svg>
+										</button>
+										<div class="cart__item-action-offcanvas">
+											<ul class="cart__item-action-menu">
+												<li>
+													<button type="button" class="cart__item-action-link" onclick="wishlist.add('{{ product.product_id }}');">{{ button_wishlist }}</button>
+												</li>
+												<li>
+													<button type="button" class="cart__item-action-link" onclick="cart.remove('{{ product.cart_id }}');">{{ button_remove }}</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+							{% for voucher in vouchers %}
+							<li>
+								<div class="cart__item" style="padding-left: 2rem;">
+									<div class="cart__item-desc">
+										<span class="cart__item-title">{{ voucher.description }}</span>
+									</div>
+									<div class="cart__item-number">
+										<div class="ui-number">
+											<input class="ui-number__input" type="number" min="1" max="1" value="1" disabled>
+											<button class="ui-number__decrease" disabled>
+												<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+												</svg>
+											</button>
+											<button class="ui-number__increase" disabled>
+												<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+												</svg>
+											</button>
+										</div>
+									</div>
+									<div class="cart__item-price">
+										{{ voucher.amount }}
+										<small class="cart__item-price-piece">{{ voucher.amount }} / {{ text_prostore_cart_quantity }}</small>
+									</div>
+									<div class="cart__item-action js-action">
+										<button class="cart__item-action-toggle js-action-toggle">
+											<svg class="icon-dots"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-dots"></use>
+											</svg>
+										</button>
+										<div class="cart__item-action-offcanvas">
+											<ul class="cart__item-action-menu">
+												<li>
+													<button type="button" class="cart__item-action-link" onclick="voucher.remove('{{ voucher.key }}');">{{ button_remove }}</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+					<div class="cart__sidebar">
+						<div class="cart__data">
+							<span class="cart__data-title">{{ text_prostore_my_cart_1 }}</span>
+							<table class="cart__data-table">
+								<tbody>
+									<tr>
+										<td>{{ text_prostore_my_cart_prod }} <mark>{{ prostore_cart_count }}</mark>
+										</td>
+										<td class="text-right">{{ prostore_cart_total }}</td>
+									</tr>
+									{% for i,total in totals %}
+									{% if (i + 1 < totals|length) %}
+									<tr>
+										<td class="{% if total.value < 0 %}text-red{% endif %}">{{ total.title }}</td>
+										 <td class="text-right {% if total.value < 0 %}text-red{% endif %}">{{ total.text }}</td>
+									</tr>
+									{% endif %}
+									{% endfor %}
+								</tbody>
+								<tfoot>
+									{% for i,total in totals %}
+									{% if not (i + 1 < totals|length) %}
+									<tr>
+										<th>{{ total.title }}</th>
+										<th class="text-right">{{ total.text }}</th>
+									</tr>
+									{% endif %}
+									{% endfor %}
+								</tfoot>
+							</table>
+						</div>
+					{% for module in modules %} 
+					{{ module }}
+					{% endfor %}
+						{% if buy_click.status %}
+						<div class="cart__quick">
+							<div class="cart__quick-action">
+								<a href="#popup-buy-click-cc" data-typefrom="cart-popup" data-for="" class="ui-btn ui-btn--grey ui-btn--fullwidth js-fancy-popup-cart" data-fancybox>{{ text_prostore_fast_order }}</a>
+							</div>
+							<p class="cart__quick-text">{{ text_prostore_cart_quick_text }}</p>
+						</div>
+						{% endif %}
+						<div class="cart__action">
+							<a class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth" href="{{ checkout }}">{{ button_checkout }}</a>
+						</div>
+					</div>
+				</div>
+			</div><!-- Cart :: End-->
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+<script>
+if ( $('.cart__code--voucher').length && $('.cart__code--coupon').length ) {
+	$('.cart__code-action').show();
+} else {
+	$('.cart__code--voucher').show();
+	
+}
+if($('.alerts-wrapper .alert--green').length >0 ){
+	alertAutoClose();
+}
+$(document).on('click', '.cart__code--coupon .cart__code-action', function (event) {
+	event.preventDefault();
+	$('.cart__code--coupon').hide();
+	$('.cart__code--voucher').show();
+});
+$(document).on('click', '.cart__code--voucher .cart__code-action', function (event) {
+	event.preventDefault();
+	$('.cart__code--coupon').show();
+	$('.cart__code--voucher').hide();
+});
+</script>
+</body></html>

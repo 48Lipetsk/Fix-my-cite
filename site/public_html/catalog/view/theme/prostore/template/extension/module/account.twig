@@ -1,0 +1,122 @@
+<div class="categories-aside categories-aside--nav">
+	<div class="settings">
+		<div class="is-xl-hidden">
+			<button class="ui-btn ui-btn--46 ui-btn--white js-categories-toggle">{{ text_prostore_menu }}<svg class="icon-catalog"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-catalog"></use>
+				</svg>
+			</button>
+		</div>
+	</div>
+	<div class="categories-aside__offcanvas">
+		<div class="categories-aside__offcanvas-in">
+		{% if logged %}
+		<span class="h2 categories-aside__title">{{ account_name }}</span>
+		{% endif %}
+			<ul class="categories-aside__menu">
+				<li>
+					<a class="categories-aside__link" href="{{ account }}">{{ text_prostore_account }}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+						</svg></span>
+					</a>
+					<div class="categories-aside__dropdown">
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ text_prostore_account }}
+						</span>
+						<ul class="categories-aside__submenu">
+							{% if not logged %}
+							<li><a class="categories-aside__sublink" href="{{ login }}">{{ text_login }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ register }}">{{ text_register }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ forgotten }}">{{ text_forgotten }}</a></li>
+							{% endif %}
+							<li><a class="categories-aside__sublink" href="{{ account }}">{{ text_account }}</a></li>
+							{% if logged %}
+							<li><a class="categories-aside__sublink" href="{{ edit }}">{{ text_edit }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ password }}">{{ text_password }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ address }}">{{ text_address }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</li>
+				{% if credit_cards %}
+				<li>
+					<a class="categories-aside__link" href="#">{{ text_credit_card }}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+						</svg></span>
+					</a>
+					<div class="categories-aside__dropdown">
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ text_credit_card }}
+						</span>
+						<ul class="categories-aside__submenu">
+							{% for credit_card in credit_cards %}
+							<li><a class="categories-aside__sublink" href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</li>
+				{% endif %}
+				<li>
+					<a class="categories-aside__link" href="{{ order }}">{{ text_my_orders }}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+						</svg></span>
+					</a>
+					<div class="categories-aside__dropdown">
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ text_my_orders }}
+						</span>
+						<ul class="categories-aside__submenu">
+							<li><a class="categories-aside__sublink" href="{{ order }}">{{ text_order }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ download }}">{{ text_download }}</a></li>
+							{% if reward %}
+							<li><a class="categories-aside__sublink" href="{{ reward }}">{{ text_reward }} {{ total_reward }}</a></li>
+							{% endif %}
+							<li><a class="categories-aside__sublink" href="{{ return }}">{{ text_return }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ transaction }}">{{ text_transaction }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ recurring }}">{{ text_recurring }}</a></li>
+						   
+						</ul>
+					</div>
+				</li>
+				<li>
+					<a class="categories-aside__link" href="{{ affiliate }}">{{ text_my_affiliate }}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+						</svg></span>
+					</a>
+					<div class="categories-aside__dropdown">
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ text_my_affiliate }}
+						</span>
+						<ul class="categories-aside__submenu">
+							{% if not tracking %}
+							<li><a class="categories-aside__sublink" href="{{ affiliate }}">{{ text_affiliate_add }}</a></li>
+							{% else %}
+							<li><a class="categories-aside__sublink" href="{{ affiliate }}">{{ text_affiliate_edit }}</a></li>
+							<li><a class="categories-aside__sublink" href="{{ tracking }}">{{ text_tracking }}</a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</li>
+				<li>
+					<a class="categories-aside__link" href="{{ newsletter }}">{{ text_my_newsletter }}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+						</svg></span>
+					</a>
+					<div class="categories-aside__dropdown">
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ text_my_newsletter }}
+						</span>
+						<ul class="categories-aside__submenu">
+							<li><a class="categories-aside__sublink" href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+						</ul>
+					</div>
+				</li>
+				{% if logged %}
+				<li>
+					<a class="categories-aside__link" href="{{ logout }}">{{ text_logout }}</a>
+				</li>
+				{% endif %}
+			</ul>
+		</div>
+		<button class="categories-aside__close">{{ text_prostore_menu_close }}</button>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<div class="personal__sidebar">
+	<nav class="personal__nav">
+		<span class="personal__nav-title">{{ heading_title }}</span>
+		<ul class="personal__nav-menu">
+			{% for information in informations %}
+			<li>
+				<a class="personal__nav-link" href="{{ information.href }}">{{ information.title }}</a>
+			</li>
+			{% endfor %}
+			<li>
+				<a class="personal__nav-link" href="{{ contact }}">{{ text_contact }}</a>
+			</li>
+			<li>
+				<a class="personal__nav-link" href="{{ sitemap }}">{{ text_sitemap }}</a>
+			</li>
+		</ul>
+	</nav>
+</div>

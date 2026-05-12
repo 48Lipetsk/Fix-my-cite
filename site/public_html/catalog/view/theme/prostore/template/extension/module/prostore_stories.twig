@@ -1,0 +1,138 @@
+{% if (banners is not empty) %}
+<!-- Stories :: Start-->
+<div class="stories-features">
+	<div class="container-fluid">
+		<span class="h2 stories-features__title">{{ heading_title }}</span>
+		<div class="stories-features__swiper">
+			<div class="swiper-container swiper-stories-features js-swiper-stories-features">
+				<div class="swiper-wrapper">
+					{% for key,banner in banners %}
+						{% if banner.thumb is not empty %}
+						<div class="swiper-slide">
+							<a class="stories-features__item {{ banner.isviewed == 1 ? 'is-viewed' : '' }}" href="#popup-stories-{{ module }}-{{ module_id }}" data-fancybox data-module_id="{{ module_id }}" data-fancybox-index="{{ key }}">
+								<div class="stories-features__item-image">
+									<img src="{{ banner.thumb }}" alt="[Alt]" width="{{ width }}" height="{{ height }}" loading="lazy">
+								</div>
+							</a>
+						</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+				<div class="swiper-scrollbar js-swiper-stories-features-scrollbar"></div>
+			</div>
+		</div>
+	</div>
+</div><!-- Stories :: End-->
+<!-- Stories Popup :: Start-->
+<div class="fancybox-is-hidden popup popup--stories" id="popup-stories-{{ module }}-{{ module_id }}"></div>
+<!-- Stories Popup :: End-->
+<script>
+function prostoreStories() {
+	$(document).on('click','.stories-features__item', function(e){
+
+	var gall_id = $(this).attr('href');
+	var module_id = $(this).attr('data-module_id');
+	var index = $(this).attr('data-fancybox-index');
+
+	$(this).addClass('is-viewed')
+	
+	//if ($(gall_id).find('.js-swiper-stories').length == 0){
+		$(gall_id).empty().load('index.php?route=extension/module/prostore_stories/getOffers&module_id='+module_id+'&story_id='+index,function(){
+
+			var swiperStoriesSlides = new Swiper('.js-swiper-stories-slides', {
+				slidesPerView: 1,
+				spaceBetween: 0,
+				watchSlidesVisibility: true,
+				watchSlidesProgress: true,
+				watchOverflow: true,
+				loop: false,
+				grabCursor: true,
+				centeredSlides: true,
+				initialSlide: index,
+				parallax: true,
+				//autoHeight: true,
+				on: {
+					slideChange: function () {
+						$('.js-swiper-stories-thumbs').find('li').eq(this.realIndex).addClass('is-active').siblings().removeClass('is-active');
+						$('.js-swiper-stories-features').find('.swiper-slide').eq(this.realIndex).find('.stories-features__item').addClass('is-viewed');
+					},
+				},
+				// thumbs: {
+				// 	swiper: swiperStoriesThumbs,
+				// },
+			});
+
+			$(document).on('click', '.js-swiper-stories-thumbs .swiper-stories__thumb', function() {
+				var index = $(this).parent().index();
+				swiperStoriesSlides.slideTo(index);
+			});
+
+
+			// --------------------------------------------------------------------------
+			// Products Gallery Mouseover
+			// --------------------------------------------------------------------------
+
+
+			$('.swiper-stories__gallery').each(function( index ) {
+				var $mouseoverGallery = $(this);
+				var $mouseoverGalleryLength = $mouseoverGallery.find('.swiper-stories__image').length;
+
+				$mouseoverGallery.append('<div class="swiper-stories__pagination"></div>')
+
+				for ( var i = 0 ; i < $mouseoverGalleryLength ; i++ ) {
+					if ($mouseoverGalleryLength == 1) {
+						$mouseoverGallery.find('.swiper-stories__pagination').append('<div class="swiper-stories__bullet swiper-stories__bullet--single"></div>');
+					} else {
+						$mouseoverGallery.find('.swiper-stories__pagination').append('<div class="swiper-stories__bullet"></div>');
+					}
+				}
+
+				$mouseoverGallery.find('.swiper-stories__image').eq(0).addClass('is-active');
+				$mouseoverGallery.find('.swiper-stories__bullet').eq(0).addClass('is-active');
+				
+				$(this).siblings('.swiper-stories__button').find('a').eq(0).addClass('is-active');
+
+				$(document).on('mouseenter touchstart', '.swiper-stories__bullet', function(){
+					var index = $(this).index();
+					var move  = index * 100 * -1;
+					move = 0;
+
+					$(this).closest('.swiper-stories__gallery').find('.swiper-stories__image').eq(index).addClass('is-active').css('transform', 'translate('+move+'%,0)').siblings().removeClass('is-active');
+					$(this).closest('.swiper-stories__gallery').siblings('.swiper-stories__button').find('a').eq(index).addClass('is-active').siblings().removeClass('is-active');
+					$(this).closest('.swiper-stories__gallery').find('.swiper-stories__bullet').eq(index).addClass('is-active').siblings().removeClass('is-active');
+
+				});
+			});
+
+		});
+	//}
+
+
+	});
+
+	if (window.matchMedia('(min-width: 1200px)').matches) {
+		var swiperStoriesFeatures = new Swiper('.js-swiper-stories-features', {
+			slidesPerView: 'auto',
+			spaceBetween: 10,
+			watchSlidesVisibility: true,
+			watchSlidesProgress: true,
+			watchOverflow: true,
+			loop: false,
+			grabCursor: true,
+			scrollbar: {
+				el: '.js-swiper-stories-features-scrollbar',
+				draggable: true,
+			},
+			breakpoints: {
+				1200: {
+					slidesPerView: 8,
+					spaceBetween: 0,
+				}
+			}
+		});
+	}
+
+}
+document.addEventListener('DOMContentLoaded', prostoreStories);
+</script>
+{% endif %}

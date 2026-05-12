@@ -1,0 +1,9 @@
+.input-wrapper-special {
+    .dropdown-menu {
+        top: 0 !important;
+        left: 0 !important;
+        position: relative !important;
+        max-height: 100px !important;
+        overflow-y: auto !important;
+    }
+}

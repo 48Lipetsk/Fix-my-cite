@@ -1,0 +1,32 @@
+<div class="header__desktop">
+	<a class="header__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>
+		{% if header_logo %}
+		<img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}">
+		{% else %}
+		{{ header_text_logo }}
+		{% endif %}
+	</a>
+	{% if prostore_phones_main %}
+	<div class="header__call">
+		<button class="header__call-btn">
+			<mark>{{ text_prostore_support }}</mark> {{ prostore_phones_main[language_id] }} <svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use>
+			</svg>
+		</button>
+		<div class="header__call-offcanvas">
+			<ul class="header__call-menu">
+				{% for key, prostore_phone in prostore_phones %}
+				<li>
+					<a class="header__call-link" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}"> {{ prostore_phone[language_id] }}</a>
+				</li>
+				{% endfor %}
+				{% if callback_status %}
+				<li>
+					<a class="header__call-link" href="#callback" data-fancybox>{{ text_header_callback }}</a>
+				</li>
+				{% endif %}
+			</ul>
+			<div class="fancybox-is-hidden popup" id="callback">{{ callback }}</div>
+		</div>
+	</div>
+	{% endif %}
+</div>

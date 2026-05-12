@@ -1,0 +1,23 @@
+{% set header_class = (header_type == '4' or header_type == '5' or header_type == '6' or header_type == '8') ? 1 : 0 %}
+<li>
+	<a class="{% if header_class %}header__nav-link{% else %}header__tags-btn{% endif %}" {% if (main_navs[number]['type'][1]['language'][language_id]['href'] != '#') %}href="{{main_navs[number]['type'][1]['language'][language_id]['href'] }}"{% endif %}>
+		{% if not header_class %}
+			{% if (nav_icons['custom_drop']['image']['h'][naw_row_id]) %}
+				{{nav_icons['custom_drop']['image']['h'][naw_row_id]}}
+			{% endif %}
+		{% endif %}
+		{{ main_navs[number]['type'][1]['language'][language_id]['name'] }}
+		{% if header_class %}<svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use></svg>{% endif %}
+	</a>
+	<div class="{% if header_class %}header__nav-dropdown{% else %}header__tags-offcanvas{% endif %}">
+		<ul class="{% if header_class %}header__nav-submenu{% else %}header__tags-submenu{% endif %}">
+			{% for id,link in main_navs[number].type[1].links %} 
+			<li>
+				<a class="{% if header_class %}header__nav-sublink{% else %}header__tags-link{% endif %}" href="{{ link }}" {% if (main_navs[number].type[1].target[id]) %} {{ 'target="'~main_navs[number].type[1].target[id]~'"' }}{% endif %}>
+					<span class="{% if header_class %}header__nav-sublink-text{% else %}header__tags-link-text{% endif %}">{{ main_navs[number].type[1].name[id] }}</span>
+				</a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</li>

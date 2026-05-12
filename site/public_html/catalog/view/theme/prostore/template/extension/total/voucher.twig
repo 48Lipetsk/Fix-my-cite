@@ -1,0 +1,63 @@
+<div class="cart__code cart__code--voucher" style="display: none;">
+	<div class="cart__code-head">
+		<div class="row">
+			<div class="col">
+				<span class="cart__code-title">{{ text_prostore_voucher }}</span>
+			</div>
+			<div class="col-auto">
+				<div class="cart__code-action" style="display: none;">
+					<a class="ui-link ui-link--blue ui-link--dashed" href="#">{{ text_prostore_coupon_1 }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cart__code-body">
+		<div class="ui-code">
+			<input class="ui-code__input" type="text" name="voucher" value="{{ voucher }}" placeholder="{{ text_prostore_voucher_0 }}">
+			<button id="button-voucher" data-loading-text="{{ text_loading }}" class="ui-code__btn">{{ button_submit }}</button>
+		</div>
+	</div>
+</div>
+<script>
+// --------------------------------------------------------------------------
+// Loading ocAddVoucher
+// --------------------------------------------------------------------------
+
+function ocAddVoucher() {
+	$('#button-voucher').on('click', function(e) {
+	e.preventDefault();
+		$.ajax({
+			url: 'index.php?route=extension/total/voucher/voucher',
+			type: 'post',
+			data: 'voucher=' + encodeURIComponent($('input[name=\'voucher\']').val()),
+			dataType: 'json',
+			beforeSend: function() {
+				$('input[name=\'voucher\']').attr('disabled', 'disabled');
+			},
+			complete: function() {
+				$('input[name=\'voucher\']').removeAttr('disabled');
+			},
+			success: function(json) {
+				$('.alert').remove();
+
+				if (json['error']) {
+					$('.alerts-wrapper').append($('<div class="alert alert--red"><button class="alert__close"><svg class="icon-close-alerts"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close-alerts"></use></svg></button><p class="alert__text"> ' + json['error'] + ' </p></div>'));
+				}
+
+				if (json['redirect']) {
+					location = json['redirect'];
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	});
+	$('input[name=\'voucher\']').keypress(function(e){
+		if(e.which == 13){
+			$('#button-voucher').trigger('click');
+		}
+	});
+}
+document.addEventListener('DOMContentLoaded', ocAddVoucher);
+</script>

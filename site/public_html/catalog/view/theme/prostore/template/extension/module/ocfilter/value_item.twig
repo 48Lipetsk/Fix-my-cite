@@ -1,0 +1,45 @@
+{% if option.color %}
+<div class="ocf-color" style="background-color: #{{ value.color }};"></div>
+{% endif %}
+
+{% if option.image %}
+<div class="ocf-image" style="background-image: url({{ value.image }});"></div>
+{% endif %}
+	  
+{% if value.selected %}
+<label id="v-{{ value.id }}" class="ui-check ocf-selected" data-option-id="{{ option.option_id }}">
+	<input class="ui-check__input ocf-target" type="{{ option.type }}" value="{{ value.params }}" name="ocf[{{ option.option_id }}]" checked="checked" autocomplete="off">
+		<span class="ui-check__checkbox">
+		  <svg class="icon-check">
+			<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-check"></use>
+		  </svg>
+		</span>{{ value.name }}
+  {% if show_counter %}
+  <small class="badge"></small>
+  {% endif %}
+</label>
+{% elseif value.count %}
+<label id="v-{{ value.id }}" class="ui-check" data-option-id="{{ option.option_id }}">
+	<input class="ui-check__input ocf-target" type="{{ option.type }}" value="{{ value.params }}" name="ocf[{{ option.option_id }}]" autocomplete="off">
+		<span class="ui-check__checkbox">
+		  <svg class="icon-check">
+			<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-check"></use>
+		  </svg>
+		</span>{{ value.name }}
+  {% if show_counter %}
+  <small class="badge">{{ value.count }}</small>
+  {% endif %}
+</label>
+{% else %}
+<label id="v-{{ value.id }}" class="ui-check" data-option-id="{{ option.option_id }}">
+	<input class="ui-check__input ocf-target" type="{{ option.type }}" value="" disabled="disabled" name="ocf[{{ option.option_id }}]" autocomplete="off">
+		<span class="ui-check__checkbox">
+		  <svg class="icon-check">
+			<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-check"></use>
+		  </svg>
+		</span>{{ value.name }}
+  {% if show_counter %}
+  <small class="badge">0</small>
+  {% endif %}
+</label>
+{% endif %}

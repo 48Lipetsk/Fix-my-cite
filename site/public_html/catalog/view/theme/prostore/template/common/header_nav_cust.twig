@@ -1,0 +1,15 @@
+{% set header_class = (header_type == '4' or header_type == '5' or header_type == '6' or header_type == '8') ? 1 : 0 %}
+{% for id,link in main_navs[number].type[2].links %}
+{% if main_navs[number].type[2].name[id] %}
+<li>
+	<a class="{% if header_class %}header__nav-link{% else %}header__tags-btn{% endif %}" href="{{ link }}" 
+		{% if (main_navs[number].type[2].target[id]) %} {{ 'target="'~main_navs[number].type[2].target[id]~'"' }} {% endif %}>
+		{% if not header_class %}
+			{% if (nav_icons[id]['image']['h'][naw_row_id]) %}
+			{{nav_icons[id]['image']['h'][naw_row_id]}}
+			{% endif %}
+		{% endif %}{{  main_navs[number].type[2].name[id] }}
+	</a>
+</li>
+{% endif %}
+{% endfor %}

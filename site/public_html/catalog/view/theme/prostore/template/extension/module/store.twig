@@ -1,0 +1,13 @@
+<div class="personal__sidebar">
+	<nav class="personal__nav">
+		<span class="personal__nav-title">{{ heading_title }}</span>
+		<p>{{ text_store }}</p>
+		<ul class="personal__nav-menu">
+			{% for store in stores %}
+			<li>
+				<a class="personal__nav-link{% if (store.store_id == store_id) %} is-active{% endif %}" href="{{  store.url }}">{{ store.name }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+	</nav>
+</div>

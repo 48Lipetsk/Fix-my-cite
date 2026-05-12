@@ -1,0 +1,10 @@
+<!-- Header Maintenance :: Start-->
+<div class="container-fluid">
+	<figure class="tech__logo">
+		{% if (header_logo) %}
+		<img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}">
+		{% else %}
+		{{ header_text_logo }}
+		{% endif %}
+	</figure>
+<!-- Header Maintenance :: End-->

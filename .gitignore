@@ -1,0 +1,24 @@
+# Storage data (generated at runtime)
+site/storage/cache/*
+site/storage/logs/*
+site/storage/session/*
+site/storage/download/*
+site/storage/upload/*
+!site/storage/cache/.gitkeep
+!site/storage/logs/.gitkeep
+!site/storage/session/.gitkeep
+!site/storage/download/.gitkeep
+!site/storage/upload/.gitkeep
+
+# Docker volumes
+db_data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

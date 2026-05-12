@@ -1,0 +1,112 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row">
+		{{ column_left }}
+		<div class="col-xl-{{ col }}">
+			<div class="page__body">
+				<div class="row">
+					<div class="col-sm-6">
+						<ul class="ui-ul ui-ul--sitemap">
+							{% for category_1 in categories %} 
+							<li><a class="ui-link ui-link--blue" href="{{ category_1['href'] }}">{{ category_1['name'] }}</a>
+								{% if (category_1['children']) %} 
+								<ul class="ui-ul ui-ul--sitemap">
+									{% for category_2 in category_1['children'] %} 
+									<li><a class="ui-link ui-link--blue" href="{{ category_2['href'] }}">{{ category_2['name'] }}</a>
+										{% if (category_2['children']) %} 
+										<ul class="ui-ul ui-ul--sitemap">
+											{% for category_3 in category_2['children'] %} 
+											<li><a class="ui-link ui-link--blue" href="{{ category_3['href'] }}">{{ category_3['name'] }}</a></li>
+											{% endfor %} 
+										</ul>
+										{% endif %} 
+									</li>
+									{% endfor %} 
+								</ul>
+								{% endif %} 
+							</li>
+							{% endfor %} 
+						</ul>
+					</div>
+					<div class="col-sm-6">
+						<ul class="ui-ul ui-ul--sitemap">
+							<li><a class="ui-link ui-link--blue" href="{{ special }}">{{ text_special }}</a></li>
+							<li><a class="ui-link ui-link--blue" href="{{ account }}">{{ text_account }}</a>
+								<ul class="ui-ul ui-ul--sitemap">
+									<li><a class="ui-link ui-link--blue" href="{{ edit }}">{{ text_edit }}</a></li>
+									<li><a class="ui-link ui-link--blue" href="{{ password }}">{{ text_password }}</a></li>
+									<li><a class="ui-link ui-link--blue" href="{{ address }}">{{ text_address }}</a></li>
+									<li><a class="ui-link ui-link--blue" href="{{ history }}">{{ text_history }}</a></li>
+									<li><a class="ui-link ui-link--blue" href="{{ download }}">{{ text_download }}</a></li>
+								</ul>
+							</li>
+							<li><a class="ui-link ui-link--blue" href="{{ cart }}">{{ text_cart }}</a></li>
+							<li><a class="ui-link ui-link--blue" href="{{ checkout }}">{{ text_checkout }}</a></li>
+							<li><a class="ui-link ui-link--blue" href="{{ search }}">{{ text_search }}</a></li>
+							<li>{{ text_information }} 
+								<ul class="ui-ul ui-ul--sitemap">
+									{% for information in informations %} 
+									<li><a class="ui-link ui-link--blue" href="{{ information['href'] }}">{{ information['title'] }}</a></li>
+									{% endfor %} 
+									<li><a class="ui-link ui-link--blue" href="{{ contact }}">{{ text_contact }}</a></li>
+								</ul>
+							</li>
+							{% if (newss is not empty) %} 
+							<li>{{ text_prostore_news }} 
+								<ul class="ui-ul ui-ul--sitemap">
+									{% for news in newss %} 
+									<li><a class="ui-link ui-link--blue" href="{{ news['href'] }}">{{ news['title'] }}</a></li>
+									{% endfor %} 
+								</ul>
+							</li>
+							{% endif %} 
+							{% if (blogcategories is not empty) %} 
+							<li>{{ text_prostore_blogs }} 
+								<ul class="ui-ul ui-ul--sitemap">
+									{% for blogcategory in blogcategories %} 
+									<li><a class="ui-link ui-link--blue" href="{{ blogcategory['href'] }}">{{ blogcategory['name'] }}</a>
+										<ul class="ui-ul ui-ul--sitemap">
+											{% for subblog in blogcategory['subblogs'] %} 
+												<li><a class="ui-link ui-link--blue" href="{{ subblog['href'] }}">{{ subblog['title'] }}</a>
+											{% endfor %} 
+										</ul>
+									</li>
+									{% endfor %} 
+								</ul>
+							</li>
+							{% endif %} 
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}</body></html>

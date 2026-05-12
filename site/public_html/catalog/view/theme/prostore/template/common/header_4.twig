@@ -1,0 +1,168 @@
+<div class="header__desktop">
+	<div class="header__row header__row--01">
+		<div class="header__group header__group--info_call">
+			{% if (header_navs is not empty) %}
+			<div class="header__info">
+				<ul class="header__info-menu">
+				  {% for key,header_nav in header_navs %} 
+
+					  {% if (header_nav.view is defined) %} 
+						{{ header_nav.view }}
+					  {% endif %}                  
+ 
+				  {% endfor %} 
+				</ul>
+			</div>
+			{% endif %}
+			{% if prostore_phones_main %}
+			<div class="header__call">
+				<button class="header__call-btn">
+					<mark>{{ text_prostore_support }}</mark> {{ prostore_phones_main[language_id] }} <svg class="icon-arrow-down"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-down"></use>
+					</svg>
+				</button>
+				<div class="header__call-offcanvas">
+					<ul class="header__call-menu">
+						{% for key, prostore_phone in prostore_phones %}
+						<li>
+							<a class="header__call-link" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}"> {{ prostore_phone[language_id] }}</a>
+						</li>
+						{% endfor %}
+						{% if callback_status %}
+						<li>
+							<a class="header__call-link" href="#callback" data-fancybox>{{ text_header_callback }}</a>
+						</li>
+						{% endif %}
+					</ul>
+					<div class="fancybox-is-hidden popup" id="callback">{{ callback }}</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+		{% if language or currency %}
+		<div class="header__group header__group--currency_language">
+		{{ currency }}
+		{{ language }}
+		</div>
+		{% endif %}
+	</div>
+	<div class="header__row header__row--02 {% if fixed_header %}header-fixed{% endif %}">
+		<a class="header__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>
+			{% if header_logo %}
+			<img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}">
+			{% else %}
+			{{ header_text_logo }}
+			{% endif %}
+		</a>
+		{% if fixed_header %}
+		{% if (main_navs_v is not empty) %}
+		<!-- MAIN NAV Vertical  -->
+		<div class="header__catalog header__catalog--fullwidth">
+			<button class="header__catalog-btn" {% if (main_navs_v.header.link) %}onclick="window.location.href='{{ main_navs_v.header.link }}'"{% endif %}>
+				<svg class="icon-catalog"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-catalog"></use>
+				</svg>{% if (main_navs_v.header.name) %} {{ main_navs_v.header.name }} {% else %} {{ text_header_category }} {% endif %}
+			</button>
+			<div class="header__catalog-offcanvas">
+				<div class="header__catalog-aside">
+					<ul class="header__catalog-menu">
+					{% for key,main_nav in main_navs_v %}
+							{% if (main_nav.view is defined) %} 
+							{{ main_nav.view }}
+							{% endif %}
+					{% endfor %}
+					</ul>
+				</div>
+				<div class="header__catalog-main">
+					{% for key,main_nav in main_navs_v %}
+						{% if (main_nav.view_content is defined) %} 
+							{{ main_nav.view_content }}
+						{% endif %}
+					{% endfor %}
+				</div>                                       
+			</div>                             
+		</div>
+		<!-- MAIN NAV Vertical  -->
+		{% endif %}
+		{% endif %}
+
+		<!-- MAIN NAV Horizontal  -->
+		<nav class="header__nav header__priority" data-text-more="{{ text_nav_more }}">
+			<ul class="header__nav-menu">
+			  {% for key,main_nav in main_navs %} 
+
+				  {% if (main_nav.view is defined) %} 
+					{{ main_nav.view }}
+				  {% endif %}
+
+			  {% endfor %}
+			</ul>
+		</nav>
+		<!-- MAIN NAV Horizontal  -->
+		
+		<div class="header__group">
+			<div class="header__search-compact">
+				<button class="header__search-compact-btn" href="#search-compact" data-fancybox>
+					<svg class="icon-search"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-search"></use>
+					</svg>
+				</button>
+				<div class="fancybox-is-hidden popup popup--search" id="search-compact">
+					<span class="popup__title">{{ text_header_search }}</span>
+					<div class="popup__form">
+						<div class="header__search">
+							<div class="header__search-control">
+								{{ search }}
+								<button type="button" class="header__search-btn js-search-btn">{{ text_search_button }}</button>
+							</div>
+							<div class="header__search-autocomplete"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="header__acc">
+				{% if logged %} 
+				<a class="header__acc-btn" href="{{ account }}" aria-label="{{ text_account }}">
+					<svg class="icon-acc-authorized"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc-authorized"></use>
+					</svg>
+				</a>
+				<div class="header__acc-offcanvas">
+					<ul class="header__acc-menu">
+						<li>
+							<a class="header__acc-link" href="{{ account }}">{{ text_account }}</a>
+						</li>
+						<li>
+							<a class="header__acc-link" href="{{ order }}">{{ text_order }}</a>
+						</li>
+						<li>
+							<a class="header__acc-link" href="{{ transaction }}">{{ text_transaction }}</a>
+						</li>
+						<li>
+							<a class="header__acc-link" href="{{ download }}">{{ text_download }}</a>
+						</li>
+						<li>
+							<a class="header__acc-link" href="{{ logout }}">{{ text_logout }}</a>
+						</li>
+					</ul>
+				</div>
+				{% else %}
+				<a class="header__acc-btn" href="#signin" data-fancybox aria-label="{{ text_account }}">
+					<svg class="icon-acc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc"></use>
+					</svg>
+				</a>
+				{% endif %}
+			</div>
+			<div class="header__action">
+				<a class="header__action-btn" href="{{ text_compare_href }}" aria-label="{{ text_prostore_comp_head }}">
+					<svg class="icon-compare"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare"></use>
+					</svg>
+					<mark class="header__action-counter js-compare-total">{% if compare_count > 0 %}{{ compare_count }}{% endif %}</mark>
+				</a>
+				<span class="header__action-line"></span>
+				<a class="header__action-btn" href="{{ text_wish_href }}" aria-label="{{ text_prostore_wish_head }}">
+					<svg class="icon-favorites"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites"></use>
+					</svg>
+					<mark class="header__action-counter js-wishlist-total">{% if wishlist_count > 0 %}{{ wishlist_count }}{% endif %}</mark>
+				</a>
+			</div>
+			{{ cart }}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,22 @@
+{% if (blogs is not empty) %}	
+<!-- Blog Aside :: Start-->
+<div class="blog-aside is-xl-visible">
+    <span class="h2 blog-aside__title">{{ heading_title }} <a class="ui-link ui-link--blue" href="{{ blog_href }}">{{ text_all_blogs }}</a>
+	</span>
+	<ul class="blog-aside__list">
+		{% for blog in blogs %}
+		<li>
+			<a class="blog-aside__item" href="{{ blog.href }}">
+				<div class="blog-aside__item-image">
+					<img src="{{ blog.image }}" alt="{{ blog.title }}" width="{{ width }}" height="{{ height }}" {% if lazyload %}loading="lazy"{% endif %}>
+				</div>
+				<span class="h3 blog-aside__item-title">
+					<u>{{ blog.title }}</u>
+				</span>
+				<span class="blog-featured__item-date">{{ blog.date_added }}</span>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div><!-- Blog Aside :: End-->
+{% endif %}

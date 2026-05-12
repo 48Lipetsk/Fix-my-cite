@@ -1,0 +1,45 @@
+{% if error_warning %}
+<div class="alert alert--yellow alert--opacity">
+	<p class="alert__text">{{ error_warning }}</p>
+</div>
+{% endif %}
+{% if payment_methods %}
+<div class="checkout__step-payments">
+	{% for payment_method in payment_methods %}
+	<label class="ui-check">
+		{% if payment_method.code == code or not code %}
+		{% set code = payment_method.code %}
+			<input class="ui-check__input" type="radio" name="payment_method" value="{{ payment_method.code }}" checked="checked">
+		{% else %}
+			<input class="ui-check__input" type="radio" name="payment_method" value="{{ payment_method.code }}">
+		{% endif %}
+		<span class="ui-check__btn">
+			<span class="ui-check__btn-radio"> </span>
+			<span class="ui-check__btn-desc">
+				<span class="ui-check__btn-title">{{ payment_method.title }}</span>
+				{% if payment_method.terms %}
+					<span class="ui-check__btn-text">{{ payment_method.terms }}</span>
+				{% endif %}
+			</span>
+		</span>
+	</label>
+	{% endfor %}
+</div>
+{% endif %}
+<div class="checkout__step-comment">
+	<label class="ui-label">{{ text_comments }}</label>
+	<textarea name="comment" class="ui-textarea" placeholder="">{{ comment }}</textarea>
+</div>
+{% if text_agree %}
+<div class="checkout__data-action">
+	<label class="ui-check">
+		{% if agree %}
+		<input class="ui-check__input" type="checkbox" id="agree" name="agree" value="1" checked="checked">
+		{% else %}
+		<input class="ui-check__input" type="checkbox" id="agree" name="agree" value="1">
+		{% endif %}
+		<span class="ui-check__checkbox"> </span>
+		<span class="ui-check__text">{{ text_agree }}</span>
+	</label>
+</div>
+{% endif %} 

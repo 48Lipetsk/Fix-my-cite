@@ -1,0 +1,89 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Main :: Start-->
+<main class="main">
+	<!-- Breadcrumbs :: Start-->
+	<div class="breadcrumbs">
+	  <div class="container-fluid">
+		<h1 class="breadcrumbs__title">{{ heading_title }}</h1>
+		<ul class="breadcrumbs__menu">
+		{% for i,breadcrumb in breadcrumbs %}
+			{% if (i + 1 < breadcrumbs|length) %} 
+			<li><a class="breadcrumbs__link" href="{{ breadcrumb.href }}"><span>{{ breadcrumb.text }}</span></a></li>
+			{% else %} 
+			<li>{{ breadcrumb.text }}</li>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	  </div>
+	</div>
+	<!-- Breadcrumbs :: End-->
+	<!-- Page :: Start-->
+	<div class="page">
+	{{ content_top }}
+	<div class="container-fluid">
+		<div class="row personal__wrapper">
+		{{ column_left|replace({'<div id="column-left" class="col-xl-3">': '<div id="column-left" class="col-xl-3 personal__sidebar">'}) }}
+		<div class="col-xl-{{ col }}">
+			<div class="auth__body">
+				<div class="auth__form">
+					<form action="{{ action }}" method="post" enctype="multipart/form-data">
+						<fieldset class="ui-fieldset">
+							<p>{{ text_description }}</p>
+							<div class="form-group">
+								<label class="ui-label" for="input-code">{{ entry_code }}</label>
+								<div class="ui-field">
+									<textarea class="ui-textarea" name="code" placeholder="{{ entry_code }}" id="input-code">{{ code }}</textarea>
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="ui-label" data-toggle="tooltip" title="{{ help_generator }}" for="input-generator">{{ entry_generator }}</label>
+								<div class="ui-field">
+									<input class="ui-input" type="text" name="product" placeholder="{{ entry_generator }}" value="" id="input-generator">
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="ui-label" for="input-link">{{ entry_link }}</label>
+								<div class="ui-field">
+									<textarea class="ui-textarea" name="link" placeholder="{{ entry_link }}" id="input-link">{{ link }}</textarea>
+								</div>
+							</div>						
+						</fieldset>
+						<fieldset class="ui-fieldset">
+							<a href="{{ continue }}" class="ui-btn ui-btn--primary">{{ button_continue }}</a>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+		{{ column_right }}
+		</div>
+	</div>
+	{{ content_bottom }}
+	</div>
+	<!-- Page :: End-->
+</main>
+<!-- Main :: End-->
+{{ footer }}
+<script>
+$('input[name=\'product\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=account/tracking/autocomplete&filter_name=' +  encodeURIComponent(request) + '&tracking=' + encodeURIComponent($('#input-code').val()),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['link']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'product\']').val(item['label']);
+		$('textarea[name=\'link\']').val(item['value']);
+	}
+});
+</script> 
+</body></html>

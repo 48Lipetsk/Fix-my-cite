@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html style="background: #F7F7FB; height: 100%;">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <meta name="theme-color" content="#{% if theme_color %}{{ theme_color }}{% else %}7266F3{% endif %}">
+        <meta name="format-detection" content="telephone=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <title>{{ text_received }}</title>
+        
+        <style>
+@media (max-width: 991px) {
+  .mail-header>tbody>tr>td {
+    padding: 10px 25px !important;
+  }
+  .mail-main>tbody>tr>td {
+    padding: 50px 25px !important;
+  }
+  .mail-footer>tbody>tr>td {
+    padding: 20px 25px !important;
+  }
+  .mail-auth {
+    margin: 0 0 40px !important;
+  }
+  .mail-auth__image {
+    margin: 0 auto 20px !important;
+  }
+  .mail-auth__title {
+    margin: 0 0 25px !important;
+  }
+  .mail-auth__link {
+    margin: 0 -25px 20px !important;
+    font-size: 22px !important;
+    line-height: 1.25 !important;
+  }
+  .mail-auth__link span {
+    font-size: 22px !important;
+    line-height: 1.25 !important;
+    padding: 35px 25px !important;
+    border-radius: 0 !important;
+  }
+}
+</style>
+    </head>
+
+    <body style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; background: #F7F7FB; height: 100%; margin: 0; padding: 0; width: 100%;">
+        <table class="mail-wrapper" style="border: none; border-collapse: collapse; border-spacing: 0; color: #343434; font-family: 'Roboto', Arial, sans-serif; font-size: 18px; font-weight: 400; height: 100%; line-height: 1.83; margin: 0 auto; max-width: 940px; width: 100%;">
+            <tr>
+                <td style="line-height: 1; padding: 60px 25px; vertical-align: middle; width: 100%;">
+                    <table class="mail-header" style="background: #{% if theme_color %}{{ theme_color }}{% else %}7266F3{% endif %}; border: none; border-collapse: collapse; border-radius: 10px 10px 0px 0px; border-spacing: 0; color: #fff; margin: 0; width: 100%;">
+                            <td style="height: 60px; padding: 10px 60px; text-align: justify; text-align-last: justify; vertical-align: middle;">
+                                <a href="{{ store_url }}" style="border: 0; display: inline-block; height: auto; line-height: 100%; max-width: 100%; outline: none; text-decoration: none; vertical-align: middle; text-decoration: none !important;">
+								{% if logo %}
+								<img class="mail-logo" src="{{ logo }}" alt="{{ store_name }}" style="border: 0; display: inline-block; height: auto; line-height: 100%; margin: 5px 20px 5px 0; max-width: 100%; outline: none; text-decoration: none; vertical-align: middle;">
+								{% else %}
+								<span style="-webkit-box-sizing: border-box;box-sizing: border-box;display: block;font-family: 'Roboto', Arial, sans-serif;font-size: 22px;font-weight: 700;line-height: 22px;color: #fff;">{{ store_name }}</span>
+								{% endif %}
+								</a>
+								{% if prostore_phones_main %}
+                                <a class="mail-phone" href="tel:{{ prostore_phones_main[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}" style="border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 5px; color: #fff; display: inline-block; font: 500 16px/23px 'Roboto', Arial, sans-serif; margin: 5px 0; padding: 5px 15px; text-decoration: none; vertical-align: middle; white-space: nowrap;">
+                                    <span class="mail-phone__text" style="color: #fff; opacity: 0.4; text-decoration: none;">{{ text_prostore_support }}</span>
+                                    <span class="mail-phone__number" style="text-decoration: none;">
+                                        <span style="text-decoration: none;">{{ prostore_phones_main[language_id] }}</span>
+                                    </span>
+                                </a>
+								{% endif %}
+                            </td>
+                    </table>
+                    <table class="mail-main" style="background: #fff; border: none; border-collapse: collapse; border-spacing: 0; margin: 0; width: 100%;">
+                        <tr>
+							<td style="padding: 60px;">
+                                <div class="mail-auth" style="margin: 0 0 50px; text-align: center;">
+                                    <div class="mail-auth__image" style="background: #F7F7FB; border-radius: 50%; display: block; height: 200px; line-height: 200px; margin: 0 auto 30px; text-align: center; width: 200px;">
+                                        <img src="{{ store_url }}catalog/view/theme/prostore/images/img-mail-status.png" width="136" height="136" alt style="border: 0; display: inline-block; height: auto; line-height: 100%; max-height: 100%; max-width: 100%; outline: none; text-decoration: none; vertical-align: middle;">
+                                    </div>
+                                    <h1 class="mail-auth__title" style="display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 26px; font-weight: 400; line-height: 1; margin: 0 0 80px;">{{ text_received }}</h1>
+                                    <p class="mail-auth__notice" style="display: block; font-family: 'Roboto', Arial, sans-serif; font-size: 20px; font-weight: 400; line-height: 1.4; margin: 0; text-align: center;">{{ text_amount }} {{ amount }} <br> {{ text_total }} {{ total }}</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="mail-footer" style="background: #EBEEF3; border: none; border-collapse: collapse; border-spacing: 0; margin: 0; width: 100%;">
+                        <tr>
+                            <td style="padding: 20px 60px;">
+                                {% if prostore_phones_main %}
+								<p class="mail-copyright" style="display: block; font: 400 15px/1.5 'Roboto', Arial, sans-serif; margin: 0; max-width: 520px;">{{ text_prostore_mail_footer }} <a href="tel:{{ prostore_phones_main[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}" style="font: 400 15px/1.5 'Roboto', Arial, sans-serif; margin: 0;text-decoration: none;color: #343434;">{{ prostore_phones_main[language_id] }}</a></p>
+								{% else %}
+								<p class="mail-copyright" style="display: block; font: 400 15px/1.5 'Roboto', Arial, sans-serif; margin: 0; max-width: 520px;">{{ text_footer }}</p>
+								{% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+
+</html>

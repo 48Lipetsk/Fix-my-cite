@@ -1,0 +1,559 @@
+{% if (view == 'slide') %}
+<!-- Products Slide :: Start-->
+	{% for tab,product_tab in product_tabs %}
+	{% if (products[tab] is not empty) %} 
+	<div class="products-featured">
+		<div class="container-fluid">
+		{% if product_tab.description[language_id].name %}
+			<span class="h2 products-featured__title">{{ product_tab.description[language_id].name }}</span>
+		{% endif %}
+			<div class="products-featured__swiper">
+				<div class="swiper-container swiper-products {% if (mobile_view == 'grid-responsive') %}swiper-products--responsive{% endif %} js-swiper-products"   data-swiper='{"slidesPerView": 3}'>
+					<div class="swiper-wrapper">
+					  {% for key,product in products[tab]['products'] %}
+					  {% if product is not empty %}
+					  <div class="swiper-slide">
+							<div class="products__item {% if (mobile_view == 'grid-responsive') %}products__item--responsive{% endif %} {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %}">
+								<div class="products__item-in">
+									<div class="products__item-topleft">
+										<div class="products__item-badges">
+											{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+											{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+											{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+											{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+											{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+											{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+										</div>
+										{% if (product.rating != constant('false')) %}
+										<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+										</span>
+										{% endif %}
+									</div>
+									<div class="products__item-buttons">
+										<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+											<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+											</svg>
+										</button>
+										<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+											<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+											</svg>
+										</button>
+									</div>
+									{% if product.images %}
+									<a class="products__item-gallery" href="{{ product.href }}">
+										<div class="products__item-image is-active">
+											<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% for imageX in product.images %}
+										<div class="products__item-image">
+											<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% endfor %}
+										<div class="products__item-pagination">
+											<div class="products__item-bullet is-active"></div>
+											{% for imageX in product.images %}
+											<div class="products__item-bullet"></div>
+											{% endfor %}
+										</div>
+									</a>
+									{% else %}
+									<a class="products__item-image" href="{{ product.href }}">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</a>
+									{% endif %}
+									<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+									{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+									<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+									{% if product.price %}
+									<p class="products__item-price">{% if product.special %}{% if product.sales and product.discount %}<mark>-{{ product.discount }}</mark>{% endif %}<ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+									</p>
+									{% endif %}
+									{% if (category_time and product.special and product.special_date_end) %}
+									<div class="products__item-discount">
+										<div class="ui-discount">
+											<div class="row">
+												<div class="col-12">
+													<div class="ui-discount__desc">
+														<figure class="ui-discount__icon">
+															<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+															</svg>
+														</figure>
+														<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+														</p>
+													</div>
+												</div>
+												<div class="col-12">
+													<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endif %}
+									<div class="products__item-action">
+										<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+											<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+												</svg>
+											</button>
+											<div class="ui-number">
+												<button class="ui-number__decrease">
+													<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+													</svg>
+												</button>
+												<button class="ui-number__increase">
+													<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+													</svg>
+												</button>
+												<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+											</div>
+											<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+												<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+												</svg>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% endfor %}
+					</div>
+					<div class="swiper-scrollbar js-swiper-products-scrollbar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	{% endfor %}
+<!-- Products Slide :: End-->
+{% elseif (view == 'grid') %}
+<!-- Products Grid :: Start-->
+	{% for tab,product_tab in product_tabs %} 
+	{% if (products[tab] is not empty) %} 
+	<div id="prodtab_{{module_id}}_{{tab}}" class="products-featured">
+		<div class="container-fluid">
+		{% if product_tab.description[language_id].name %}
+			<span class="h2 products-featured__title">{{ product_tab.description[language_id].name }}</span>
+		{% endif %}
+			<div class="products">
+				<ul class="products__list {% if (mobile_view == 'grid-responsive') %}products__list--responsive{% endif %} products__list--grid-{{ tp_limit }}">
+					{% for key,product in products[tab]['products'] %}
+					{% if product is not empty %}
+					<li>
+						<div class="products__item {% if (mobile_view == 'grid-responsive') %}products__item--responsive{% endif %} {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %}">
+							<div class="products__item-in">
+								<div class="products__item-topleft">
+									<div class="products__item-badges">
+										{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+										{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+										{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+										{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+										{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+										{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+									</div>
+									{% if (product.rating != constant('false')) %}
+									<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+									</span>
+									{% endif %}
+								</div>
+								<div class="products__item-buttons">
+									<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+										<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+											<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+										</svg>
+									</button>
+									<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+										<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+											<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+										</svg>
+									</button>
+								</div>
+								{% if product.images %}
+								<a class="products__item-gallery" href="{{ product.href }}">
+									<div class="products__item-image is-active">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</div>
+									{% for imageX in product.images %}
+									<div class="products__item-image">
+										<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</div>
+									{% endfor %}
+									<div class="products__item-pagination">
+										<div class="products__item-bullet is-active"></div>
+										{% for imageX in product.images %}
+										<div class="products__item-bullet"></div>
+										{% endfor %}
+									</div>
+								</a>
+								{% else %}
+								<a class="products__item-image" href="{{ product.href }}">
+									<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+								</a>
+								{% endif %}
+								<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+								{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+								<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+								{% if product.price %}
+								<p class="products__item-price">{% if product.special %}{% if product.sales and product.discount %}<mark>-{{ product.discount }}</mark>{% endif %}<ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+								</p>
+								{% endif %}
+								{% if (category_time and product.special and product.special_date_end) %}
+								<div class="products__item-discount">
+									<div class="ui-discount">
+										<div class="row">
+											<div class="col-12">
+												<div class="ui-discount__desc">
+													<figure class="ui-discount__icon">
+														<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+														</svg>
+													</figure>
+													<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+													</p>
+												</div>
+											</div>
+											<div class="col-12">
+												<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+											</div>
+										</div>
+									</div>
+								</div>
+								{% endif %}
+								<div class="products__item-action">
+									<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+										<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+											</svg>
+										</button>
+										<div class="ui-number">
+											<button class="ui-number__decrease">
+												<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+												</svg>
+											</button>
+											<button class="ui-number__increase">
+												<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+												</svg>
+											</button>
+											<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+										</div>
+										<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+											<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+											</svg>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+			{% if (products[tab].show_more ) %}
+			<div class="products-featured__action">
+				<a class="ui-btn ui-btn--primary show-more"  data-for="{{module_id}}_{{tab}}" href="#">{{ text_prostore_show_more }}</a>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+	{% endfor %}
+<!-- Products Grid :: End-->
+{% elseif (view == 'tab_slide') %} 
+<!-- Products Tab Slide :: Start-->
+<div class="products-featured" data-tabs>
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			{% if title %}
+			<div class="col-md">
+				<span class="h2 products-featured__title">{{ title }}</span>
+			</div>
+			{% endif %}
+			<div class="col-md-auto">
+				<div class="products-featured__filter">
+					{% set t = 0 %} 
+				  	{% for tab,product_tab in product_tabs %} 
+					{% if (products[tab] is not empty) %} 
+					<button class="ui-btn ui-btn--45 ui-btn--white {% if (not t) %}is-active{% endif %}" data-tabs-btn="products-tabs-{{module_id}}-{{ tab }}">{{ product_tab.description[language_id].name is defined ? product_tab.description[language_id].name : '' }}</button>
+					{% set t = t + 1 %} 
+					{% endif %} 
+					{% endfor %} 
+				</div>
+			</div>
+		</div>
+		<div class="products-featured__swiper">
+			{% set y = 0 %}
+			{% for tab,product_tab in product_tabs %}
+			{% if products[tab] is not empty %}
+			<div class="products-featured__content {% if (not y) %}is-active{% endif %}" data-tabs-content="products-tabs-{{module_id}}-{{ tab }}">
+				<div class="swiper-container swiper-products {% if (mobile_view == 'grid-responsive') %}swiper-products--responsive{% endif %} js-swiper-products">
+					<div class="swiper-wrapper">
+					  {% for key,product in products[tab]['products'] %}
+					  {% if product is not empty %}
+					  <div class="swiper-slide">
+							<div class="products__item {% if (mobile_view == 'grid-responsive') %}products__item--responsive{% endif %} {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %}">
+								<div class="products__item-in">
+									<div class="products__item-topleft">
+										<div class="products__item-badges">
+											{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+											{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+											{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+											{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+											{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+											{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+										</div>
+										{% if (product.rating != constant('false')) %}
+										<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+										</span>
+										{% endif %}
+									</div>
+									<div class="products__item-buttons">
+										<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+											<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+											</svg>
+										</button>
+										<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+											<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+											</svg>
+										</button>
+									</div>
+									{% if product.images %}
+									<a class="products__item-gallery" href="{{ product.href }}">
+										<div class="products__item-image is-active">
+											<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% for imageX in product.images %}
+										<div class="products__item-image">
+											<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% endfor %}
+										<div class="products__item-pagination">
+											<div class="products__item-bullet is-active"></div>
+											{% for imageX in product.images %}
+											<div class="products__item-bullet"></div>
+											{% endfor %}
+										</div>
+									</a>
+									{% else %}
+									<a class="products__item-image" href="{{ product.href }}">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</a>
+									{% endif %}
+									<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+									{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+									<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+									{% if product.price %}
+									<p class="products__item-price">{% if product.special %}{% if product.sales and product.discount %}<mark>-{{ product.discount }}</mark>{% endif %}<ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+									</p>
+									{% endif %}
+									{% if (category_time and product.special and product.special_date_end) %}
+									<div class="products__item-discount">
+										<div class="ui-discount">
+											<div class="row">
+												<div class="col-12">
+													<div class="ui-discount__desc">
+														<figure class="ui-discount__icon">
+															<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+															</svg>
+														</figure>
+														<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+														</p>
+													</div>
+												</div>
+												<div class="col-12">
+													<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endif %}
+									<div class="products__item-action">
+										<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+											<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+												</svg>
+											</button>
+											<div class="ui-number">
+												<button class="ui-number__decrease">
+													<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+													</svg>
+												</button>
+												<button class="ui-number__increase">
+													<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+													</svg>
+												</button>
+												<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+											</div>
+											<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+												<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+												</svg>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% endfor %}
+					</div>
+					<div class="swiper-scrollbar js-swiper-products-scrollbar"></div>
+				</div>
+			</div>
+			{% set y = y + 1 %}
+			{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+<!-- Products Tab Slide :: End-->	
+{% elseif (view == 'tab_grid') %} 
+<!-- Products Tab Grid :: Start-->
+<div id="prodtab_{{module_id}}" class="products-featured" data-tabs>
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			{% if title %}
+			<div class="col-md">
+				<span class="h2 products-featured__title">{{ title }}</span>
+			</div>
+			{% endif %}
+			<div class="col-md-auto">
+				<div class="products-featured__filter">
+					{% set t = 0 %} 
+				  	{% for tab,product_tab in product_tabs %} 
+					{% if (products[tab] is not empty) %} 
+					<button class="ui-btn ui-btn--45 ui-btn--white {% if (not t) %}is-active{% endif %}" data-tabs-btn="products-tabs-{{module_id}}-{{ tab }}">{{ product_tab.description[language_id].name is defined ? product_tab.description[language_id].name : '' }}</button>
+					{% set t = t + 1 %} 
+					{% endif %} 
+					{% endfor %} 
+				</div>
+			</div>
+		</div>
+			{% set y = 0 %}
+			{% for tab,product_tab in product_tabs %}
+			{% if products[tab] is not empty %}
+			<div id="prodtab_{{module_id}}_{{tab}}" class="products-featured__content {% if (not y) %}is-active{% endif %}" data-tabs-content="products-tabs-{{module_id}}-{{ tab }}">
+				<div class="products">
+					<ul class="products__list {% if (mobile_view == 'grid-responsive') %}products__list--responsive{% endif %} products__list--grid-{{ tp_limit }}">
+						{% for key,product in products[tab]['products'] %}
+						{% if product is not empty %}
+						<li>
+							<div class="products__item {% if (mobile_view == 'grid-responsive') %}products__item--responsive{% endif %} {% if (category_time and product.special and product.special_date_end) %}products__item--countdown{% endif %}">
+								<div class="products__item-in">
+									<div class="products__item-topleft">
+										<div class="products__item-badges">
+											{% if (product.isnewest) %}<span class="ui-badge ui-badge--blue">{{ labelsinfo.new.name[language_id] }}</span>{% endif %}
+											{% if (product.special and product.sales) %}<span class="ui-badge ui-badge--red">{{ labelsinfo.sale.name[language_id] }}</span>{% endif %}
+											{% if (product.popular) %}<span class="ui-badge ui-badge--orange">{{ product.popular }}</span>{% endif %}
+											{% if (product.hit) %}<span class="ui-badge ui-badge--purple">{{ product.hit }}</span>{% endif %}
+											{% if (product.nocatch) %}<span class="ui-badge">{{ product.catch }}</span>{% elseif product.catch %}<span class="ui-badge">{{ product.catch }}</span>{% endif %}
+											{% if (product.reward) %}<span class="ui-badge ui-badge--transparent">{{ text_prostore_reward_short }} {{ product.reward }}</span>{% endif %}
+										</div>
+										{% if (product.rating != constant('false')) %}
+										<span class="products__item-rating">{{ product.rating }} <svg class="icon-star"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-star"></use></svg>
+										</span>
+										{% endif %}
+									</div>
+									<div class="products__item-buttons">
+										<button type="button" class="ui-btn ui-btn--compare {% if product.wish_compare_data.compare_data.is_in_compare %}is-active{% endif %}" title="{{ button_compare }}" data-action="compare" data-for="{{ product.product_id }}">
+											<svg class="icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare{% if product.wish_compare_data.compare_data.is_in_compare %}-active{% endif %}"></use>
+											</svg>
+										</button>
+										<button type="button" class="ui-btn ui-btn--favorite {% if product.wish_compare_data.wish_data.is_in_wish %}is-active{% endif %}" title="{{ button_wishlist }}" data-action="wishlist" data-for="{{ product.product_id }}">
+											<svg class="icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}">
+												<use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites{% if product.wish_compare_data.wish_data.is_in_wish %}-active{% endif %}"></use>
+											</svg>
+										</button>
+									</div>
+									{% if product.images %}
+									<a class="products__item-gallery" href="{{ product.href }}">
+										<div class="products__item-image is-active">
+											<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% for imageX in product.images %}
+										<div class="products__item-image">
+											<img data-src="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+										</div>
+										{% endfor %}
+										<div class="products__item-pagination">
+											<div class="products__item-bullet is-active"></div>
+											{% for imageX in product.images %}
+											<div class="products__item-bullet"></div>
+											{% endfor %}
+										</div>
+									</a>
+									{% else %}
+									<a class="products__item-image" href="{{ product.href }}">
+										<img src="{{ product.thumb }}" alt="{{ product.name }}" width="{{ image_product_width }}" height="{{ image_product_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+									</a>
+									{% endif %}
+									<span class="products__item-status {% if (product.quantity > 0) %}products__item-status--true{% else %}products__item-status--false{% endif %}">{{ product.stock }}</span>
+									{% if product.manufacturer %}<span class="products__item-id">{{ product.manufacturer }}</span>{% endif %}
+									<a class="products__item-title" href="{{ product.href }}">{{ product.name }}</a>
+									{% if product.price %}
+									<p class="products__item-price">{% if product.special %}{% if product.sales and product.discount %}<mark>-{{ product.discount }}</mark>{% endif %}<ins>{{ product.special }} </ins><del>{{ product.price }}</del>{% else %}{{ product.price }}{% endif %}
+									</p>
+									{% endif %}
+									{% if (category_time and product.special and product.special_date_end) %}
+									<div class="products__item-discount">
+										<div class="ui-discount">
+											<div class="row">
+												<div class="col-12">
+													<div class="ui-discount__desc">
+														<figure class="ui-discount__icon">
+															<svg class="icon-discount"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-discount"></use>
+															</svg>
+														</figure>
+														<p class="ui-discount__caption">{{ time_text_1 }}<small>{{ time_text_2 }}</small>
+														</p>
+													</div>
+												</div>
+												<div class="col-12">
+													<time class="ui-discount__countdown js-countdown" data-text-countdown="{{ text_countdown }}" datetime="{{ product.special_date_end }}"></time>
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endif %}
+									<div class="products__item-action">
+										<div class="ui-add-to-cart {% if product.isincart %}is-active{% endif %}">
+											<button type="button" class="ui-btn ui-btn--primary" onclick="{% if product.isincart %}window.location.href='{{cart_link}}';{% else %}cart.add('{{ product.product_id }}', '{{ product.minimum }}');{% endif %}" {% if product.buy_btn %}disabled{% endif %} data-button-cart="{{ button_cart }}" data-add-to-cart="{{ text_prostore_in_cart }}">{% if product.isincart %}{{ text_prostore_in_cart }}{% else %}{{ button_cart }}{% endif %}<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+												</svg>
+											</button>
+											<div class="ui-number">
+												<button class="ui-number__decrease">
+													<svg class="icon-decrease"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-decrease"></use>
+													</svg>
+												</button>
+												<button class="ui-number__increase">
+													<svg class="icon-increase"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-increase"></use>
+													</svg>
+												</button>
+												<input class="ui-number__input" type="number" name="prod_id_quantity[{{ product.product_id }}]" value="{{ product.to_cart_quantity }}" min="0" max="9999">
+											</div>
+											<a class="ui-btn ui-btn--view js-btn-preview" title="{{ text_product_view_btn }}" data-for="{{ product.product_id }}" href="#popupprod">
+												<svg class="icon-view"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-view"></use>
+												</svg>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+				{% if (products[tab].show_more ) %}
+				<div class="products-featured__action">
+					<a class="ui-btn ui-btn--primary show-more" data-for="{{module_id}}_{{tab}}" href="#">{{ text_prostore_show_more }}</a>
+				</div>
+				{% endif %}
+			</div>
+			{% set y = y + 1 %}
+			{% endif %}
+			{% endfor %}
+	</div>
+</div>
+<!-- Products Tab Grid :: End-->	
+{% endif %}

@@ -1,0 +1,44 @@
+{% if (banners is not empty) %}
+<div class="swiper-stories js-swiper-stories">
+	<div class="swiper-container swiper-stories-slides js-swiper-stories-slides">
+		<div class="swiper-wrapper">
+			{% for banner in banners %}
+			<div class="swiper-slide">
+				<div class="swiper-stories__slide" data-swiper-parallax-scale="0.5">
+					<div class="swiper-stories__gallery">
+						{% for image in banner.images %}
+						<div class="swiper-stories__image">
+							<img src="{{ image.image }}" alt="">
+						</div>
+						{% endfor %}
+					</div>
+					<button class="swiper-stories__close" data-fancybox-close>
+						<svg class="icon-close"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close"></use>
+						</svg>
+					</button>
+					<div class="swiper-stories__button">
+					{% for image in banner.images %}
+						{% if image.text_small and image.link %}
+							<a href="{{ image.link }}" class="ui-btn ui-btn--40 ui-btn--{{ image.color }} ui-btn--fullwidth" {% if image.position == 'top' %}style="top: 2rem;bottom: unset;"{% endif %}>{{ image.text_small }}</a>
+						{% endif %}
+					{% endfor %}
+					</div>
+					
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="swiper-stories-thumbs js-swiper-stories-thumbs">
+		<ul class="swiper-stories-thumbs__list">
+			{% for banner in banners %}
+			<li>
+				<div class="swiper-stories__thumb">
+					<img src="{{ banner.thumb }}" alt="">
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+{% endif %}

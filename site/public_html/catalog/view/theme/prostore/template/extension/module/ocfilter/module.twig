@@ -1,0 +1,63 @@
+{% if options or show_price %}
+                <!-- Filter :: Start-->
+				<div class="options options--mobile">
+				  <div class="row">
+					<div class="col-sm-12">
+					  <div class="options__trigger">
+						<button class="options__btn js-filter-open">{{ heading_title }}</button>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				  
+                <div class="filter" id="ocfilter">
+                    <div class="filter__head">
+                      <button class="filter__back js-filter-close">
+                        <svg class="icon-back">
+                          <use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-back"></use>
+                        </svg>
+                      </button><span class="filter__heading">{{ heading_title }}</span>
+                    </div>
+                    <div class="filter__body">
+					  <div class="hidden" id="ocfilter-button">
+						<button class="btn btn--link disabled" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Загрузка.."></button>
+					  </div>
+						{% include 'prostore/template/extension/module/ocfilter/selected_filter.twig' %}
+
+						{% include 'prostore/template/extension/module/ocfilter/filter_price.twig' %}
+
+						{% include 'prostore/template/extension/module/ocfilter/filter_list.twig' %}
+                    </div>
+                </div>
+<script type="text/javascript"><!--
+document.addEventListener('DOMContentLoaded', function() {
+	$(function() {
+		var options = {
+		mobile: $('.ocfilter-mobile').is(':visible'),
+		php: {
+		  searchButton : {{ search_button ? 'true' : 'false' }},
+		  showPrice    : {{ show_price ? 'true' : 'false' }},
+			showCounter  : {{ show_counter ? 'true' : 'false' }},
+				manualPrice  : {{ manual_price ? 'true' : 'false' }},
+		  link         : '{{ link }}',
+			path         : '{{ path }}',
+			params       : '{{ params }}',
+			index        : '{{ index }}'
+		  },
+		text: {
+			show_all: '{{ text_show_all }}',
+			hide    : '{{ text_hide }}',
+			load    : '{{ text_load }}',
+				any     : '{{ text_any }}',
+			select  : '{{ button_select }}'
+		  }
+		};
+
+	  setTimeout(function() {
+		$('#ocfilter').ocfilter(options);
+	  }, 1);
+	});
+});
+//--></script>
+                <!-- Filter :: End-->
+{% endif %}

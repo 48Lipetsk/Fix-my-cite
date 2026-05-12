@@ -1,0 +1,28 @@
+<!-- Categories :: Start-->
+<div class="categories">
+	<div class="container-fluid">
+		<span class="h2 categories__title">{% if title %}{{ title }}{% else %}{{ heading_title }}{% endif %}</span>
+		<div class="products-categories">
+			<ul class="products-categories__grid">
+				{% for i,category in categories %}
+				<li style="-ms-flex: 0 0 {{ 100/view }}%;flex: 0 0 {{ 100/view }}%;max-width: {{ 100/view }}%;">
+					<a class="products-categories__item" href="{{ category.href }}">
+						{% if (category.thumb) %}
+						<div class="products-categories__item-image">
+							<img src="{{ category.thumb }}" alt="{{ category.name }}" width="{{ image_category_width }}" height="{{ image_category_height }}" {% if lazyload %}loading="lazy"{% endif %}>
+						</div>
+						{% endif %}
+						<span class="h2 products-categories__item-title">{{ category.name }}</span>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div><!-- Categories :: End-->
+
+
+
+
+			
+			

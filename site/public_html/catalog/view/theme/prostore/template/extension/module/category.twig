@@ -1,0 +1,45 @@
+<!-- Categories :: Start-->
+<div class="categories-aside">
+	<div class="categories-aside__offcanvas">
+		<div class="categories-aside__offcanvas-in">
+			<span class="h2 categories-aside__title">{{ heading_title }}</span>
+			<ul class="categories-aside__menu">
+				{% for category in categories %}
+				{% if (category.category_id == category_id) %}
+				<li class="is-open">
+					<a class="categories-aside__link is-active" href="{{ category.href }}">{{ category.name }}<span><svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+					</svg></span>
+					</a>
+					{% if (category.children) %}
+					<div class="categories-aside__dropdown" style="display: block;">
+						<span class="categories-aside__back">
+							<svg class="icon-arrow-categories"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-categories"></use>
+							</svg>{{ category.name }}
+						</span>
+						<ul class="categories-aside__submenu">
+							{% for child in category.children %}
+							{% if (child.category_id == child_id) %}
+							<li>
+								<a class="categories-aside__sublink is-active" href="{{ child.href }}">{{ child.name }}</a>
+							</li>
+							{% else %} 
+							<li>
+								<a class="categories-aside__sublink" href="{{ child.href }}">{{ child.name }}</a>
+							</li>
+							{% endif %}
+							{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+				</li>
+				{% else %}
+				<li>
+					<a class="categories-aside__link" href="{{ category.href }}">{{ category.name }}</a>
+				</li>
+				{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+		<button class="categories-aside__close">{{ text_prostore_menu_close }}</button>
+	</div>
+</div><!-- Categories Aside :: End-->

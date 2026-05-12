@@ -1,0 +1,514 @@
+<!doctype html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+	<meta name="format-detection" content="telephone=no">
+    <base href="{{ base }}">
+    <title>{{ title }}</title>
+    <meta name="theme-color" content="#{% if (theme_color) %}{{ theme_color_2 }}{% else %}7266F3{% endif %}">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+{% if robots %}
+	<meta name="robots" content="{{ robots }}">
+{% endif %}
+{% if (description) %}
+	<meta name="description" content="{{ description }}">
+{% endif %} 
+{% if (keywords) %} 
+	<meta name="keywords" content="{{ keywords }}">
+{% endif %} 
+{% if (google_site_verification) %} 
+	<meta name="google-site-verification" content="{{ google_site_verification }}">
+{% endif %} 
+{% if (yandex_verification) %} 
+	<meta name="yandex-verification" content="{{ yandex_verification }}">
+{% endif %} 
+
+
+
+{% if (fav_32) %} 
+	<link rel="icon" type="image/png" href="{{ fav_32 }}" sizes="32x32">
+{% endif %}
+{% if (fav_16) %} 
+	<link rel="icon" type="image/png" href="{{ fav_16 }}" sizes="16x16">
+{% endif %} 
+{% if (fav_180) %} 
+<link rel="apple-touch-icon" sizes="180x180" href="{{ fav_180 }}">
+{% endif %} 
+{% if (open_graph) %} 
+	<meta property="og:title" content="{{ title }} {% if (_GET['page'] is defined) %} {{ " - "~ _GET['page']~" "~text_page }}{% endif %}">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{{ og_url }}">
+	{% if (og_image) %} 
+		<meta property="og:image" content="{{ og_image }}">
+	{% else %} 
+		<meta property="og:image" content="{{ logo }}">
+	{% endif %} 
+	<meta property="og:site_name" content="{{ name }}">
+	{% if (description) %}
+	<meta property="og:description" content="{{ description }}">
+	{% endif %}
+{% endif %} 
+{% if (fonts == 'Roboto') %}
+	<link rel="preload" href="catalog/view/theme/prostore/fonts/Roboto-Regular.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="catalog/view/theme/prostore/fonts/Roboto-Medium.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="catalog/view/theme/prostore/fonts/Roboto-Bold.woff2" as="font" type="font/woff2" crossorigin>
+{% endif %} 
+{% if (fontawesome == 1) %} 
+	<link rel="stylesheet" href="catalog/view/theme/prostore/css/fontawesome/svg-with-js.min.css{{ '?v'~version }}">
+{% elseif (fontawesome == 2) %}
+	<link rel="stylesheet" href="catalog/view/theme/prostore/css/fontawesome/4.7.0/css/font-awesome.min.css{{ '?v'~version }}">
+{% endif %}
+	<link rel="stylesheet" href="catalog/view/theme/prostore/css/bootstrap/{{ bootstrap_ver ? '5.1.3' : '3.3.5' }}/bootstrap.min.css{{ '?v'~version }}">
+	<link rel="stylesheet" href="catalog/view/theme/prostore/css/app.min.css{{ '?v'~version }}">
+{% if (fonts != 'Roboto') %}
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family={{ fonts }}:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" media="screen and (min-width: 767px)">
+{% endif %}
+{% for style in styles %} 
+	<link href="{{ style['href'] }}" type="text/css" rel="{{ style['rel'] }}" media="{{ style['media'] }}">
+{% endfor %} 
+<style>
+:root {
+{% if theme_color %}
+--theme-primary-color: #{{ theme_color_1 }};--theme-secondary-color: #{{ theme_color_2 }};
+{% endif %}
+--base-font-family: "{{fonts|replace({'+': ' '})}}", Arial, Helvetica, sans-serif;
+}
+@media (max-width: 767px) {:root {font-size: 9px; --theme-size: 9px; }}
+body {font: 400 1.6rem/1.5 "{{fonts|replace({'+': ' '})}}", Arial, Helvetica, sans-serif;}
+input:not([class]),textarea:not([class]),select:not([class]),select.form-control,.ui-input, .ui-range__input, .ui-textarea,.form-control:not(select),.ui-select,.ui-select select,.personal__order-table-info{
+font-family: "{{fonts|replace({'+': ' '})}}", Arial, Helvetica, sans-serif;}
+@media (min-width: 768px) {.personal__order-table {font-family: "{{fonts|replace({'+': ' '})}}", Arial, Helvetica, sans-serif;}}
+@media (max-width: 767px) {.personal__order-table {font-family: "{{fonts|replace({'+': ' '})}}", Arial, Helvetica, sans-serif;}}
+{% if theme_color %} 
+/* {{ theme_color_1 }} {{ theme_color_2 }} {{ theme_color_3 }} {{ theme_color_4 }} {{ theme_color_5 }} */
+{% endif %}
+{% if theme_fc_color %} 
+/* {{ theme_fc_color_1 }} {{ theme_fc_color_2 }} {{ theme_fc_color_3 }} */
+{% endif %}
+{% if container_width %}
+@media (min-width: 1199px) {
+.container-fluid {max-width: {{ container_width }};}}
+{% endif %}
+{% if mobile_buttons %}
+@media (max-width: 1199px) {.products__item {height: auto!important;}.products__item-discount,.products__item-action {position: relative;opacity: 1;visibility: visible;transform: translate(0, 0);}}
+{% endif %}	
+{% if (not product_detail) %}.ui-btn.js-btn-preview {display: none;}{% endif %}
+{% if custom_css %} 
+{{ custom_css }} 
+{% endif %}	
+</style>
+
+{% for link in links %} 
+	{% if ('preload_as_' in link['rel']) %}
+	<link href="{{ link['href'] }}" rel="preload" as="image">
+	{% else %}
+	<link href="{{ link['href'] }}" rel="{{ link['rel'] }}">
+	{% endif %}
+{% endfor %} 
+
+{% if (js_footorhead == 1) %} 
+    <!--<script src="catalog/view/javascript/prostore/plugins.min.js{{ '?v'~version }}"></script>-->
+	<script src="catalog/view/javascript/prostore/plugins/jquery.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/jquery.fancybox.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/swiper.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/readmore.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/jquery.countdown.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/css-vars-ponyfill.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/sticky-kit.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/priority-nav.min.js{{ '?v'~version }}"></script>
+	<script src="catalog/view/javascript/prostore/plugins/matchMedia.min.js{{ '?v'~version }}"></script>
+	
+	{{ fontawesome == 1 ? '<script defer src="catalog/view/javascript/prostore/fontawesome/js/all.min.js?v' ~ version ~ '"></script>' : '' }} 
+	<script src="catalog/view/javascript/prostore/bootstrap/{{ bootstrap_ver ? '5.1.3' : '3.3.5' }}/bootstrap.min.js{{ '?v'~version }}"></script>
+	{% if bootstrap_ver %}<script src="catalog/view/javascript/prostore/bootstrap/5.1.3/bootstrap.bundle.min.js{{ '?v'~version }}"></script>{% endif %}
+	<script src="catalog/view/javascript/prostore/app.min.js{{ '?v'~version }}"></script>
+{% for script in scripts %} 
+	<script src="{{ script }}"></script>
+{% endfor %} 
+{% endif %} 
+
+{% if (js_footorhead == 1 and custom_js) %} 
+	<script>{{ custom_js }}</script>
+{% endif %} 
+
+{% if (dataLayer_isneed) %}
+	<!-- For Yandex Ecommerce -->
+	<script type="text/javascript">
+		window.dataLayer = window.dataLayer || [];
+  	</script>
+{% endif %}
+
+{% for analytic in analytics %} 
+{{ analytic }} 
+{% endfor %} 
+
+{% if (yandex_metrika_counter) %} 
+	<meta property="yandex_metric" content="{{ yandex_metrika_counter }}">
+{% endif %} 
+
+</head>
+  <body class="is-page-default {% if mobile_menu and not header_checkout %}is-page-sticky{% endif %} page-homepage{{ class ? ' ' ~ class : '' }} {{ bootstrap_ver ? 'bootstrap-5' : 'bootstrap-3' }} {% if fixed_header and not header_checkout %}is-page-header-fixed{% endif %} {% if header_checkout %}is-header-checkout is-footer-checkout{% else %}is-header-v{{ header_type }}{% endif %} {% if adult_banner %}fancybox-age{% endif %} {% if messenger_status and messenger_pos != 'footer' %}is-chat-{{ messenger_pos }}-widget{% endif %}">
+    <div class="{% if not maintenance %}app app--v{{ header_type }} is-footer-v{{ footer_type }}{% else %}tech{% endif %}" id="app">
+		<!-- Header V{{ header_type }} :: Start-->
+		<header class="header {% if header_checkout %}header--checkout{% else %}header--v{{ header_type }}{% endif %}">
+			<div class="container-fluid">
+				<div class="header__mobile {% if fixed_header and not header_checkout %}header__mobile-fixed{% endif %}">
+					{% if not header_checkout %}
+					<div class="header__nav">
+						<button class="header__nav-btn js-nav-trigger" aria-label="{{ text_prostore_menu }}">
+							<svg class="icon-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-toggle"></use>
+							</svg>
+						</button>
+						<div class="header__nav-offcanvas">
+							<div class="header__nav-head">
+								<button class="header__nav-close js-nav-trigger">
+									<svg class="icon-close"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close"></use>
+									</svg>
+								</button>
+								<span class="header__nav-title">{{ text_prostore_menu }}</span>
+							</div>
+							<div class="header__nav-body">
+								<div class="header__nav-group header__nav-group--acc_action_cart">
+									{% if logged %}
+									<div class="header__nav-acc">
+										<a class="header__nav-acc-btn" href="{{ account }}">
+											<svg class="icon-acc-authorized"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc-authorized"></use></svg>
+										</a>
+									</div>
+									{% else %}
+									<div class="header__nav-acc">
+										<a class="header__nav-acc-btn" href="#signin" data-fancybox>
+											<svg class="icon-acc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc"></use>
+											</svg>
+										</a>
+									</div>
+									{% endif %}
+									<div class="header__nav-action">
+										<a class="header__nav-action-btn" href="{{ text_compare_href }}">
+											<svg class="icon-compare"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-compare"></use>
+											</svg>
+											<mark class="header__nav-action-counter js-compare-total">{% if compare_count > 0 %}{{ compare_count }}{% endif %}</mark>
+										</a>
+										<span class="header__nav-action-line"></span>
+										<a class="header__nav-action-btn" href="{{ text_wish_href }}">
+											<svg class="icon-favorites"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites"></use>
+											</svg>
+											<mark class="header__nav-action-counter js-wishlist-total">{% if wishlist_count > 0 %}{{ wishlist_count }}{% endif %}</mark>
+										</a>
+									</div>
+									<div class="header__nav-cart">
+										<a class="header__nav-cart-btn" href="{{ shopping_cart }}">
+											<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+											</svg>
+											<span class="header__nav-cart-total js-cart-total">{{ text_items }} </span>
+										</a>
+									</div>
+								</div>
+								<ul class="header__catalog-menu"></ul>
+								{% if prostore_phones_main %}
+								<div class="header__nav-support">
+									<strong class="header__nav-support-title">{{ text_prostore_support }}</strong>
+									<ul class="header__nav-support-phones">
+										{% for key, prostore_phone in prostore_phones %}
+										<li>
+											<a class="header__nav-support-link" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }} <svg class="icon-call"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-call"></use>
+												</svg>
+											</a>
+										</li>
+										{% endfor %}
+									</ul>
+									<p class="header__nav-support-worktime">{{ config_open }}</p>
+								</div>
+								{% endif %}
+								{% if messenger_status %}
+								{% if messenger_navs is defined and messenger_navs is not null %}
+								<div class="header__nav-social">
+									<strong class="header__nav-social-title">{{ text_prostore_support_mess }}</strong>
+									<ul class="header__nav-social-menu">
+										{% for key,messenger_nav in messenger_navs %}
+										<li>
+											<a class="header__nav-social-link" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}" rel="nofollow">
+												<svg class="icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-social-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+												</svg>
+											</a>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+								{% endif %}
+								{% endif %}
+								<div class="header__nav-group header__nav-group--currency_language"></div>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					
+					<a class="header__logo" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>
+						{% if header_logo %}
+						<img src="{{ header_logo }}" title="{{ name }}" alt="{{ name }}">
+						{% else %}
+						{{ header_text_logo }}
+						{% endif %}
+					</a>
+					
+					{% if not header_checkout %}
+						{% if mobile_menu %}
+							{% if prostore_phones_main %}
+							<div class="header__call">
+								<button class="header__call-btn js-call-trigger" aria-label="{{ text_prostore_support }}">
+									<svg class="icon-call"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-call"></use>
+									</svg>
+								</button>
+								<div class="header__call-offcanvas">
+									<div class="header__call-offcanvas-in">
+										<ul class="header__call-menu">
+											{% for key, prostore_phone in prostore_phones %}
+											<li>
+												<a class="header__call-link" href="tel:{{ prostore_phone[language_id]|replace({' ': '', '-': '', '(': '', ')': ''}) }}">{{ prostore_phone[language_id] }} <svg class="icon-call"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-call"></use>
+													</svg>
+												</a>
+											</li>
+											{% endfor %}
+											{% if callback_status %}
+											<li>
+												<a class="header__call-link" href="#callback_mobile" data-fancybox>{{ text_header_callback }}</a>
+												<div class="fancybox-is-hidden popup" id="callback_mobile">{{ callback }}</div>
+											</li>
+											{% endif %}
+											<li>
+												<button class="header__call-link js-call-trigger">{{ text_prostore_menu_close }}</button>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+						{% else %}
+							<div class="header__group">
+								<div class="header__search">
+									<button class="header__search-btn js-search-trigger">
+										<svg class="icon-search"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-search"></use>
+										</svg>
+									</button>
+									<div class="header__search-offcanvas"></div>
+								</div>
+								{% if logged %}
+								<div class="header__acc">
+									<a class="header__acc-btn" href="{{ account }}" aria-label="{{ text_account }}">
+										<svg class="icon-acc-authorized"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc-authorized"></use></svg>
+									</a>
+								</div>
+								{% else %}
+								<div class="header__acc">
+									<a class="header__acc-btn" href="#signin" data-fancybox aria-label="{{ text_account }}">
+										<svg class="icon-acc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc"></use>
+										</svg>
+									</a>
+								</div>
+								{% endif %}
+								<div class="header__cart">
+									<a class="header__cart-btn" href="{{ shopping_cart }}">
+										<svg class="icon-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-cart"></use>
+										</svg>
+										<span class="header__cart-counter js-cart-total">{{ text_items }}</span>
+									</a>
+								</div>
+							</div>
+						{% endif %}
+						{% if mobile_menu %}
+						<div class="header__catalog">
+							<div class="header__catalog-offcanvas">
+								<div class="header__catalog-head">
+									<button class="header__catalog-close js-catalog-trigger">
+										<svg class="icon-close"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close"></use>
+										</svg>
+									</button>
+									<span class="header__catalog-title">{{ text_header_catalog }} </span>
+								</div>
+								<div class="header__catalog-body">
+									<ul class="header__catalog-menu"></ul>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						<div class="header__search">
+							<div class="header__search-offcanvas">
+								<div class="header__search-head">
+									<button class="header__search-close js-search-trigger">
+										<svg class="icon-close"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-close"></use>
+										</svg>
+									</button>
+									<span class="header__search-title">{{ text_header_search }}</span>
+								</div>
+								<div class="header__search-body">
+									<div class="header__search-control">
+										{{ search }}
+										<button type="button" class="header__search-append js-search-btn">
+											<svg class="icon-search"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-search"></use>
+											</svg>
+										</button>
+									</div>
+									<div class="header__search-autocomplete"></div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+				
+				{{ header_view }}
+				
+				{% if mobile_menu and not header_checkout and not maintenance %}
+				<div class="header__sticky">
+					{% if mobile_menu_array.home %}
+					<a class="header__sticky-btn" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-home"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-catalog-home"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_home }}</span>
+					</a>
+					{% endif %}
+					{% if (main_navs_v is not empty and mobile_menu_array.catalog) %}
+					<a class="header__sticky-btn js-catalog-trigger" href="#">
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-catalog"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-nav-catalog"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_header_catalog }}</span>
+					</a>
+					{% endif %}
+					{% if mobile_menu_array.search %}
+					<a class="header__sticky-btn js-search-trigger" href="#">
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-search"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-nav-search"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_header_search }}</span>
+					</a>
+					{% endif %}
+					{% if mobile_menu_array.cart %}
+					<a class="header__sticky-btn js-cart-trigger" href="{{ shopping_cart }}">
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-cart"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-nav-cart"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_prostore_cart_title }}</span>
+						<span class="header__sticky-counter js-cart-total">{{ text_items }}</span>
+					</a>
+					{% endif %}
+					{% if mobile_menu_array.compare %}
+					<a class="header__sticky-btn" href="{{ text_compare_href }}">
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-compare"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-nav-compare"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_prostore_comp_head }}</span>
+						<span class="header__sticky-counter js-compare-total">{% if compare_count > 0 %}{{ compare_count }}{% endif %}</span>
+					</a>
+					{% endif %}
+					{% if mobile_menu_array.wishlist %}
+					<a class="header__sticky-btn" href="{{ text_wish_href }}">
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-wishlist"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-favorites"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_prostore_wish_head }}</span>
+						<span class="header__sticky-counter js-wishlist-total">{% if wishlist_count > 0 %}{{ wishlist_count }}{% endif %}</span>
+					</a>
+					{% endif %}
+					{% if mobile_menu_array.signin %}
+					{% if logged %} 
+					<a class="header__sticky-btn" href="{{ account }}">
+						<span class="header__sticky-icon">
+							<svg class="icon-acc-authorized"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-acc-authorized"></use></svg>
+						</span>
+						<span class="header__sticky-text">{{ text_account_account }}</span>
+					</a>
+					{% else %}
+					<a class="header__sticky-btn" href="#signin" data-fancybox>
+						<span class="header__sticky-icon">
+							<svg class="icon-nav-acc"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-nav-acc"></use>
+							</svg>
+						</span>
+						<span class="header__sticky-text">{{ text_account_submit }}</span>
+					</a>
+					{% endif %}
+					{% endif %}
+				</div>
+				{% endif %}
+			</div>
+
+			{% if messenger_status and messenger_pos != 'footer' and not maintenance %}	  
+			{% if messenger_navs is defined and messenger_navs is not null %}
+			<!-- Chat :: Start-->
+			<div class="chat chat--{{ messenger_pos }} js-chat">
+				{% if scroll_to_top %}
+				{% if messenger_pos == scroll_to_top_pos %}
+				<a href="#" class="scroll-to-top js-stt">
+					<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use></svg>
+				</a>
+				{% set to_top_messenger = 1 %}
+				{% endif %}
+				{% endif %}
+				<button class="chat__toggle js-chat-toggle" aria-label="{{ text_prostore_chat }}">
+					<svg class="icon-chat"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-chat"></use>
+					</svg>
+					<svg class="icon-chat-close"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-chat-close"></use>
+					</svg>
+				</button>
+				<div class="chat__offcanvas js-chat-offcanvas">
+					<ul class="chat__menu">
+						{% for key,messenger_nav in messenger_navs %}
+						<li>
+							<a class="chat__link" href="{{ messenger_links[messenger_nav.settype]|split(' ')|last }}{{ messenger_nav.link }}{% if (messenger_links[messenger_nav.settype]|split(' ')|first == 'skype') %}?chat{% endif %}" target="_blank" rel="nofollow">
+								<span class="chat__link-icon">
+									<svg class="icon-chat-whatsapp"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-chat-{{ messenger_links[messenger_nav.settype]|split(' ')|first|lower }}"></use>
+									</svg>
+								</span>
+								<span class="chat__link-text">{{ messenger_links[messenger_nav.settype]|split(' ')|first }}</span>
+							</a>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div><!-- Chat :: End-->
+			{% endif %} 
+			{% endif %}
+
+			{% if scroll_to_top and not maintenance %}
+			{% if not to_top_messenger %}
+			<a href="#" class="scroll-to-top scroll-to-top--{{ scroll_to_top_pos }} js-stt" aria-label="{{ text_prostore_scroll_top }}">
+				<svg class="icon-arrow-toggle"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-toggle"></use></svg>
+			</a>
+			{% endif %}
+			{% endif %}
+
+		</header><!-- Header V{{ header_type }} :: End-->
+		<!-- Popups :: Start-->
+		<!--noindex-->
+		<div class="fancybox-is-hidden popup" id="signin">
+			<span class="popup__title">{{ text_account_title }}</span>
+			<div class="popup__form">
+				<form action="{{ login }}" enctype="multipart/form-data" id="loginform" method="post">
+					<label class="ui-label">{{ text_prostore_email }}</label>
+					<input class="ui-input" type="email" name="email" placeholder="{{ text_prostore_email }}" required>
+					<label class="ui-label">{{ text_account_password }}</label>
+					<input class="ui-input" type="password" name="password" placeholder="{{ text_account_password }}" required>
+					<div class="popup__link">
+						<a class="ui-link ui-link--blue ui-link--underline" href="{{ forgotten }}">{{ text_forgotten }}</a>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							<button class="ui-btn ui-btn--60 ui-btn--primary ui-btn--fullwidth" form="loginform" type="submit">{{ text_account_submit }}</button>
+						</div>
+						<div class="col-6">
+							<a class="ui-btn ui-btn--60 ui-btn--grey ui-btn--fullwidth" href="{{ register }}">{{ text_register }}</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		{{ adult_banner }}
+		<!--/noindex-->
+		<!-- Popups :: End-->

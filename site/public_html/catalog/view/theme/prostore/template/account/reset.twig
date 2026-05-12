@@ -1,0 +1,60 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+<!-- Main :: Start-->
+<main class="main">
+	{{ content_top }}
+<!-- 	<div class="row">
+	{{ column_left }}
+	<div class="col-xl-{{ col }}"> -->
+	<!-- Authorization :: Start-->
+	<div class="auth">
+		<div class="container-fluid">
+			<div class="auth__head">
+				<h1 class="auth__title">{{ heading_title }}</h1>
+			</div>
+			<div class="auth__body">
+				<div class="auth__form">
+					<form action="{{ action }}" method="post" enctype="multipart/form-data">
+						<fieldset class="ui-fieldset">
+							<legend class="ui-legend">{{ text_password }}</legend>
+							<div class="form-group">
+								<label class="ui-label required" for="input-password">{{ entry_password }}</label>
+								<div class="ui-field{% if error_password %} is-error{% endif %}">
+									<input class="ui-input" type="password" name="password" placeholder="{{ entry_password }}" value="{{ password }}" id="input-password">
+									{% if error_password %}
+									<span class="error ui-error">{{ error_password }}</span>
+									{% endif %} 
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="ui-label required" for="input-confirm">{{ entry_confirm }}</label>
+								<div class="ui-field{% if error_confirm %} is-error{% endif %}">
+									<input class="ui-input" type="password" name="confirm" placeholder="{{ entry_confirm }}" value="{{ confirm }}" id="input-confirm">
+									{% if error_confirm %}
+									<span class="error ui-error">{{ error_confirm }}</span>
+									{% endif %} 
+								</div>
+							</div>	
+						</fieldset>								
+						<fieldset class="ui-fieldset">
+							<hr>
+							<div class="row">
+								<div class="col-6">
+									<a href="{{ back }}" class="ui-btn ui-btn--grey  ui-btn--60 ui-btn--fullwidth">{{ button_back }}</a>
+								</div>
+								<div class="col-6">
+									<button type="submit" class="ui-btn ui-btn--primary ui-btn--60 ui-btn--fullwidth">{{ button_continue }}</button>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div><!-- Authorization :: End-->
+<!-- 	</div>
+	{{ column_right }}
+	</div> -->
+	{{ content_bottom }}
+</main><!-- Main :: End-->
+{{ footer }}
+</body></html>

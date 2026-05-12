@@ -1,0 +1,42 @@
+<!-- Brands Featured :: Start-->
+<div class="brands-featured">
+	<div class="container-fluid">
+		<div class="row align-items-center">
+			<div class="col">
+				<span class="h2 brands-featured__title">{% if title %}{{ title }}{% else %}{{ heading_title }}{% endif %}</span>
+			</div>
+			<div class="col-auto">
+				<div class="brands-featured__all">
+					<a class="ui-link ui-link--blue" href="{{ all_brands }}">{{ text_all_brands }}<svg class="icon-arrow-link"><use xlink:href="catalog/view/theme/prostore/sprites/sprite.svg#icon-arrow-link"></use>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="brands-featured__swiper">
+			<div class="swiper-container swiper-brands-featured js-swiper-brands-featured">
+				<div class="swiper-wrapper">
+					{% for banner1 in banners %}
+					{% for banner in banner1 %}
+					<div class="swiper-slide">
+						{% if (banner['link']) %}
+						<a class="brands-featured__item" href="{{ banner['link'] }}">
+							<div class="brands-featured__item-image">
+								<img src="{{ banner['image'] }}" alt="[Alt]" width="{{ width }}" height="{{ height }}" loading="lazy">
+							</div>
+						</a>
+						{% else %}
+						<div class="brands-featured__item">
+							<div class="brands-featured__item-image">
+								<img src="{{ banner['image'] }}" alt="[Alt]" width="{{ width }}" height="{{ height }}" loading="lazy">
+							</div>
+						</div>
+						{% endif %}
+					</div>
+					{% endfor %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- Brands Featured :: End-->

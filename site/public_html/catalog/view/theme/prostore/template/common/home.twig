@@ -1,0 +1,20 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %} 
+	<main class="main">
+	{% if column_left or column_right %} 
+	<div class="container-fluid">
+		<div class="row">
+			{{ column_left }}
+			<div class="col-sm-{{ col }}">
+				{{ content_top }} 
+				{{ content_bottom }} 
+			</div>
+			{{ column_right }}
+		</div>	
+	</div>	
+	{% else %} 
+		{{ content_top }} 
+		{{ content_bottom }} 
+	{% endif %} 
+	</main>
+{{ footer }}
+</body></html>

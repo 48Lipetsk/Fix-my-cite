@@ -1,0 +1,53 @@
+<!-- Benefits :: Start-->
+<div class="benefits">
+	<div class="container-fluid">
+		{% if title %}
+		<div class="row align-items-center">
+			<div class="col">
+				<span class="h2 benefits__title">{{ title }}</span>
+			</div>
+		</div>
+		{% endif %}
+		{% if (grid == 'slide') %}
+		<div class="swiper-container swiper-benefits js-swiper-benefits">
+			<div class="swiper-wrapper">
+				{% for advantage1 in advantages %}
+				{% for advantage in advantage1 %}
+				<div class="swiper-slide">
+					{% if advantage.link %}<a class="benefits__item" href="{{ advantage.link }}">{% else %}<div class="benefits__item">{% endif %}
+						<div class="benefits__item-image">
+							{% if (icon_type == 'html') %}
+							{{ advantage.html }}
+							{% else %}
+							<img src="{{ advantage.image }}" alt="{{ advantage.title }}" width="{{ width }}" height="{{ height }}" {% if lazyload %}loading="lazy"{% endif %}>
+							{% endif %}
+						</div>
+						<span class="h4 benefits__item-title">{{ advantage.title }}</span>
+					{% if advantage.link %}</a>{% else %}</div>{% endif %}
+				</div>
+				{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+		{% else %}
+		<div class="row">
+			{% for advantage1 in advantages %}
+			{% for advantage in advantage1 %}
+			<div class="{% if (grid == 'auto') %}col-auto{% else %}col-xl-{{ grid }} col-lg-3 col-md-4{% endif %}">
+				{% if advantage.link %}<a class="benefits__item benefits__item--grid" href="{{ advantage.link }}">{% else %}<div class="benefits__item benefits__item--grid">{% endif %}
+					<div class="benefits__item-image">
+						{% if (icon_type == 'html') %}
+						{{ advantage.html }}
+						{% else %}
+						<img src="{{ advantage.image }}" alt="{{ advantage.title }}" width="{{ width }}" height="{{ height }}" {% if lazyload %}loading="lazy"{% endif %}>
+						{% endif %}
+					</div>
+					<span class="h4 benefits__item-title">{{ advantage.title }}</span>
+				{% if advantage.link %}</a>{% else %}</div>{% endif %}
+			</div>
+			{% endfor %}
+			{% endfor %}
+		</div>
+		{% endif %}
+	</div>
+</div><!-- Benefits :: End-->

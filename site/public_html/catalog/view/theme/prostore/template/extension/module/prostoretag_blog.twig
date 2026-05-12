@@ -1,0 +1,16 @@
+{% if (tags is not empty) %} 
+<!-- Tags :: Start-->
+<div class="blog__sidebar">
+	<div class="blog__tags">
+		<span class="blog__tags-title">{{ heading_title }}</span>
+		<ul class="blog__tags-menu">
+			{% for tag in tags %}
+			<li>
+				<a class="blog__tags-link" href="{{ tag.href }}">#{{ tag.tag }} <!--<span>{{ tag.total }}</span>--></a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+<!-- Tags :: End-->
+{% endif %}

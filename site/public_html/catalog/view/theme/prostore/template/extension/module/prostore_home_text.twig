@@ -1,0 +1,24 @@
+<!-- Seo :: Start-->
+<div class="seo">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xl-10 push-xl-1">
+				<div class="seo__wrapper">
+					{% if img %}
+					<div class="seo__image">
+						<img src="{{ img }}" alt="{{ heading_title }}" width="{{ width }}" height="{{ height }}" {% if img %}loading="lazy"{% endif %}>
+					</div>
+					{% endif %}
+					<div class="seo__desc">
+						<div {% if readmore %}class="seo__readmore js-readmore" data-readmore-toggle="{{ text_readmore_more }}" data-readless-toggle="{{ text_readmore_less }}" data-collapsedheight-toggle="{{ collapsedheight }}" style="max-height: {{ collapsedheight }}px;"{% endif %}>
+							{% if heading_title %}
+							<h1 class="h3">{{ heading_title }}</h1>
+							{% endif %}
+							{{ html }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- Seo :: End-->
